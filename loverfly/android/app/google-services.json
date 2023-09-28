@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "413658535902",
+    "project_id": "loverfly-7c51a",
+    "storage_bucket": "loverfly-7c51a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413658535902:android:59d75da663ee3c8d6e6f4f",
+        "android_client_info": {
+          "package_name": "com.example.loverfly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413658535902-d3mao03jdij4p1c3h6u8506vh1oqh7rd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSvxdA5sv6qZgYfJLOqx5hL0xeUmx6Xqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413658535902-d3mao03jdij4p1c3h6u8506vh1oqh7rd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
