@@ -5,11 +5,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../environmentconfig/envconfig.dart';
 
-Future<Map> getComments(postId) async {
+Future<Map> getComments(postId, nextPageLink) async {
   try {
     var db = await SharedPreferences.getInstance();
-    var url = Uri.parse(
+    Uri url = Uri.parse(
         EnvConfig().baseUrl + '/get-comments/' + postId.toString() + '/');
+    var apiResponse = await http.get(
+      url,
+      headers: {
+        'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
+      },
+    );
+    Map response = jsonDecode(apiResponse.body);
+    return response;
+  } catch (error) {
+    return {"apiResponse": "Local Error"};
+  }
+}
+
+Future<Map> getCommentsWithPagination(postId, nextPageLink) async {
+  try {
+    var db = await SharedPreferences.getInstance();
+    Uri url = Uri.parse(nextPageLink);
     var apiResponse = await http.get(
       url,
       headers: {

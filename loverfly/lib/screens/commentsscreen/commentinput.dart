@@ -3,28 +3,49 @@ import 'package:get/get.dart';
 import '../../components/custombutton.dart';
 import '../../utils/pageutils.dart';
 
-class CommentInput extends StatelessWidget {
+class CommentInput extends StatefulWidget {
   final int postId;
   final Function postCommentFunction;
-  final TextEditingController commentInputController = TextEditingController();
-  final RxBool postingComment = RxBool(false);
 
-  CommentInput(
+  const CommentInput(
       {Key? key, required this.postCommentFunction, required this.postId})
       : super(key: key);
 
-  void createComment(context) async {
+  @override
+  State<CommentInput> createState() => _CommentInputState();
+}
+
+class _CommentInputState extends State<CommentInput> {
+  final TextEditingController commentInputController = TextEditingController();
+  final RxBool postingComment = RxBool(false);
+  final RxString savedCommentValue = RxString("");
+
+  void createComment(context, comment) async {
     FocusScope.of(context).unfocus();
-    if (!postingComment.value && commentInputController.text.isNotEmpty) {
+    if (!postingComment.value && comment != "") {
       postingComment.value = true;
       var commentData = {
-        "post_id": postId,
-        "comment": commentInputController.text,
+        "post_id": widget.postId,
+        "comment": comment,
       };
-      await postCommentFunction(postId, commentData);
-      postingComment.value = false;
+      await widget.postCommentFunction(widget.postId, commentData);
+      setState(() {
+        commentInputController.clear();
+        postingComment.value = false;
+      });
       SnackBars().displaySnackBar("Comment Created", () {}, context);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    commentInputController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,7 +66,7 @@ class CommentInput extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-                child: TextFormField(
+                child: TextField(
                   controller: commentInputController,
                   style: const TextStyle(fontWeight: FontWeight.w300),
                   decoration: const InputDecoration(
@@ -55,34 +76,32 @@ class CommentInput extends StatelessWidget {
               ),
             ),
           ),
-          Obx(
-            () => Expanded(
-                child: !postingComment.value
-                    ? CustomButton(
-                        rightmargin: 10.0,
-                        borderradius: 10.0,
-                        icon: const Icon(
-                          Icons.send_rounded,
-                          size: 20.0,
+          Expanded(
+              child: !postingComment.value
+                  ? CustomButton(
+                      rightmargin: 10.0,
+                      borderradius: 10.0,
+                      icon: const Icon(
+                        Icons.send_rounded,
+                        size: 20.0,
+                      ),
+                      buttonlabel: "",
+                      buttoncolor: Colors.purple,
+                      onpressedfunction: () async {
+                        createComment(context, commentInputController.text);
+                      },
+                    )
+                  : const Center(
+                      child: SizedBox(
+                        width: 20.0,
+                        height: 20.0,
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                          color: Colors.purple,
+                          strokeWidth: 2.0,
                         ),
-                        buttonlabel: "",
-                        buttoncolor: Colors.purple,
-                        onpressedfunction: () async {
-                          createComment(context);
-                        },
-                      )
-                    : const Center(
-                        child: SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            color: Colors.purple,
-                            strokeWidth: 2.0,
-                          ),
-                        ),
-                      )),
-          ),
+                      ),
+                    )),
         ],
       ),
     );

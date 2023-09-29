@@ -8,26 +8,33 @@ import '../largerpreviewscreen/largerpreviewscreen.dart';
 import 'api/commentsapi.dart';
 import 'comment.dart';
 
-class CommentScreen extends StatelessWidget {
+class CommentScreen extends StatefulWidget {
   final int postId;
   final Map couple;
 
-  CommentScreen({
+  const CommentScreen({
     Key? key,
     required this.postId,
     required this.couple,
   }) : super(key: key);
 
+  @override
+  State<CommentScreen> createState() => _CommentScreenState();
+}
+
+class _CommentScreenState extends State<CommentScreen> {
   final RxList comments = RxList([]);
   final RxBool preventRebuildProcess = RxBool(false);
   final RxBool pageLoading = RxBool(true);
+  String nextPageLink = "";
 
   void preparePageData() async {
     if (!preventRebuildProcess.value) {
-      var apiResponse = await getComments(postId);
-      apiResponse["api_response"] == "Success"
-          ? comments.addAll(apiResponse["comments"])
-          : null;
+      var apiResponse = await getComments(widget.postId, "");
+      if (apiResponse["api_response"] == "Success") {
+        comments.addAll(apiResponse["comments"]);
+        nextPageLink = apiResponse["next_page_link"];
+      }
       pageLoading.value = false;
       preventRebuildProcess.value = true;
     }
@@ -39,6 +46,11 @@ class CommentScreen extends StatelessWidget {
         ? comments
             .add({"comment_liked": false, "comment": apiResponse["comment"]})
         : null;
+    setState(() {});
+  }
+
+  void addMoreComments(postId) {
+    print('adding more posts');
   }
 
   void removeDeletedComment(comment) {
@@ -48,9 +60,13 @@ class CommentScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     preparePageData();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(context, "Comments"),
       body: Container(
@@ -77,7 +93,7 @@ class CommentScreen extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
-                                          imageurl: couple["partner_one"]
+                                          imageurl: widget.couple["partner_one"]
                                               ["profile_picture"],
                                           myImage: false,
                                           resetPage: () {},
@@ -96,7 +112,7 @@ class CommentScreen extends StatelessWidget {
                                     height: 60.0,
                                     child: CircleAvatar(
                                       backgroundImage: NetworkImage(
-                                          couple["partner_one"]
+                                          widget.couple["partner_one"]
                                               ["profile_picture"]),
                                       radius: 25.0,
                                     ),
@@ -112,7 +128,7 @@ class CommentScreen extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
-                                          imageurl: couple["partner_two"]
+                                          imageurl: widget.couple["partner_two"]
                                               ["profile_picture"],
                                           myImage: false,
                                           postId: 000,
@@ -131,7 +147,7 @@ class CommentScreen extends StatelessWidget {
                                     height: 60.0,
                                     child: CircleAvatar(
                                       backgroundImage: NetworkImage(
-                                          couple["partner_two"]
+                                          widget.couple["partner_two"]
                                               ["profile_picture"]),
                                       radius: 25.0,
                                     ),
@@ -149,7 +165,7 @@ class CommentScreen extends StatelessWidget {
                         child: RichText(
                       text: TextSpan(children: [
                         TextSpan(
-                            text: couple["partner_one"]["username"],
+                            text: widget.couple["partner_one"]["username"],
                             style: const TextStyle(
                                 fontWeight: FontWeight.w200,
                                 color: Colors.black)),
@@ -159,7 +175,7 @@ class CommentScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w200,
                                 color: Colors.black)),
                         TextSpan(
-                            text: couple["partner_two"]["username"],
+                            text: widget.couple["partner_two"]["username"],
                             style: const TextStyle(
                                 fontWeight: FontWeight.w200,
                                 color: Colors.black)),
@@ -193,7 +209,7 @@ class CommentScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
-                              couple["fans"].toString(),
+                              widget.couple["fans"].toString(),
                               style:
                                   const TextStyle(fontWeight: FontWeight.w300),
                             ),
@@ -208,7 +224,7 @@ class CommentScreen extends StatelessWidget {
               ),
             ),
 
-            // COMMENT VIEWER
+            // comment list:
             Expanded(
               flex: 6,
               child: Obx(
@@ -216,7 +232,7 @@ class CommentScreen extends StatelessWidget {
                     ? const Padding(
                         padding: EdgeInsets.only(top: 50.0),
                         child: Text(
-                          "Fetching comments",
+                          "Fetching comments...",
                           style: TextStyle(fontWeight: FontWeight.w300),
                         ),
                       )
@@ -224,6 +240,28 @@ class CommentScreen extends StatelessWidget {
                         ? ListView.builder(
                             itemCount: comments.length,
                             itemBuilder: (context, index) {
+                              if (index + 1 == comments.length) {
+                                print(comments.length);
+                                if (nextPageLink != "") {
+                                  getCommentsWithPagination(
+                                          widget.postId, nextPageLink)
+                                      .then((Map apiResponse) {
+                                    if (apiResponse["api_response"] ==
+                                        "Success") {
+                                      if (apiResponse["comments"].length > 0) {
+                                        setState(() {
+                                          comments
+                                              .addAll(apiResponse["comments"]);
+                                          apiResponse["next_page_link"] == null
+                                              ? nextPageLink = ""
+                                              : nextPageLink =
+                                                  apiResponse["next_page_link"];
+                                        });
+                                      }
+                                    }
+                                  });
+                                }
+                              }
                               return Comment(
                                 commentData: comments[index],
                                 removeDeletedCommentFunction:
@@ -242,7 +280,8 @@ class CommentScreen extends StatelessWidget {
             ),
 
             // COMMENTS INPUT FIELD
-            CommentInput(postCommentFunction: postAComment, postId: postId),
+            CommentInput(
+                postCommentFunction: postAComment, postId: widget.postId),
           ],
         ),
       ),
