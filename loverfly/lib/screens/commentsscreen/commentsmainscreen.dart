@@ -241,7 +241,6 @@ class _CommentScreenState extends State<CommentScreen> {
                             itemCount: comments.length,
                             itemBuilder: (context, index) {
                               if (index + 1 == comments.length) {
-                                print(comments.length);
                                 if (nextPageLink != "") {
                                   getCommentsWithPagination(
                                           widget.postId, nextPageLink)

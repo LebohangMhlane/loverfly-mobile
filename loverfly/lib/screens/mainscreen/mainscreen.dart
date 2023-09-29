@@ -179,7 +179,19 @@ class MainScreen extends StatelessWidget {
                                             itemCount: posts.value.length,
                                             scrollDirection: Axis.vertical,
                                             itemBuilder: (context, index) {
-                                              print("building list item");
+                                              print(index + 1);
+                                              // trigger pagination when at the end of the list:
+                                              if (index + 1 ==
+                                                  posts.value.length) {
+                                                if (pageData.value[
+                                                            "pagination_link"] !=
+                                                        "" ||
+                                                    pageData.value[
+                                                            "pagination_link"] !=
+                                                        null) {
+                                                  addMorePosts();
+                                                }
+                                              }
 
                                               // couple post
                                               return CouplePost(

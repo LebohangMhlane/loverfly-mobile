@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/inputcodescreen', page: () => InputCodeScreen()),
         GetPage(
             name: '/comments',
-            page: () => CommentScreen(postId: 000, couple: const {})),
+            page: () => const CommentScreen(postId: 000, couple: {})),
 
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),
