@@ -35,19 +35,17 @@ Future<Map> getCouplePosts(coupleid) async {
   return responseMap;
 }
 
-Future<bool> checkIfFavourited(coupleid) async {
+Future<bool> checkIfAdmired(coupleid) async {
   Map responseMap = {};
   var db = await SharedPreferences.getInstance();
   try {
-    var url = Uri.parse(EnvConfig().baseUrl +
-        '/check-if-favourited/' +
-        coupleid.toString() +
-        '/');
+    var url = Uri.parse(
+        EnvConfig().baseUrl + '/check-if-admired/' + coupleid.toString() + '/');
     var response = await http.get(url,
         headers: {'Authorization': 'TOKEN ' + db.getString('token')!});
     if (response.statusCode == 200) {
       responseMap = jsonDecode(response.body);
-      return responseMap["favourited"];
+      return responseMap["admired"];
     } else {
       return false;
     }

@@ -1,10 +1,7 @@
-
-
 import 'package:intl/intl.dart';
 
 class DateFunctions {
-
-  Map convertdate(stringdate){
+  Map convertdate(stringdate) {
     Map formatteddatevalues = {};
     DateTime datetime = DateTime.parse(stringdate);
     formatteddatevalues = {
@@ -15,12 +12,10 @@ class DateFunctions {
     return formatteddatevalues;
   }
 
-  String determineanniversarycount(number){
-
-    if (number == 0){
-      return "1st";
-    } else
-    if (number % 100 >= 11 && number % 100 <= 13) {
+  String determineanniversarycount(number) {
+    if (number == 0) {
+      return "1st ";
+    } else if (number % 100 >= 11 && number % 100 <= 13) {
       return '${number}th';
     } else {
       switch (number % 10) {
@@ -35,5 +30,4 @@ class DateFunctions {
       }
     }
   }
-
 }

@@ -66,5 +66,5 @@ class CoupleExplorerScreen extends StatelessWidget {
     }
   }
 
-  void updateCoupleFavouriteState(bool newState) {}
+  void updateCoupleAdmiredState(bool newState) {}
 }

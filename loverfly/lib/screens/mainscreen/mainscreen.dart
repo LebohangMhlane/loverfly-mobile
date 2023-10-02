@@ -25,6 +25,66 @@ class MainScreen extends StatelessWidget {
     "couple": {},
   });
 
+  void preparePageData(comingFromCouplePage) async {
+    if (!pageLoaded.value || comingFromCouplePage == true) {
+      // pageLoading.value ? pageLoading.value = true : pageLoading.value;
+      try {
+        var instance = await SharedPreferences.getInstance();
+        await AuthenticationAPI()
+            .getUserProfileAndCoupleData(instance.get("token"))
+            .then((responseMap) async {
+          if (!responseMap.keys.contains("error")) {
+            var userProfile = responseMap["user_profile"];
+            var couple = responseMap["couple"];
+
+            // update local storage with new data:
+            instance.setString("user_profile", jsonEncode(userProfile));
+            instance.setString("user_couple", jsonEncode(couple));
+
+            // update pagedata with new data:
+            pageData.value["user_profile"] = userProfile;
+            pageData.value["couple"] = couple;
+          }
+          preparePostsForFeed();
+        });
+      } catch (e) {
+        print("Something went wrong loading this page");
+      }
+    }
+  }
+
+  void preparePostsForFeed() async {
+    pageData.value["pagination_link"] = null;
+    await getPostsForFeed(null).then((responseMap) {
+      if (responseMap["posts"] != null) {
+        posts.value = responseMap["posts"];
+        responseMap["pagination_link"] != null
+            ? pageData.value["pagination_link"] = responseMap["pagination_link"]
+            : pageData.value["pagination_link"] = "";
+      } else {
+        posts.value = [];
+      }
+      posts.value.isEmpty ? postsFound.value = false : postsFound.value = true;
+      pageLoaded.value = true;
+    }).whenComplete(() => pageLoading.value = false);
+  }
+
+  void addMorePosts() async {
+    var paginationLink = pageData.value["pagination_link"];
+    if (paginationLink != "") {
+      await getPostsForFeed(paginationLink).then((responseMap) {
+        if (!responseMap.containsKey("error")) {
+          posts.update((val) {
+            val!.addAll(responseMap["posts"]);
+          });
+        }
+        responseMap["pagination_link"] != null
+            ? pageData.value["pagination_link"] = responseMap["pagination_link"]
+            : pageData.value["pagination_link"] = null;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     preparePageData(false);
@@ -213,59 +273,5 @@ class MainScreen extends StatelessWidget {
                         ))),
               ])),
         ));
-  }
-
-  void preparePageData(comingFromCouplePage) async {
-    if (!pageLoaded.value || comingFromCouplePage == true) {
-      // pageLoading.value ? pageLoading.value = true : pageLoading.value;
-      try {
-        var instance = await SharedPreferences.getInstance();
-        await AuthenticationAPI()
-            .getUserProfileAndCoupleData(instance.get("token"))
-            .then((responseMap) async {
-          if (!responseMap.keys.contains("error")) {
-            var userProfile = responseMap["user_profile"];
-            var couple = responseMap["couple"];
-
-            // update local storage with new data:
-            instance.setString("user_profile", jsonEncode(userProfile));
-            instance.setString("user_couple", jsonEncode(couple));
-
-            // update pagedata with new data:
-            pageData.value["user_profile"] = userProfile;
-            pageData.value["couple"] = couple;
-          }
-          preparePostsForFeed();
-        });
-      } catch (e) {
-        print("Something went wrong loading this page");
-      }
-    }
-  }
-
-  void preparePostsForFeed() async {
-    pageData.value["pagination_link"] = null;
-    await getPostsForFeed(null).then((responseMap) {
-      if (responseMap["posts"] != null) {
-        posts.value = responseMap["posts"];
-        pageData.value["pagination_link"] = responseMap["pagination_link"];
-      } else {
-        posts.value = [];
-      }
-      posts.value.isEmpty ? postsFound.value = false : postsFound.value = true;
-      pageLoaded.value = true;
-    }).whenComplete(() => pageLoading.value = false);
-  }
-
-  void addMorePosts() async {
-    var paginationLink = pageData.value["pagination_link"];
-    if (paginationLink != null) {
-      await getPostsForFeed(paginationLink).then((responseMap) {
-        posts.update((val) {
-          val!.addAll(responseMap["posts"]);
-        });
-        pageData.value["pagination_link"] = responseMap["pagination_link"];
-      });
-    }
   }
 }

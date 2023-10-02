@@ -21,20 +21,20 @@ class CouplePost extends StatelessWidget {
     Map post = postdata["post"];
     Map couple = postdata["couple"];
     Rx<bool> isliked = Rx(postdata["isLiked"]);
-    RxBool isFavourited = RxBool(postdata["isFavourited"]);
+    RxBool isAdmired = RxBool(postdata["isAdmired"]);
     Map postdate = DateFunctions().convertdate(post["time_posted"]);
-    Rx<int> fans = Rx<int>(couple["fans"]);
+    Rx<int> admirers = Rx<int>(couple["admirers"]);
     Rx<int> likecount = Rx<int>(post["likes"]);
     RxDouble imageHeight = RxDouble(0.0);
 
     return Container(
         child: Column(children: [
-      // profile picture and favouriters section:
+      // profile picture and admirers section:
       GestureDetector(
         onTap: () {
           Get.to(() => CoupleProfileScreen(
                 couple: couple,
-                isfavourited: RxBool(postdata["isFavourited"]),
+                isAdmired: RxBool(postdata["isAdmired"]),
                 rebuildPageFunction: resetPageFunction,
               ));
         },
@@ -50,14 +50,15 @@ class CouplePost extends StatelessWidget {
                     child: Container(
                       child: Stack(
                         children: [
-                          // couple partner 1
+                          // couple partner 1 profile picture:
                           Positioned(
                             left: 60.0,
                             child: GestureDetector(
                               onTap: () => Get.to(
                                   () => LargerPreviewScreen(
                                         imageurl: couple["partner_one"]
-                                            ["profile_picture"],
+                                                ["profile_picture"] ??
+                                            "",
                                         myImage: false,
                                         resetPage: () {},
                                         postId: 000,
@@ -74,9 +75,13 @@ class CouplePost extends StatelessWidget {
                                   width: 60.0,
                                   height: 60.0,
                                   child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        couple["partner_one"]
-                                            ["profile_picture"]),
+                                    backgroundImage: couple["partner_one"]
+                                                ["profile_picture"] !=
+                                            null
+                                        ? NetworkImage(couple["partner_one"]
+                                            ["profile_picture"])
+                                        : const NetworkImage(
+                                            "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                     radius: 25.0,
                                   ),
                                 ),
@@ -92,7 +97,8 @@ class CouplePost extends StatelessWidget {
                               onTap: () => Get.to(
                                   () => LargerPreviewScreen(
                                         imageurl: couple["partner_two"]
-                                            ["profile_picture"],
+                                                ["profile_picture"] ??
+                                            "",
                                         myImage: false,
                                         postId: 000,
                                         resetPage: () {},
@@ -109,9 +115,13 @@ class CouplePost extends StatelessWidget {
                                   width: 60.0,
                                   height: 60.0,
                                   child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        couple["partner_two"]
-                                            ["profile_picture"]),
+                                    backgroundImage: couple["partner_two"]
+                                                ["profile_picture"] !=
+                                            null
+                                        ? NetworkImage(couple["partner_two"]
+                                            ["profile_picture"])
+                                        : const NetworkImage(
+                                            "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                     radius: 25.0,
                                   ),
                                 ),
@@ -124,11 +134,11 @@ class CouplePost extends StatelessWidget {
                   )),
 
               SizedBox(
-                width: 199.0,
+                width: 165.0,
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 30.0),
+                      padding: const EdgeInsets.only(left: 35.0),
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
@@ -151,38 +161,34 @@ class CouplePost extends StatelessWidget {
                     )),
               ),
 
-              // fans
+              // admirers section:
               Expanded(
-                child: Column(
-                  children: [
-                    const Expanded(
-                        child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 5.0),
-                        child: Text(
-                          "Fans",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300, fontSize: 12.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 20.0,
+                  ),
+                  child: Column(
+                    children: [
+                      // svg heart icon:
+                      Expanded(
+                          child: SvgPicture.asset(
+                        'assets/svg/heart.svg',
+                        width: 14.0,
+                        color: Colors.lightBlue,
+                      )),
+                      // admirers count:
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Text(
+                            couple["admirers"].toString(),
+                            style: const TextStyle(fontWeight: FontWeight.w300),
+                          ),
                         ),
-                      ),
-                    )),
-                    Expanded(
-                        child: SvgPicture.asset(
-                      'assets/svg/heart.svg',
-                      width: 14.0,
-                      color: Colors.lightBlue,
-                    )),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Text(
-                          couple["fans"].toString(),
-                          style: const TextStyle(fontWeight: FontWeight.w300),
-                        ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
 
@@ -291,24 +297,24 @@ class CouplePost extends StatelessWidget {
       Container(
         height: 110.0,
         child: Row(children: [
-          // favourite couple button
+          // admire couple button:
           !postdata.containsKey("is_my_post")
               ? Container(
                   width: 130.0,
                   child: TextButton(
                     onPressed: () async {
-                      await favourite(couple["id"], postdata["isFavourited"])
+                      await admire(couple["id"], postdata["isAdmired"])
                           .then((response) {
-                        postdata["isFavourited"] = response["favourited"];
-                        isFavourited.value = response["favourited"];
-                        if (response["favourited"] == false) {
-                          if (fans.value != 0) {
-                            fans.value--;
-                            postdata["couple"]["fans"]--;
+                        postdata["isAdmired"] = response["admired"];
+                        isAdmired.value = response["admired"];
+                        if (response["admired"] == false) {
+                          if (admirers.value != 0) {
+                            admirers.value--;
+                            postdata["couple"]["admirers"]--;
                           }
                         } else {
-                          fans.value++;
-                          postdata["couple"]["fans"]++;
+                          admirers.value++;
+                          postdata["couple"]["admirers"]++;
                         }
                       });
                     },
@@ -319,7 +325,7 @@ class CouplePost extends StatelessWidget {
                         children: [
                           Container(
                             child: const Text(
-                              "Favourite",
+                              "Admire",
                               style: TextStyle(
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.w300,
@@ -329,9 +335,9 @@ class CouplePost extends StatelessWidget {
                           Obx(
                             () => Container(
                               padding: const EdgeInsets.only(left: 4.0),
-                              child: isFavourited.value
+                              child: isAdmired.value
                                   ?
-                                  // favourited heart icon
+                                  // admired heart icon
                                   Transform(
                                       child: Image.asset(
                                         'assets/placeholders/logo.jpeg',
@@ -341,7 +347,7 @@ class CouplePost extends StatelessWidget {
                                       transform: Matrix4.rotationZ(6.0),
                                     )
                                   :
-                                  // unfavourited heart heart icon
+                                  // unAdmired heart heart icon
                                   SvgPicture.asset(
                                       'assets/svg/heart.svg',
                                       alignment: Alignment.center,

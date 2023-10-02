@@ -6,7 +6,7 @@ class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {
     Get.to(() => CoupleProfileScreen(
           couple: coupledata["couple"],
-          isfavourited: RxBool(coupledata["isFavourited"]),
+          isAdmired: RxBool(coupledata["isAdmired"]),
           rebuildPageFunction: rebuildCoupleExplorer,
         ));
   }

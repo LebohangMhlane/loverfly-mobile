@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
+import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import '../../utils/pageutils.dart';
 import '../couplelink/generatecode.dart';
 import '../couplelink/inputcode.dart';
@@ -353,9 +354,15 @@ class MyProfile extends StatelessWidget {
                                                   const EdgeInsets.all(1.0),
                                               child: CircleAvatar(
                                                 radius: 50.0,
-                                                backgroundImage: NetworkImage(
-                                                    userProfile["my_partner"]
-                                                        ['profile_picture']),
+                                                backgroundImage: userProfile[
+                                                                "my_partner"][
+                                                            'profile_picture'] !=
+                                                        null
+                                                    ? NetworkImage(userProfile[
+                                                            "my_partner"]
+                                                        ['profile_picture'])
+                                                    : const NetworkImage(
+                                                        "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                               )),
                                         ),
                                       ),
@@ -474,7 +481,7 @@ class MyProfile extends StatelessWidget {
                                   color: Colors.white,
                                   child: Column(
                                     children: [
-                                      // FANS COUNTER
+                                      // ADMIRER COUNTER
                                       Container(
                                           width: 100.0,
                                           padding:
@@ -485,32 +492,28 @@ class MyProfile extends StatelessWidget {
                                               Expanded(
                                                 flex: 1,
                                                 child: Container(
-                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 4.0,
+                                                            top: 1.0),
+                                                    alignment:
+                                                        Alignment.centerRight,
                                                     child: SvgPicture.asset(
                                                         'assets/svg/heart.svg',
                                                         color: Colors.blue,
                                                         width: 15.0)),
                                               ),
                                               Expanded(
+                                                flex: 1,
                                                 child: Container(
-                                                    alignment: Alignment.center,
-                                                    child: const Text(
-                                                      'Fans',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    )),
-                                              ),
-                                              Expanded(
-                                                  child: Container(
-                                                child: Center(
                                                   child: Text(
-                                                      couple["fans"].toString(),
+                                                      couple["admirers"]
+                                                          .toString(),
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w300)),
                                                 ),
-                                              ))
+                                              )
                                             ],
                                           )),
 
@@ -659,19 +662,22 @@ class MyProfile extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 5.0, bottom: 15.0),
                     child: Row(
                       children: [
-                        // FANS
+                        // Admirers:
                         couple.isEmpty
                             ? Container()
                             : Expanded(
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(() =>
+                                        ListViewScreen(listType: "Admirers"));
+                                  },
                                   child: Container(
                                       child: Column(children: [
                                     Container(
                                       padding: const EdgeInsets.only(
                                           top: 6.0, bottom: 6.0),
                                       child: const Text(
-                                        'Fans',
+                                        'Admirers',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w300,
                                           color: Colors.black,
@@ -688,17 +694,18 @@ class MyProfile extends StatelessWidget {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.all(6.0),
-                                      child: Text(couple["fans"].toString()),
+                                      child:
+                                          Text(couple["admirers"].toString()),
                                     )
                                   ])),
                                 ),
                               ),
 
-                        // FAVOURITES
+                        // Admired Couples:
                         Expanded(
                           child: TextButton(
                             onPressed: () async {
-                              print('Favourites List');
+                              print('Admired List');
                             },
                             child: Container(
                                 child: Column(children: [
@@ -706,7 +713,7 @@ class MyProfile extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     top: 6.0, bottom: 6.0),
                                 child: const Text(
-                                  'Favourite Couples',
+                                  'Admired Couples',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black,
@@ -724,7 +731,7 @@ class MyProfile extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(6.0),
                                 child: Text(
-                                    userProfile["number_of_favourite_couples"]
+                                    userProfile["number_of_admired_couples"]
                                         .toString(),
                                     style: const TextStyle(color: Colors.red)),
                               ),

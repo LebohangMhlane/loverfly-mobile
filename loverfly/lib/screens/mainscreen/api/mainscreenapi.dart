@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
-// get all posts of favourited couples from the database:
+// get all posts of admired couples from the database:
 Future<Map> getPostsForFeed(nextLink) async {
   Map apiResponse = {};
   var db = await SharedPreferences.getInstance();

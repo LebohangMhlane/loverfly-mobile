@@ -100,14 +100,22 @@ class LargerPreviewScreen extends StatelessWidget {
                             // image:
                             GestureDetector(
                               onTap: () => Get.back(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  alignment: FractionalOffset.center,
-                                  image: NetworkImage(imageurlstring.value),
-                                )),
-                              ),
+                              child: imageurlstring.value != ""
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        alignment: FractionalOffset.center,
+                                        image:
+                                            NetworkImage(imageurlstring.value),
+                                      )),
+                                    )
+                                  : const Center(
+                                      child: Text(
+                                        "No image to display",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
                             ),
 
                             showConfirmationOverlay.value

@@ -4,12 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
-Future<Map> favourite(coupleid, favourited) async {
+Future<Map> admire(coupleid, admired) async {
   var url = Uri.parse(EnvConfig().baseUrl +
-      '/favourite/' +
+      '/admire/' +
       coupleid.toString() +
       '/' +
-      favourited.toString() +
+      admired.toString() +
       '/');
   var db = await SharedPreferences.getInstance();
   try {

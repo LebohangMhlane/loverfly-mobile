@@ -9,6 +9,7 @@ import 'package:loverfly/screens/commentsscreen/commentsmainscreen.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/createapostscreen/createapost.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
+import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
             name: '/coupleprofilescreen',
             page: () => CoupleProfileScreen(
                   couple: const {},
-                  isfavourited: RxBool(false),
+                  isAdmired: RxBool(false),
                   rebuildPageFunction: () {},
                 )),
         GetPage(
@@ -79,6 +80,11 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/comments',
             page: () => const CommentScreen(postId: 000, couple: {})),
+        GetPage(
+            name: '/listview',
+            page: () => ListViewScreen(
+                  listType: "None",
+                )),
 
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),

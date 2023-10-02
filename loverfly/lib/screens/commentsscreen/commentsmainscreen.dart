@@ -111,9 +111,15 @@ class _CommentScreenState extends State<CommentScreen> {
                                     width: 60.0,
                                     height: 60.0,
                                     child: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          widget.couple["partner_one"]
-                                              ["profile_picture"]),
+                                      backgroundImage: widget
+                                                      .couple["partner_one"]
+                                                  ["profile_picture"] !=
+                                              null
+                                          ? NetworkImage(
+                                              widget.couple["partner_one"]
+                                                  ["profile_picture"])
+                                          : const NetworkImage(
+                                              "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
                                     ),
                                   ),
@@ -146,9 +152,15 @@ class _CommentScreenState extends State<CommentScreen> {
                                     width: 60.0,
                                     height: 60.0,
                                     child: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          widget.couple["partner_two"]
-                                              ["profile_picture"]),
+                                      backgroundImage: widget
+                                                      .couple["partner_two"]
+                                                  ["profile_picture"] !=
+                                              null
+                                          ? NetworkImage(
+                                              widget.couple["partner_two"]
+                                                  ["profile_picture"])
+                                          : const NetworkImage(
+                                              "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
                                     ),
                                   ),
@@ -160,7 +172,7 @@ class _CommentScreenState extends State<CommentScreen> {
                       )),
 
                   SizedBox(
-                    width: 199.0,
+                    width: 170.0,
                     child: Center(
                         child: RichText(
                       text: TextSpan(children: [
@@ -185,37 +197,32 @@ class _CommentScreenState extends State<CommentScreen> {
 
                   // fans
                   Expanded(
-                    child: Column(
-                      children: [
-                        const Expanded(
-                            child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 5.0),
-                            child: Text(
-                              "Fans",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300, fontSize: 12.0),
-                            ),
-                          ),
-                        )),
-                        Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
                             child: SvgPicture.asset(
-                          'assets/svg/heart.svg',
-                          width: 14.0,
-                          color: Colors.lightBlue,
-                        )),
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: Text(
-                              widget.couple["fans"].toString(),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w300),
+                              'assets/svg/heart.svg',
+                              width: 14.0,
+                              color: Colors.lightBlue,
                             ),
-                          ),
-                        )
-                      ],
+                          )),
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                widget.couple["admirers"].toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
 

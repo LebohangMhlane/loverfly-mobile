@@ -17,8 +17,8 @@ class CoupleCard extends StatelessWidget {
   final Map coupleData;
   final coupleFanCount = Rx<int>(0);
   final Rx<Map> pageData = Rx({});
-  final RxBool isFavourited = RxBool(false);
-  final RxBool favouriting = RxBool(false);
+  final RxBool isAdmired = RxBool(false);
+  final RxBool admiring = RxBool(false);
   final Function rebuildCoupleExplorer;
 
   @override
@@ -88,8 +88,13 @@ class CoupleCard extends StatelessWidget {
                             width: 100.0,
                             height: 100.0,
                             child: CircleAvatar(
-                              backgroundImage: NetworkImage(coupleData["couple"]
-                                  ['partner_one']["profile_picture"]),
+                              backgroundImage: coupleData["couple"]
+                                          ['partner_one']["profile_picture"] !=
+                                      null
+                                  ? NetworkImage(coupleData["couple"]
+                                      ['partner_one']["profile_picture"])
+                                  : const NetworkImage(
+                                      "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                               radius: 25.0,
                             ),
                           ),
@@ -109,7 +114,7 @@ class CoupleCard extends StatelessWidget {
                           // followers title
                           Container(
                             child: const Text(
-                              'Fans',
+                              'Admirers',
                               style: TextStyle(fontSize: 11.0),
                             ),
                           ),
@@ -183,25 +188,25 @@ class CoupleCard extends StatelessWidget {
             height: 60.0,
             child: Row(
               children: [
-                // favourite couple button:
+                // admire couple button:
                 Expanded(child: SizedBox(
                   child: Center(
                     child: Obx(() {
                       return CustomButton(
                           buttoncolor: Colors.purple,
-                          buttonlabel: 'Favourite',
+                          buttonlabel: 'Admire',
                           icon: Icon(Icons.star,
-                              color: isFavourited.value
+                              color: isAdmired.value
                                   ? const Color.fromARGB(164, 255, 235, 59)
                                   : const Color.fromARGB(163, 231, 231, 228)),
                           onpressedfunction: () async {
-                            // lock the favourite button until the operation is done:
-                            if (favouriting.value) {
+                            // lock the admire button until the operation is done:
+                            if (admiring.value) {
                               print(
                                   'Currently working on favouriting. Please wait.');
                             } else {
-                              favouriting.value = true;
-                              favouriteCouple(context);
+                              admiring.value = true;
+                              admireCouple(context);
                             }
                           });
                     }),
@@ -216,32 +221,31 @@ class CoupleCard extends StatelessWidget {
   }
 
   void preparepagedata() {
-    isFavourited.value = coupleData["isFavourited"];
-    coupleFanCount.value = coupleData["couple"]["fans"];
+    isAdmired.value = coupleData["isAdmired"];
+    coupleFanCount.value = coupleData["couple"]["admirers"];
   }
 
-  void favouriteCouple(context) async {
+  void admireCouple(context) async {
     try {
       // make a request to the api:
-      Map response =
-          await favourite(coupleData["couple"]["id"], isFavourited.value);
+      Map response = await admire(coupleData["couple"]["id"], isAdmired.value);
       // if something goes wrong, notify the user:
       if (response.containsKey("error_info")) {
         SnackBars().displaySnackBar(
             "Something went wrong. We will fix it soon!", () => null, context);
       } else {
-        // else, update the favourited values:
-        isFavourited.value = response["favourited"];
-        coupleData["isFavourited"] = response["favourited"];
+        // else, update the admired values:
+        isAdmired.value = response["admired"];
+        coupleData["isAdmired"] = response["admired"];
         // update the fan count based on the returned value:
-        if (isFavourited.value == false) {
+        if (isAdmired.value == false) {
           if (coupleFanCount.value != 0) {
             coupleFanCount.value--;
           }
         } else {
           coupleFanCount.value++;
         }
-        favouriting.value = false;
+        admiring.value = false;
       }
     } catch (e) {
       // if something goes wrong with the logic above, notify the user:

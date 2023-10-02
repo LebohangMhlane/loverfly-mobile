@@ -14,20 +14,20 @@ import 'api/couplescreenapi.dart';
 class CoupleProfileScreen extends StatelessWidget {
   final Map couple;
   final RxMap coupledata = RxMap({});
-  final RxBool isfavourited;
+  final RxBool isAdmired;
   final Function rebuildPageFunction;
   final RxMap relationshipstartdate = RxMap({});
   final RxMap nextanniversarydate = RxMap({});
   final RxString anniversarycount = RxString("0");
-  final RxInt numberoffans = RxInt(0);
-  final RxInt numberoffavs = RxInt(0);
+  final RxInt numberOfAdmirers = RxInt(0);
+  final RxInt numOfAdmiredCouples = RxInt(0);
   final RxList posts = RxList([]);
   final RxBool pageLoaded = RxBool(false);
 
   CoupleProfileScreen(
       {Key? key,
       required this.couple,
-      required this.isfavourited,
+      required this.isAdmired,
       required this.rebuildPageFunction})
       : super(key: key);
 
@@ -112,9 +112,10 @@ class CoupleProfileScreen extends StatelessWidget {
                                                   onTap: () => Get.to(
                                                       () => LargerPreviewScreen(
                                                             imageurl: couple[
-                                                                    "partner_one"]
-                                                                [
-                                                                "profile_picture"],
+                                                                        "partner_one"]
+                                                                    [
+                                                                    "profile_picture"] ??
+                                                                "",
                                                             myImage: false,
                                                             resetPage: () {},
                                                             postId: 000,
@@ -135,11 +136,17 @@ class CoupleProfileScreen extends StatelessWidget {
                                                       width: 70.0,
                                                       height: 70.0,
                                                       child: CircleAvatar(
-                                                        backgroundImage:
-                                                            NetworkImage(couple[
+                                                        backgroundImage: couple[
+                                                                        "partner_one"]
+                                                                    [
+                                                                    "profile_picture"] !=
+                                                                null
+                                                            ? NetworkImage(couple[
                                                                     "partner_one"]
                                                                 [
-                                                                "profile_picture"]),
+                                                                "profile_picture"])
+                                                            : const NetworkImage(
+                                                                "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                                         radius: 25.0,
                                                       ),
                                                     ),
@@ -154,9 +161,10 @@ class CoupleProfileScreen extends StatelessWidget {
                                                   onTap: () => Get.to(
                                                       () => LargerPreviewScreen(
                                                             imageurl: couple[
-                                                                    "partner_two"]
-                                                                [
-                                                                "profile_picture"],
+                                                                        "partner_two"]
+                                                                    [
+                                                                    "profile_picture"] ??
+                                                                "",
                                                             myImage: false,
                                                             postId: 000,
                                                             resetPage: () {},
@@ -177,11 +185,17 @@ class CoupleProfileScreen extends StatelessWidget {
                                                       width: 65.0,
                                                       height: 65.0,
                                                       child: CircleAvatar(
-                                                        backgroundImage:
-                                                            NetworkImage(couple[
+                                                        backgroundImage: couple[
+                                                                        "partner_two"]
+                                                                    [
+                                                                    "profile_picture"] !=
+                                                                null
+                                                            ? NetworkImage(couple[
                                                                     "partner_two"]
                                                                 [
-                                                                "profile_picture"]),
+                                                                "profile_picture"])
+                                                            : const NetworkImage(
+                                                                "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                                         radius: 25.0,
                                                       ),
                                                     ),
@@ -226,23 +240,23 @@ class CoupleProfileScreen extends StatelessWidget {
                             margin: const EdgeInsets.only(top: 0.0),
                             child: Row(
                               children: [
-                                // favourite couple button:
+                                // Admire couple button:
                                 Expanded(
                                     child: Container(
                                   child: Center(
                                       child: CustomButton(
                                           splashcolor: Colors.blue,
                                           buttoncolor: Colors.white,
-                                          buttonlabel: 'Favourite',
+                                          buttonlabel: 'Admire',
                                           fontWeight: FontWeight.bold,
                                           textcolor: Colors.black,
                                           icon: Obx(
                                             () => Container(
                                               padding: const EdgeInsets.only(
                                                   left: 4.0),
-                                              child: isfavourited.value
+                                              child: isAdmired.value
                                                   ?
-                                                  // favourited heart icon
+                                                  // Admire heart icon
                                                   Transform(
                                                       child: Image.asset(
                                                         'assets/placeholders/logo.jpeg',
@@ -255,7 +269,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                                               6.0),
                                                     )
                                                   :
-                                                  // unfavourited heart heart icon:
+                                                  // not Admired heart icon:
                                                   SvgPicture.asset(
                                                       'assets/svg/heart.svg',
                                                       alignment:
@@ -266,7 +280,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                             ),
                                           ),
                                           onpressedfunction: () async {
-                                            favouriteCouple(context);
+                                            admireCouple(context);
                                           })),
                                 )),
 
@@ -358,10 +372,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                         child: Container(
                                           alignment: Alignment.center,
                                           child: Text(
-                                              anniversarycount +
-                                                  nextanniversarydate[
-                                                          "normalized"]
-                                                      .toString(),
+                                              nextanniversarydate["normalized"]
+                                                  .toString(),
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 12.0)),
@@ -386,7 +398,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                 const EdgeInsets.only(top: 15.0, bottom: 15.0),
                             child: Row(
                               children: [
-                                // favourites
+                                // Admirers:
                                 Expanded(
                                   child: Container(
                                       child: Column(children: [
@@ -394,7 +406,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                       padding: const EdgeInsets.only(
                                           top: 6.0, bottom: 6.0),
                                       child: const Text(
-                                        'Our Favourites',
+                                        'Admired Couples',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w300,
                                             color: Colors.black,
@@ -411,13 +423,14 @@ class CoupleProfileScreen extends StatelessWidget {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.all(6.0),
-                                      child: Obx(() =>
-                                          Text(numberoffavs.value.toString())),
+                                      child: Obx(() => Text(numOfAdmiredCouples
+                                          .value
+                                          .toString())),
                                     )
                                   ])),
                                 ),
 
-                                // fans
+                                // Admirers:
                                 Expanded(
                                   child: Container(
                                       child: Column(children: [
@@ -425,7 +438,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                       padding: const EdgeInsets.only(
                                           top: 6.0, bottom: 6.0),
                                       child: const Text(
-                                        'Our Fans',
+                                        'Admirers',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w300,
                                             color: Colors.black,
@@ -442,8 +455,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.all(6.0),
-                                      child: Obx(() =>
-                                          Text(numberoffans.value.toString())),
+                                      child: Obx(() => Text(
+                                          numberOfAdmirers.value.toString())),
                                     ),
                                   ])),
                                 ),
@@ -512,7 +525,7 @@ class CoupleProfileScreen extends StatelessWidget {
       // set counts:
       anniversarycount.value =
           DateFunctions().determineanniversarycount(couple["anniversaries"]);
-      numberoffans.value = couple["fans"];
+      numberOfAdmirers.value = couple["admirers"];
 
       // get couple posts:
       await getCouplePosts(couple["id"]).then((apiResponse) {
@@ -524,24 +537,24 @@ class CoupleProfileScreen extends StatelessWidget {
     }
   }
 
-  void favouriteCouple(context) async {
+  void admireCouple(context) async {
     try {
       // make a request to the api:
-      Map response = await favourite(couple["id"], isfavourited);
+      Map response = await admire(couple["id"], isAdmired);
       // if something goes wrong, notify the user:
       if (response.containsKey("error_info")) {
         SnackBars().displaySnackBar(
             "Something went wrong. We will fix it soon!", () => null, context);
       } else {
-        // else, update the favourited value:
-        isfavourited.value = response["favourited"];
+        // else, update the admired value:
+        isAdmired.value = response["admired"];
         // update the fan count based on the returned value:
-        if (isfavourited.value == false) {
-          if (numberoffans.value != 0) {
-            numberoffans.value--;
+        if (isAdmired.value == false) {
+          if (numberOfAdmirers.value != 0) {
+            numberOfAdmirers.value--;
           }
         } else {
-          numberoffans.value++;
+          numberOfAdmirers.value++;
         }
       }
     } catch (e) {

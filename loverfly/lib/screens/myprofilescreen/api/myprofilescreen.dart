@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
-Future<Map> getFavouritedCouples(username) async {
-  var favouritedcouples = {};
-  var url = Uri.parse(EnvConfig().baseUrl + '/get-favourited-couples/');
+Future<Map> getAdmiredCouples(username) async {
+  var admiredCouples = {};
+  var url = Uri.parse(EnvConfig().baseUrl + '/get-admired-couples/');
   var db = await SharedPreferences.getInstance();
 
   try {
@@ -16,10 +16,10 @@ Future<Map> getFavouritedCouples(username) async {
     );
 
     if (response.statusCode == 200) {
-      favouritedcouples = jsonDecode(response.body);
-      print('get favourited couples: Successful');
+      admiredCouples = jsonDecode(response.body);
+      print('get admired couples: Successful');
     } else {
-      print('get favourited couples: Fail');
+      print('get admired couples: Fail');
       print(response.body);
     }
   } on SocketException {
@@ -28,7 +28,7 @@ Future<Map> getFavouritedCouples(username) async {
     print(e);
   }
 
-  return favouritedcouples;
+  return admiredCouples;
 }
 
 Future<Map> deletePost(postId) async {
