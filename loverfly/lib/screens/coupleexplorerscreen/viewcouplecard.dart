@@ -127,7 +127,8 @@ class CoupleCard extends StatelessWidget {
                           Container(
                             child: SvgPicture.asset(
                               'assets/svg/heart.svg',
-                              color: Colors.blue,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.blue, BlendMode.srcIn),
                               width: 20.0,
                             ),
                           ),
@@ -202,8 +203,10 @@ class CoupleCard extends StatelessWidget {
                           onpressedfunction: () async {
                             // lock the admire button until the operation is done:
                             if (admiring.value) {
-                              print(
-                                  'Currently working on favouriting. Please wait.');
+                              SnackBars().displaySnackBar(
+                                  "Please wait for the process to finish",
+                                  () => null,
+                                  context);
                             } else {
                               admiring.value = true;
                               admireCouple(context);

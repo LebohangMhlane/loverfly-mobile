@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> createAPost(caption, imageurl) async {
-  var responseData = {};
   var url = Uri.parse(EnvConfig().baseUrl + '/create-a-post/');
   var db = await SharedPreferences.getInstance();
   try {
@@ -15,14 +14,17 @@ Future<Map> createAPost(caption, imageurl) async {
       body: {'caption': caption, 'image_url': imageurl},
     );
     if (response.statusCode == 200) {
-      responseData = jsonDecode(response.body);
+      var responseData = jsonDecode(response.body);
+      return responseData;
     } else {
-      return {"error": "Failed to create the post"};
+      return {"error": "An error has occured on the server"};
     }
   } on SocketException {
-    print('No internet connection');
+    return {"error": "No connection could be made"};
   } catch (e) {
-    print(e);
+    return {
+      "error": "An error has occured",
+      "error_info": e.toString(),
+    };
   }
-  return responseData;
 }

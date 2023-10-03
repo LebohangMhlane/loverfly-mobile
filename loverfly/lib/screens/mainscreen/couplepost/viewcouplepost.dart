@@ -174,7 +174,8 @@ class CouplePost extends StatelessWidget {
                           child: SvgPicture.asset(
                         'assets/svg/heart.svg',
                         width: 14.0,
-                        color: Colors.lightBlue,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.lightBlue, BlendMode.srcIn),
                       )),
                       // admirers count:
                       Expanded(
@@ -351,7 +352,8 @@ class CouplePost extends StatelessWidget {
                                   SvgPicture.asset(
                                       'assets/svg/heart.svg',
                                       alignment: Alignment.center,
-                                      color: Colors.grey[300],
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.grey, BlendMode.srcIn),
                                       width: 20.0,
                                     ),
                             ),

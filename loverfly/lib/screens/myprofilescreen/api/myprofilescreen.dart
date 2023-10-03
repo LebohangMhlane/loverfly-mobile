@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> getAdmiredCouples(username) async {
-  var admiredCouples = {};
   var url = Uri.parse(EnvConfig().baseUrl + '/get-admired-couples/');
   var db = await SharedPreferences.getInstance();
 
@@ -14,21 +13,17 @@ Future<Map> getAdmiredCouples(username) async {
       url,
       headers: {'Authorization': 'TOKEN ' + db.getString('token')!.toString()},
     );
-
     if (response.statusCode == 200) {
-      admiredCouples = jsonDecode(response.body);
-      print('get admired couples: Successful');
+      Map admiredCouples = jsonDecode(response.body);
+      return admiredCouples;
     } else {
-      print('get admired couples: Fail');
-      print(response.body);
+      return {"error": "An server error has occured."};
     }
   } on SocketException {
-    print('No internet connection');
+    return {"error": "No connection could be made."};
   } catch (e) {
-    print(e);
+    return {"error": "An error has occured", "error_info": e.toString()};
   }
-
-  return admiredCouples;
 }
 
 Future<Map> deletePost(postId) async {
@@ -42,16 +37,15 @@ Future<Map> deletePost(postId) async {
       url,
       headers: {'Authorization': 'TOKEN ' + db.getString('token')!.toString()},
     );
-
     if (response.statusCode == 200) {
       responseData = jsonDecode(response.body);
     } else {
-      return {"error": "Failed to delete the post"};
+      return {"error": "A server error has occured."};
     }
   } on SocketException {
-    print('No internet connection');
+    return {"error": "No connection could be made."};
   } catch (e) {
-    print(e);
+    return {"error": "An error has a occured."};
   }
   return responseData;
 }

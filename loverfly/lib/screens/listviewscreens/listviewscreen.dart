@@ -65,7 +65,6 @@ class ListViewScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index + 1 == admirers.length) {
                         addMoreAdmirers();
-                        print("adding more admirers");
                       }
                       return AdmirerListItem(
                         admirerData: admirers[index],

@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future likePost(postid, postliked) async {
-  bool responseBool = false;
   var url = Uri.parse(EnvConfig().baseUrl +
       '/like-post/' +
       postid.toString() +
@@ -19,15 +18,15 @@ Future likePost(postid, postliked) async {
     if (response.statusCode == 200) {
       var apiResponse = jsonDecode(response.body);
       if (apiResponse["api_response"] == "Success") {
-        responseBool = apiResponse["post_liked"];
+        bool responseBool = apiResponse["post_liked"];
+        return responseBool;
       }
     } else {
-      print(response.body);
+      return postliked;
     }
   } on SocketException {
-    print('No internet connection');
+    return {"error": "No connection could be made"};
   } catch (e) {
-    print(e);
+    return {"error": "An error has occured", "error_info": e.toString()};
   }
-  return responseBool;
 }

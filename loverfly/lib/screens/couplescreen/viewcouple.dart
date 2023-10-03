@@ -274,7 +274,10 @@ class CoupleProfileScreen extends StatelessWidget {
                                                       'assets/svg/heart.svg',
                                                       alignment:
                                                           Alignment.center,
-                                                      color: Colors.grey[300],
+                                                      colorFilter:
+                                                          const ColorFilter
+                                                              .mode(Colors.grey,
+                                                              BlendMode.srcIn),
                                                       width: 20.0,
                                                     ),
                                             ),
@@ -418,7 +421,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                       child: SvgPicture.asset(
                                         'assets/svg/heart.svg',
                                         width: 20.0,
-                                        color: Colors.deepPurple,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.deepPurple, BlendMode.srcIn),
                                       ),
                                     ),
                                     Container(
@@ -450,7 +454,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                       child: SvgPicture.asset(
                                         'assets/svg/heart.svg',
                                         width: 20.0,
-                                        color: Colors.blue,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.blue, BlendMode.srcIn),
                                       ),
                                     ),
                                     Container(

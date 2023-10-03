@@ -10,18 +10,26 @@ Future<Map> getAllCouples() async {
   var db = await SharedPreferences.getInstance();
   try {
     var response = await http.get(url, headers: {
-      'Authorization': 'TOKEN ' + db.getString('token')!.toString()
+      'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
     });
     if (response.statusCode == 200) {
       coupledata = jsonDecode(response.body);
     } else {
-      print('get all user profiles: Fail');
-      print(response.body);
+      return {
+        "error": "An error has occured on the server",
+        "error_info": response.body
+      };
     }
   } on SocketException {
-    print('No connection made');
+    return {
+      "error": "An error has occured on the server",
+      "error_info": "A connection could not be made"
+    };
   } catch (e) {
-    print(e);
+    return {
+      "error": "An error has occured on the server",
+      "error_info": e.toString()
+    };
   }
   return coupledata;
 }
@@ -37,13 +45,21 @@ Future<Map> getTrendingCouples() async {
     if (response.statusCode == 200) {
       trendingCouples = jsonDecode(response.body);
     } else {
-      print('Error during: getTrendingCouples');
-      print(response.body);
+      return {
+        "error": "An error has occured on the server",
+        "error_info": response.body
+      };
     }
   } on SocketException {
-    print('No connection made');
+    return {
+      "error": "An error has occured on the server",
+      "error_info": "A connection could not be made",
+    };
   } catch (e) {
-    print(e);
+    return {
+      "error": "An error has occured on the server",
+      "error_info": e.toString()
+    };
   }
   return trendingCouples;
 }

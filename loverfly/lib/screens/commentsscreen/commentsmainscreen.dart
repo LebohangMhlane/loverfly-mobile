@@ -49,10 +49,6 @@ class _CommentScreenState extends State<CommentScreen> {
     setState(() {});
   }
 
-  void addMoreComments(postId) {
-    print('adding more posts');
-  }
-
   void removeDeletedComment(comment) {
     if (comments.isNotEmpty) {
       comments.remove(comment);
@@ -195,21 +191,24 @@ class _CommentScreenState extends State<CommentScreen> {
                     )),
                   ),
 
-                  // fans
+                  // Admirers:
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 15.0),
                       child: Column(
                         children: [
+                          // heart icon:
                           Expanded(
                               child: Padding(
                             padding: const EdgeInsets.only(top: 2.0),
                             child: SvgPicture.asset(
                               'assets/svg/heart.svg',
                               width: 14.0,
-                              color: Colors.lightBlue,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.lightBlue, BlendMode.srcIn),
                             ),
                           )),
+                          // admirers count:
                           Expanded(
                             flex: 3,
                             child: Padding(

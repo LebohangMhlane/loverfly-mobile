@@ -187,12 +187,18 @@ class MyProfile extends StatelessWidget {
                                           ? SvgPicture.asset(
                                               'assets/svg/heart.svg',
                                               width: 10.0,
-                                              color: Colors.red,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.red,
+                                                      BlendMode.srcIn),
                                             )
                                           : SvgPicture.asset(
                                               'assets/svg/heart.svg',
                                               width: 10.0,
-                                              color: Colors.grey,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.grey,
+                                                      BlendMode.srcIn),
                                             )
                                     ],
                                   ),
@@ -218,12 +224,18 @@ class MyProfile extends StatelessWidget {
                                           ? SvgPicture.asset(
                                               'assets/svg/heart.svg',
                                               width: 10.0,
-                                              color: Colors.red,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.red,
+                                                      BlendMode.srcIn),
                                             )
                                           : SvgPicture.asset(
                                               'assets/svg/heart.svg',
                                               width: 10.0,
-                                              color: Colors.grey,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.grey,
+                                                      BlendMode.srcIn),
                                             )
                                     ],
                                   ),
@@ -444,23 +456,40 @@ class MyProfile extends StatelessWidget {
                                                       ? SvgPicture.asset(
                                                           'assets/svg/twohearts.svg',
                                                           width: 15.0,
-                                                          color:
-                                                              Colors.redAccent)
+                                                          colorFilter:
+                                                              const ColorFilter
+                                                                  .mode(
+                                                                  Colors
+                                                                      .redAccent,
+                                                                  BlendMode
+                                                                      .srcIn),
+                                                        )
                                                       : couple["relationship_status"] ==
                                                               'Engaged'
                                                           ? SvgPicture.asset(
                                                               'assets/svg/rings1.svg',
                                                               width: 15.0,
-                                                              color:
-                                                                  Colors.blue)
+                                                              colorFilter:
+                                                                  const ColorFilter
+                                                                      .mode(
+                                                                      Colors
+                                                                          .blue,
+                                                                      BlendMode
+                                                                          .srcIn),
+                                                            )
                                                           : couple["relationship_status"] ==
                                                                   'Married'
-                                                              ? SvgPicture.asset(
+                                                              ? SvgPicture
+                                                                  .asset(
                                                                   'assets/svg/rings2.svg',
                                                                   width: 15.0,
-                                                                  color: Colors
-                                                                          .pink[
-                                                                      400])
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
+                                                                      Colors
+                                                                          .pink,
+                                                                      BlendMode
+                                                                          .srcIn),
+                                                                )
                                                               : Container(),
                                                 )
                                               ],
@@ -500,7 +529,12 @@ class MyProfile extends StatelessWidget {
                                                         Alignment.centerRight,
                                                     child: SvgPicture.asset(
                                                         'assets/svg/heart.svg',
-                                                        color: Colors.blue,
+                                                        colorFilter:
+                                                            const ColorFilter
+                                                                .mode(
+                                                                Colors.blue,
+                                                                BlendMode
+                                                                    .srcIn),
                                                         width: 15.0)),
                                               ),
                                               Expanded(
@@ -689,7 +723,8 @@ class MyProfile extends StatelessWidget {
                                       child: SvgPicture.asset(
                                         'assets/svg/heart.svg',
                                         width: 20.0,
-                                        color: Colors.blue,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.blue, BlendMode.srcIn),
                                       ),
                                     ),
                                     Container(
@@ -725,7 +760,8 @@ class MyProfile extends StatelessWidget {
                                 child: SvgPicture.asset(
                                   'assets/svg/heart.svg',
                                   width: 20.0,
-                                  color: Colors.red,
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.red, BlendMode.srcIn),
                                 ),
                               ),
                               Container(
