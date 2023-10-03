@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/utils/utils.dart';
 import 'package:loverfly/userinteractions/favourite/favouriteapi.dart';
@@ -219,7 +220,7 @@ class CouplePost extends StatelessWidget {
                 return GestureDetector(
                   onTap: () => Get.to(
                       () => LargerPreviewScreen(
-                            imageurl: post["image"],
+                            imageurl: EnvConfig().baseUrl + post["post_image"],
                             myImage: false,
                             postId: 000,
                             resetPage: () {},
@@ -232,7 +233,7 @@ class CouplePost extends StatelessWidget {
                     child: Transform.scale(
                         scale: 1.0,
                         child: Image.network(
-                          post["image"],
+                          EnvConfig().baseUrl + post["post_image"],
                           fit: BoxFit.cover,
                         )),
                   ),
@@ -299,7 +300,7 @@ class CouplePost extends StatelessWidget {
         height: 110.0,
         child: Row(children: [
           // admire couple button:
-          !postdata.containsKey("is_my_post")
+          !postdata["is_my_post"]
               ? Container(
                   width: 130.0,
                   child: TextButton(
@@ -373,7 +374,7 @@ class CouplePost extends StatelessWidget {
           ),
 
           // like button
-          !postdata.containsKey("is_my_post")
+          !postdata["is_my_post"]
               ? Expanded(
                   child: TextButton(
                     onPressed: () {

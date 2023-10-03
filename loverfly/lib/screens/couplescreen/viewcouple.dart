@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/userinteractions/favourite/favouriteapi.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import '../../components/customappbar.dart';
@@ -488,8 +489,10 @@ class CoupleProfileScreen extends StatelessWidget {
                                         onPressed: () {
                                           Get.to(
                                               () => LargerPreviewScreen(
-                                                    imageurl: posts[index]
-                                                        ["image"],
+                                                    imageurl:
+                                                        EnvConfig().baseUrl +
+                                                            posts[index]
+                                                                ["post_image"],
                                                     myImage: false,
                                                     postId: 000,
                                                     resetPage: () {},
@@ -501,7 +504,9 @@ class CoupleProfileScreen extends StatelessWidget {
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: NetworkImage(
-                                                      posts[index]["image"]),
+                                                      EnvConfig().baseUrl +
+                                                          posts[index]
+                                                              ["post_image"]),
                                                   fit: BoxFit.cover),
                                             )),
                                       );

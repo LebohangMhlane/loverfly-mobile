@@ -55,25 +55,31 @@ class SignInScreen extends StatelessWidget {
       String? email;
       String? password;
       SharedPreferences cache = await SharedPreferences.getInstance();
-      if (!cache.containsKey("token")) {
-        if (cache.containsKey("email") &&
-            cache.containsKey("password") &&
-            cache.containsKey("username")) {
-          username = cache.getString("username");
-          email = cache.getString("email");
-          password = cache.getString("password");
-        }
-        final Map token = await AuthenticationAPI().getAndCacheAPIToken(
-            username: username, email: email, password: password);
-        if (token.isNotEmpty &&
-            !token.containsKey("error_info") &&
-            cache.getString("token") != "") {
-          Get.offAll(() => MainScreen());
-        } else {
-          signInStatus.value = false;
-          signInResponse.value = token["error_info"];
-        }
+      // if (!cache.containsKey("token")) {
+      //   if (cache.containsKey("email") &&
+      //       cache.containsKey("password") &&
+      //       cache.containsKey("username")) {
+      //     username = cache.getString("username");
+      //     email = cache.getString("email");
+      //     password = cache.getString("password");
+      //   }
+
+      // TODO: temp:
+      username = "kai";
+      email = "kai@gmail.com";
+      password = "damonrecords";
+
+      final Map token = await AuthenticationAPI().getAndCacheAPIToken(
+          username: username, email: email, password: password);
+      if (token.isNotEmpty &&
+          !token.containsKey("error_info") &&
+          cache.getString("token") != "") {
+        Get.offAll(() => MainScreen());
+      } else {
+        signInStatus.value = false;
+        signInResponse.value = token["error_info"];
       }
+      // }
     } catch (e) {
       signInStatus.value = false;
       signInResponse.value =

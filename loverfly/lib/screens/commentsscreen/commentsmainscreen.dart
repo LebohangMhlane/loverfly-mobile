@@ -33,7 +33,7 @@ class _CommentScreenState extends State<CommentScreen> {
       var apiResponse = await getComments(widget.postId, "");
       if (apiResponse["api_response"] == "Success") {
         comments.addAll(apiResponse["comments"]);
-        nextPageLink = apiResponse["next_page_link"];
+        nextPageLink = apiResponse["next_page_link"] ?? "";
       }
       pageLoading.value = false;
       preventRebuildProcess.value = true;

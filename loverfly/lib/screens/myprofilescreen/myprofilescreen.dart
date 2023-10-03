@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import '../../utils/pageutils.dart';
@@ -904,9 +905,12 @@ class MyProfile extends StatelessWidget {
                                           onPressed: () {
                                             Get.to(
                                                 () => LargerPreviewScreen(
-                                                      imageurl: pageData
-                                                              .value["posts"]
-                                                          [index]["image"],
+                                                      imageurl: EnvConfig()
+                                                              .baseUrl +
+                                                          pageData.value[
+                                                                      "posts"]
+                                                                  [index]
+                                                              ["post_image"],
                                                       myImage: true,
                                                       postId: pageData
                                                               .value["posts"]
@@ -920,8 +924,11 @@ class MyProfile extends StatelessWidget {
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: NetworkImage(
-                                                        pageData.value["posts"]
-                                                            [index]["image"]),
+                                                        EnvConfig().baseUrl +
+                                                            pageData.value[
+                                                                        "posts"]
+                                                                    [index]
+                                                                ["post_image"]),
                                                     fit: BoxFit.cover),
                                               )),
                                         );

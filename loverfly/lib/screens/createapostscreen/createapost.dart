@@ -59,10 +59,9 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // date formatting
+    // format the date:
     var dayofweek = DateFormat('EEEE').format(DateTime.now());
     var date = DateFormat('dd/MM/yy').format(DateTime.now());
-
     return Builder(
         builder: (context) => Scaffold(
             appBar: AppBar(
@@ -113,7 +112,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.only(left: 10.0),
                               child: const Text(
-                                'Share a moment',
+                                'Share a memory',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
@@ -216,10 +215,6 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
                                             blurRadius: 3.0,
                                             color: Colors.white,
                                           ),
-                                          // Shadow(
-                                          //   blurRadius: 8.0,
-                                          //   color: Colors.white,
-                                          // ),
                                         ],
                                       ),
                                     ),
@@ -408,92 +403,32 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
   }
 
   void createMemory() async {
-    // =============================================================================================
     // ensure the user cannot press the button multiple times while everything is still taking place
-    // =============================================================================================
-
     if (savingpost.value == true) {
       print("post is currently saving");
       return;
     }
     savingpost.value = true;
+    // save the image and postdata data to mysql
+    File imageFile = File(selectedimage!.path);
 
-    // ======================================================================
-    // save the image to firebase storage and save the postdata data to mysql
-    // ======================================================================
+    // prepare the caption:
+    var caption = captioncontroller.value.text != ''
+        ? captioncontroller.value.text
+        : partnerOne["username"] + ' + ' + userProfile.value['username'];
+    // save the post data to mysql:
+    var postUploadedToServerDatabase =
+        await uploadPostToServerDatabase(context, caption, imageFile);
+    var coupleDataUpdated = await updateCoupleData();
 
-    File file = File(selectedimage!.path);
-
-    // run main process:
-    Reference firebaseStorageRef = await getMainReference();
-    Reference imageReference = await getImageReference(firebaseStorageRef);
-
-    // upload to firebase storage:
-    bool uploadedToFirebase = await uploadFileToFirebase(file, imageReference);
-    String downloadUrl = "";
-
-    // get the download url:
-    if (uploadedToFirebase) {
-      // prepare the download url:
-      downloadUrl = await getDownloadUrl(imageReference);
-      // prepare the caption:
-      var caption = captioncontroller.value.text != ''
-          ? captioncontroller.value.text
-          : partnerOne["username"] + ' + ' + userProfile.value['username'];
-      // save the post data to mysql:
-      var postUploadedToServerDatabase =
-          await uploadPostToServerDatabase(caption, downloadUrl);
-      var coupleDataUpdated = await updateCoupleData();
-
-      // verify all went well and notify the user:
-      validateProcessAndNotifyUser(
-          coupleDataUpdated, postUploadedToServerDatabase, uploadedToFirebase);
-    }
+    // verify all went well and notify the user:
+    validateProcessAndNotifyUser(
+        context, coupleDataUpdated, postUploadedToServerDatabase);
   }
 
-  Future<Reference> getMainReference() async {
-    var firebaseStorageRef = FirebaseStorage.instance
-        .ref('couplePosts')
-        .child(couple.value["id"].toString());
-    return firebaseStorageRef;
-  }
-
-  Future<Reference> getImageReference(firebaseStorageRef) async {
-    int numberOfPosts = 0;
-    await firebaseStorageRef.listAll().then((value) {
-      numberOfPosts = value.items.length;
-    });
-    var imageReference =
-        firebaseStorageRef.child((numberOfPosts + 1).toString());
-    return imageReference;
-  }
-
-  Future<bool> uploadFileToFirebase(file, imageReference) async {
-    imageReference as Reference;
+  Future<bool> uploadPostToServerDatabase(context, caption, imageFile) async {
     try {
-      await imageReference.putFile(file);
-      return true;
-    } catch (error) {
-      handleError(error);
-      return false;
-    }
-  }
-
-  Future<String> getDownloadUrl(firebaseStorageRef) async {
-    try {
-      var url = await firebaseStorageRef.getDownloadURL();
-      return url;
-    } catch (error) {
-      handleError(error);
-      // printing for now:
-      print("Error uploading image to firebase: " + error.toString());
-      return "";
-    }
-  }
-
-  Future<bool> uploadPostToServerDatabase(caption, downloadUrl) async {
-    try {
-      Map apiResponse = await createAPost(caption, downloadUrl);
+      Map apiResponse = await createAPost(caption, imageFile);
       if (apiResponse.containsKey("error")) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.purple,
@@ -516,11 +451,11 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
 
   Future<bool> updateCoupleData() async {
     try {
-      var localCache = await SharedPreferences.getInstance();
-      var couple = localCache.getString("user_couple");
+      var cache = await SharedPreferences.getInstance();
+      var couple = cache.getString("user_couple");
       Map jsonCouple = jsonDecode(couple!);
       jsonCouple["has_posts"] = true;
-      localCache.setString("user_couple", jsonEncode(jsonCouple));
+      cache.setString("user_couple", jsonEncode(jsonCouple));
       return true;
     } catch (error) {
       handleError(error);
@@ -529,8 +464,8 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
   }
 
   void validateProcessAndNotifyUser(
-      coupleDataUpdated, postUploadedToServerDatabase, isUploaded) {
-    if (coupleDataUpdated && postUploadedToServerDatabase && isUploaded) {
+      context, coupleDataUpdated, postUploadedToServerDatabase) {
+    if (coupleDataUpdated && postUploadedToServerDatabase) {
       SnackBars().displaySnackBar("Memory Shared Successfully", () {}, context);
       savingpost.value = false;
       Get.offAll(() => MainScreen());
