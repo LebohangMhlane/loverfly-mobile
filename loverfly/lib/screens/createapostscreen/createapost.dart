@@ -31,7 +31,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
   ImagePicker imagepicker = ImagePicker();
 
   var imagedownloadurl = '';
-  var userprofile = Rx<Map>({});
+  var userProfile = Rx<Map>({});
   var couple = Rx<Map>({});
   Map partnerOne = {};
   bool isPartnerOne = false;
@@ -45,11 +45,11 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     // get the users profile from local storage:
     try {
       SharedPreferences.getInstance().then((value) {
-        userprofile.value = jsonDecode(value.getString('user_profile')!);
+        userProfile.value = jsonDecode(value.getString('user_profile')!);
         couple.value = jsonDecode(value.getString('user_couple')!);
         // find partner one:
-        couple.value["partner_one"]["username"] == userprofile.value["username"]
-            ? partnerOne = userprofile.value
+        couple.value["partner_one"]["username"] == userProfile.value["username"]
+            ? partnerOne = userProfile.value
             : partnerOne = couple.value["partner_one"];
       });
     } catch (e) {
@@ -439,7 +439,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
       // prepare the caption:
       var caption = captioncontroller.value.text != ''
           ? captioncontroller.value.text
-          : partnerOne["username"] + ' + ' + userprofile.value['username'];
+          : partnerOne["username"] + ' + ' + userProfile.value['username'];
       // save the post data to mysql:
       var postUploadedToServerDatabase =
           await uploadPostToServerDatabase(caption, downloadUrl);

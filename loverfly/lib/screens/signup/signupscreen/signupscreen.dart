@@ -169,7 +169,7 @@ class SignUpScreen extends StatelessWidget {
                               ),
                             )),
                         const SizedBox(
-                          height: 8.0,
+                          height: 6.0,
                         ),
                         Container(
                             decoration: BoxDecoration(
@@ -374,7 +374,7 @@ class SignUpScreen extends StatelessWidget {
         saveToSharedPreferences(email, password).then((saved) => {
               saved
                   ? SnackBars()
-                      .displaySnackBar("Saved! Continuing with sign up!", () {
+                      .displaySnackBar("Saved! Continuing with sign up.", () {
                       Get.to(() => UsernameCreateScreen());
                     }, context)
                   : SnackBars().displaySnackBar(

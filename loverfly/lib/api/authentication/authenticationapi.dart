@@ -7,7 +7,7 @@ import '../../environmentconfig/envconfig.dart';
 
 class AuthenticationAPI {
   // =========================================================================
-  // generates an authentication token and userprofile for the registered user
+  // handles authentication throughout the app
   // =========================================================================
   late SharedPreferences db;
 
@@ -18,7 +18,8 @@ class AuthenticationAPI {
   }
 
   Future<Map> getAndCacheAPIToken({username, email, password}) async {
-    Map tokenMap = {};
+    // make the request to get a api token:
+    Map token = {};
     try {
       var url = Uri.parse(EnvConfig().baseUrl + '/api-token-auth/');
       var response = await http
@@ -29,28 +30,26 @@ class AuthenticationAPI {
           )
           .timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
-        // cache and return the token:
         var responseAsJson = jsonDecode(response.body);
         db.clear();
         db.setString('token', responseAsJson['token']);
-        tokenMap["token"] = responseAsJson['token'];
-        return tokenMap;
+        token["token"] = responseAsJson['token'];
+        return token;
       } else {
         var responseBody = jsonDecode(response.body);
         if (responseBody['non_field_errors'][0] ==
             "Unable to log in with provided credentials.") {
-          tokenMap["error_info"] = "Incorrect username or password";
+          token["error_info"] = "Incorrect username or password";
         } else {
-          tokenMap["error_info"] =
+          token["error_info"] =
               "Something went wrong on our end. We will fix it soon";
         }
-
-        return tokenMap;
+        return token;
       }
     } catch (e) {
       String error = e.toString();
       if (error.contains("TimeoutException")) {
-        tokenMap["error_info"] =
+        token["error_info"] =
             "No connection to server: Please check internet connection";
       }
       throw Exception();

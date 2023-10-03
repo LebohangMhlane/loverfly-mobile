@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/signup/couplecreate/couplecreatescreen.dart';
 import 'package:loverfly/screens/signup/signupapi.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -138,11 +137,14 @@ class UsernameCreateScreen extends StatelessWidget {
                                 leftmargin: 60.0,
                                 rightmargin: 60.0,
                                 onpressedfunction: () async {
+                                  // hide the keyboard:
+                                  // clean the username:
+                                  // call processUsername function:
                                   FocusScope.of(context).unfocus();
                                   String username = usernameController.text
                                       .trim()
                                       .replaceAll(RegExp(r'\s+'), '');
-                                  createAccounts(username, context);
+                                  processUsername(username, context);
                                 }),
                             const SizedBox(
                               height: 50.0,
@@ -183,25 +185,29 @@ class UsernameCreateScreen extends StatelessWidget {
     }
   }
 
-  void createAccounts(String username, context) async {
+  void processUsername(String username, context) async {
+    // if the username is not an empty string:
+    // validate the username:
+    // save it to the cache:
+    // when saved, sign up the user:
+    // navigate to the sign in screen to do the sign in process for the new user:
     if (username != "") {
       // TODO: Complete username validations:
       profanityFound.value = await isProfanityFound(username);
       usernameTaken.value = await isUsernameTaken(username);
-      // check all is valid and continue with sign up:
       if (!profanityFound.value && !usernameTaken.value) {
         await saveToSharedPreferences(username).then((saved) async {
           if (saved) {
-            bool accountCreated = await createAccountAPI();
+            bool accountCreated = await signUp();
             accountCreated
-                ? SnackBars().displaySnackBar("All done! Signing you up!", () {
+                ? SnackBars().displaySnackBar("All done. Signing you up.", () {
                     Get.to(() => SignInScreen());
                   }, context)
                 : SnackBars().displaySnackBar(
                     "Sign up failed. We're looking into it.", () {}, context);
           } else {
-            SnackBars()
-                .displaySnackBar("Something went wrong!", () {}, context);
+            SnackBars().displaySnackBar(
+                "Something went wrong. We're looking into it.", () {}, context);
           }
         });
       }
