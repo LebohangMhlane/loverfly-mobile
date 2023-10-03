@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/screens/signup/couplecreate/couplecreatescreen.dart';
+import 'package:loverfly/screens/signup/signupapi.dart';
+import 'package:loverfly/utils/pageutils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UsernameCreateScreen extends StatelessWidget {
   UsernameCreateScreen({Key? key}) : super(key: key);
 
-  final RxBool usernameValid = RxBool(true);
+  final RxBool usernameTaken = RxBool(false);
+  final RxBool profanityFound = RxBool(false);
   final TextEditingController usernameController = TextEditingController();
 
   @override
@@ -66,7 +72,7 @@ class UsernameCreateScreen extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
                                   padding:
-                                      EdgeInsets.only(left: 8.0, bottom: 5.0),
+                                      EdgeInsets.only(left: 8.0, bottom: 10.0),
                                   child: Text(
                                     "Pick an entertaining username!",
                                     style: TextStyle(color: Colors.purple),
@@ -84,9 +90,7 @@ class UsernameCreateScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10.0)),
                                 child: TextFormField(
                                   style: const TextStyle(fontSize: 13.0),
-                                  onTap: () {
-                                    usernameValid.value = true;
-                                  },
+                                  onTap: () {},
                                   onChanged: (value) {},
                                   controller: usernameController,
                                   decoration: const InputDecoration(
@@ -98,21 +102,34 @@ class UsernameCreateScreen extends StatelessWidget {
                             const SizedBox(
                               height: 8.0,
                             ),
-                            usernameValid.isFalse
+                            usernameTaken.isTrue
                                 ? SizedBox(
                                     height: 20.0,
                                     width: MediaQuery.of(context).size.width,
                                     child: const Padding(
                                       padding: EdgeInsets.only(left: 10.0),
                                       child: Text(
-                                        "That username is already be taken!",
+                                        "That username is already taken!",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            profanityFound.isTrue
+                                ? SizedBox(
+                                    height: 20.0,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: const Padding(
+                                      padding: EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        "Usernames like that aren't allowed.",
                                         style: TextStyle(color: Colors.red),
                                       ),
                                     ),
                                   )
                                 : const SizedBox(),
                             const SizedBox(
-                              height: 20.0,
+                              height: 15.0,
                             ),
                             CustomButton(
                                 buttonlabel: "Continue",
@@ -122,13 +139,10 @@ class UsernameCreateScreen extends StatelessWidget {
                                 rightmargin: 60.0,
                                 onpressedfunction: () async {
                                   FocusScope.of(context).unfocus();
-                                  String username =
-                                      usernameController.text.trim();
-                                  if (username != "") {
-                                    await validateUsernameProfanity(
-                                        username); // TODO: Complete username validations
-                                    await validateUsernameUnique(username);
-                                  }
+                                  String username = usernameController.text
+                                      .trim()
+                                      .replaceAll(RegExp(r'\s+'), '');
+                                  createAccounts(username, context);
                                 }),
                             const SizedBox(
                               height: 50.0,
@@ -143,19 +157,54 @@ class UsernameCreateScreen extends StatelessWidget {
         ));
   }
 
-  Future<bool> validateUsernameProfanity(String username) async {
+  Future<bool> isProfanityFound(String username) async {
     try {
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> isUsernameTaken(String username) async {
+    try {
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> saveToSharedPreferences(String username) async {
+    try {
+      SharedPreferences db = await SharedPreferences.getInstance();
+      db.setString("username", username);
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  Future<bool> validateUsernameUnique(String username) async {
-    try {
-      return true;
-    } catch (e) {
-      return false;
+  void createAccounts(String username, context) async {
+    if (username != "") {
+      // TODO: Complete username validations:
+      profanityFound.value = await isProfanityFound(username);
+      usernameTaken.value = await isUsernameTaken(username);
+      // check all is valid and continue with sign up:
+      if (!profanityFound.value && !usernameTaken.value) {
+        await saveToSharedPreferences(username).then((saved) async {
+          if (saved) {
+            bool accountCreated = await createAccountAPI();
+            accountCreated
+                ? SnackBars().displaySnackBar("All done! Signing you up!", () {
+                    Get.to(() => SignInScreen());
+                  }, context)
+                : SnackBars().displaySnackBar(
+                    "Sign up failed. We're looking into it.", () {}, context);
+          } else {
+            SnackBars()
+                .displaySnackBar("Something went wrong!", () {}, context);
+          }
+        });
+      }
     }
   }
 }

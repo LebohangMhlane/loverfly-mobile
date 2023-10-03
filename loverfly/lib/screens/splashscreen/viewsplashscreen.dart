@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
+import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:get/get.dart';
-// import 'package:loverfly/api/authentication/signinscreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -64,6 +63,8 @@ class _SplashScreenState extends State<SplashScreen> {
               instance.get("user_profile") != "") {
             Get.to(() => MainScreen());
           }
+        } else {
+          Get.to(() => SignUpScreen());
         }
       });
     });

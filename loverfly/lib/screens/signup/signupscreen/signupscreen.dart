@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/usernamecreatescreen/usernamecreatescreen.dart';
+import 'package:loverfly/screens/signup/usernamecreate/usernamecreatescreen.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,7 +34,7 @@ class SignUpScreen extends StatelessWidget {
         },
         child: SingleChildScrollView(
           child: Column(children: [
-            // logo
+            // logo:
             Padding(
               padding: const EdgeInsets.only(top: 100.0),
               child: Center(
@@ -67,7 +67,7 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
 
-            // sign Up title
+            // sign Up title:
             Padding(
               padding: const EdgeInsets.only(
                   top: 50.0, left: 30.0, right: 30.0, bottom: 30.0),
@@ -94,7 +94,7 @@ class SignUpScreen extends StatelessWidget {
               height: 10.0,
             ),
 
-            // email address field:
+            // fields:
             Obx(
               () => Padding(
                 padding: const EdgeInsets.only(left: 50.0, right: 50.0),
@@ -102,6 +102,7 @@ class SignUpScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
+                        // email address field:
                         const Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -155,7 +156,7 @@ class SignUpScreen extends StatelessWidget {
                           height: 15.0,
                         ),
 
-                        // password
+                        // password field:
                         const Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -206,6 +207,14 @@ class SignUpScreen extends StatelessWidget {
                                 ),
                               )
                             : const SizedBox(),
+
+                        const SizedBox(
+                          height: 40.0,
+                          child: Text(
+                            "Password must be at least 8 characters long with at least one capitalized letter, special character, and numerical character. White spaces will not be recognized.",
+                            style: TextStyle(fontSize: 10.0),
+                          ),
+                        ),
 
                         const SizedBox(
                           height: 15.0,
@@ -325,7 +334,7 @@ class SignUpScreen extends StatelessWidget {
     try {
       SharedPreferences db = await SharedPreferences.getInstance();
       await db.clear();
-      await db.setString("emailAddress", email);
+      await db.setString("email", email);
       await db.setString("password", password);
       return true;
     } catch (e) {
@@ -339,8 +348,11 @@ class SignUpScreen extends StatelessWidget {
 
     // gather form data:
     String email = emailTextController.text.trim();
-    String password = passwordTextController.text.trim();
-    String confirmPassword = confirmPasswordTextController.text.trim();
+    String password =
+        passwordTextController.text.trim().replaceAll(RegExp(r'\s+'), '');
+    String confirmPassword = confirmPasswordTextController.text
+        .trim()
+        .replaceAll(RegExp(r'\s+'), '');
 
     // validate the form data:
     if (!isEmailValid(email)) {
@@ -361,7 +373,8 @@ class SignUpScreen extends StatelessWidget {
       try {
         saveToSharedPreferences(email, password).then((saved) => {
               saved
-                  ? SnackBars().displaySnackBar("Signed Up Successfully!", () {
+                  ? SnackBars()
+                      .displaySnackBar("Saved! Continuing with sign up!", () {
                       Get.to(() => UsernameCreateScreen());
                     }, context)
                   : SnackBars().displaySnackBar(

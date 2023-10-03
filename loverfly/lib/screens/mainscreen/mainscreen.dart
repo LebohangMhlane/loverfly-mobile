@@ -8,6 +8,7 @@ import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
+import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../coupleexplorerscreen/viewcoupleexplorer.dart';
 import '../myprofilescreen/myprofilescreen.dart';
@@ -27,15 +28,15 @@ class MainScreen extends StatelessWidget {
 
   void preparePageData(comingFromCouplePage) async {
     if (!pageLoaded.value || comingFromCouplePage == true) {
-      // pageLoading.value ? pageLoading.value = true : pageLoading.value;
       try {
+        // TODO: find a way to globally have access to the shared preferences instance:
         var instance = await SharedPreferences.getInstance();
         await AuthenticationAPI()
             .getUserProfileAndCoupleData(instance.get("token"))
-            .then((responseMap) async {
-          if (!responseMap.keys.contains("error")) {
-            var userProfile = responseMap["user_profile"];
-            var couple = responseMap["couple"];
+            .then((Map response) async {
+          if (!response.keys.contains("error")) {
+            var userProfile = response["user_profile"];
+            var couple = response["couple"];
 
             // update local storage with new data:
             instance.setString("user_profile", jsonEncode(userProfile));
@@ -55,11 +56,11 @@ class MainScreen extends StatelessWidget {
 
   void preparePostsForFeed() async {
     pageData.value["pagination_link"] = null;
-    await getPostsForFeed(null).then((responseMap) {
-      if (responseMap["posts"] != null) {
-        posts.value = responseMap["posts"];
-        responseMap["pagination_link"] != null
-            ? pageData.value["pagination_link"] = responseMap["pagination_link"]
+    await getPostsForFeed(null).then((Map response) {
+      if (response["posts"] != null) {
+        posts.value = response["posts"];
+        response["pagination_link"] != null
+            ? pageData.value["pagination_link"] = response["pagination_link"]
             : pageData.value["pagination_link"] = "";
       } else {
         posts.value = [];
@@ -69,17 +70,20 @@ class MainScreen extends StatelessWidget {
     }).whenComplete(() => pageLoading.value = false);
   }
 
-  void addMorePosts() async {
+  void addMorePosts(context) async {
     var paginationLink = pageData.value["pagination_link"];
     if (paginationLink != "") {
-      await getPostsForFeed(paginationLink).then((responseMap) {
-        if (!responseMap.containsKey("error")) {
+      await getPostsForFeed(paginationLink).then((Map response) {
+        if (!response.containsKey("error")) {
           posts.update((val) {
-            val!.addAll(responseMap["posts"]);
+            val!.addAll(response["posts"]);
           });
+        } else {
+          SnackBars().displaySnackBar(
+              "There was an error adding more posts", () => null, context);
         }
-        responseMap["pagination_link"] != null
-            ? pageData.value["pagination_link"] = responseMap["pagination_link"]
+        response["pagination_link"] != null
+            ? pageData.value["pagination_link"] = response["pagination_link"]
             : pageData.value["pagination_link"] = null;
       });
     }
@@ -249,7 +253,7 @@ class MainScreen extends StatelessWidget {
                                                     pageData.value[
                                                             "pagination_link"] !=
                                                         null) {
-                                                  addMorePosts();
+                                                  addMorePosts(context);
                                                 }
                                               }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'authenticationapi.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -12,8 +13,7 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    signinuser(
-        email: "kai@gmail.com", password: "damonrecords", username: "kai");
+    signinuser();
 
     return Scaffold(
         body: Column(
@@ -69,8 +69,22 @@ class SignInScreen extends StatelessWidget {
   // sign the user in and save their data to local storage to keep them signed in:
   // =============================================================================
 
-  void signinuser({email, password, username}) async {
+  void signinuser() async {
     try {
+      String? username;
+      String? email;
+      String? password;
+
+      SharedPreferences db = await SharedPreferences.getInstance();
+
+      if (db.containsKey("email") &&
+          db.containsKey("password") &&
+          db.containsKey("username")) {
+        username = db.getString("username");
+        email = db.getString("email");
+        password = db.getString("password");
+      }
+
       var firebaseSignInSuccessful = await signIntoFirebase(email, password);
 
       // if we signed in successfully to firebase we can now get the api token:

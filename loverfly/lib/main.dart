@@ -11,10 +11,10 @@ import 'package:loverfly/screens/createapostscreen/createapost.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
-import 'package:loverfly/screens/signupscreen/signupscreen.dart';
+import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
 import 'package:loverfly/screens/myprofilescreen/myprofilescreen.dart';
-import 'package:loverfly/screens/usernamecreatescreen/usernamecreatescreen.dart';
+import 'package:loverfly/screens/signup/usernamecreate/usernamecreatescreen.dart';
 import 'package:loverfly/testpage.dart';
 import 'screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),
       ],
-      initialRoute: '/signinscreen',
+      initialRoute: '/signupscreen',
     );
   }
 }
