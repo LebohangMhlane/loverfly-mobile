@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
 import 'dart:convert';
 import 'dart:io';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../environmentconfig/envconfig.dart';
@@ -48,11 +49,11 @@ class AuthenticationAPI {
       }
     } catch (e) {
       String error = e.toString();
-      if (error.contains("TimeoutException")) {
+      if (error.split(" ").contains("TimeoutException")) {
         token["error_info"] =
             "No connection to server: Please check internet connection";
       }
-      throw Exception();
+      return token;
     }
   }
 

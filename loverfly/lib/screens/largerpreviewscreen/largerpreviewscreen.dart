@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/components/custombutton.dart';
@@ -106,8 +107,8 @@ class LargerPreviewScreen extends StatelessWidget {
                                           image: DecorationImage(
                                         fit: BoxFit.contain,
                                         alignment: FractionalOffset.center,
-                                        image:
-                                            NetworkImage(imageurlstring.value),
+                                        image: CachedNetworkImageProvider(
+                                            imageurlstring.value),
                                       )),
                                     )
                                   : const Center(

@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_key_in_widget_constructors, avoid_print, avoid_unnecessary_containers, sized_box_for_whitespace
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import '../../utils/pageutils.dart';
@@ -905,12 +905,9 @@ class MyProfile extends StatelessWidget {
                                           onPressed: () {
                                             Get.to(
                                                 () => LargerPreviewScreen(
-                                                      imageurl: EnvConfig()
-                                                              .baseUrl +
-                                                          pageData.value[
-                                                                      "posts"]
-                                                                  [index]
-                                                              ["post_image"],
+                                                      imageurl: pageData
+                                                              .value["posts"]
+                                                          [index]["post_image"],
                                                       myImage: true,
                                                       postId: pageData
                                                               .value["posts"]
@@ -923,8 +920,8 @@ class MyProfile extends StatelessWidget {
                                               margin: const EdgeInsets.all(2.0),
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        EnvConfig().baseUrl +
+                                                    image:
+                                                        CachedNetworkImageProvider(
                                                             pageData.value[
                                                                         "posts"]
                                                                     [index]

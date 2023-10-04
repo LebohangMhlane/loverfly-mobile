@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_this, avoid_unnecessary_containers, sized_box_for_whitespace, use_key_in_widget_constructors, avoid_print
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/utils/utils.dart';
 import 'package:loverfly/userinteractions/favourite/favouriteapi.dart';
@@ -13,21 +13,38 @@ import '../../couplescreen/viewcouple.dart';
 
 class CouplePost extends StatelessWidget {
   final Map postdata;
-  final Function resetPageFunction;
-  const CouplePost({required this.postdata, required this.resetPageFunction});
+  final Function rebuildPageFunction;
+  CouplePost({required this.postdata, required this.rebuildPageFunction});
+
+  // prepare the data
+  final RxMap post = RxMap({});
+  final RxMap couple = RxMap({});
+  final Rx<bool> isliked = RxBool(false);
+  final RxBool isAdmired = RxBool(false);
+  final RxMap postdate = RxMap({});
+  final RxInt admirers = RxInt(0);
+  final RxInt likecount = RxInt(0);
+  final RxDouble imageHeight = RxDouble(0.0);
+  final RxBool pageLoaded = RxBool(false);
+
+  void preparePageData() {
+    if (!pageLoaded.value) {
+      post.value = postdata["post"];
+      couple.value = postdata["couple"];
+      isliked.value = postdata["isLiked"];
+      isAdmired.value = postdata["isAdmired"];
+      postdate.value = DateFunctions().convertdate(post["time_posted"]);
+      admirers.value = couple["admirers"];
+      likecount.value = post["likes"];
+      imageHeight.value = 0.0;
+      pageLoaded.value = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // prepare the data and build:
-    Map post = postdata["post"];
-    Map couple = postdata["couple"];
-    Rx<bool> isliked = Rx(postdata["isLiked"]);
-    RxBool isAdmired = RxBool(postdata["isAdmired"]);
-    Map postdate = DateFunctions().convertdate(post["time_posted"]);
-    Rx<int> admirers = Rx<int>(couple["admirers"]);
-    Rx<int> likecount = Rx<int>(post["likes"]);
-    RxDouble imageHeight = RxDouble(0.0);
-
+    preparePageData();
+    print('page built');
     return Container(
         child: Column(children: [
       // profile picture and admirers section:
@@ -36,7 +53,7 @@ class CouplePost extends StatelessWidget {
           Get.to(() => CoupleProfileScreen(
                 couple: couple,
                 isAdmired: RxBool(postdata["isAdmired"]),
-                rebuildPageFunction: resetPageFunction,
+                rebuildPageFunction: rebuildPageFunction,
               ));
         },
         child: SizedBox(
@@ -220,21 +237,21 @@ class CouplePost extends StatelessWidget {
                 return GestureDetector(
                   onTap: () => Get.to(
                       () => LargerPreviewScreen(
-                            imageurl: EnvConfig().baseUrl + post["post_image"],
+                            imageurl: post["post_image"] ??
+                                "", // TODO: should have a suitable placeholder:
                             myImage: false,
                             postId: 000,
                             resetPage: () {},
                           ),
                       opaque: false),
                   child: Container(
-                    // alignment: showComments.value ? Alignment.center : Alignment.bottomCenter,
                     constraints: BoxConstraints(maxHeight: maxHeight),
                     width: MediaQuery.of(context).size.width,
                     child: Transform.scale(
                         scale: 1.0,
-                        child: Image.network(
-                          EnvConfig().baseUrl + post["post_image"],
+                        child: CachedNetworkImage(
                           fit: BoxFit.cover,
+                          imageUrl: post["post_image"] ?? "",
                         )),
                   ),
                 );

@@ -260,7 +260,7 @@ class MainScreen extends StatelessWidget {
                                               // couple post
                                               return CouplePost(
                                                 postdata: posts.value[index],
-                                                resetPageFunction:
+                                                rebuildPageFunction:
                                                     preparePageData,
                                               );
                                             })),

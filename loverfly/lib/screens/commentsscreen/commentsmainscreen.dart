@@ -90,7 +90,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
                                           imageurl: widget.couple["partner_one"]
-                                              ["profile_picture"],
+                                                  ["profile_picture"] ??
+                                              "",
                                           myImage: false,
                                           resetPage: () {},
                                           postId: 000,
