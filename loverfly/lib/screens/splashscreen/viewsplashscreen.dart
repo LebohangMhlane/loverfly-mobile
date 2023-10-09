@@ -61,7 +61,9 @@ class _SplashScreenState extends State<SplashScreen> {
         if (instance.containsKey("token") && instance.get("token") != "") {
           if (instance.containsKey("user_profile") &&
               instance.get("user_profile") != "") {
-            Get.to(() => MainScreen());
+            Get.to(() => MainScreen(
+                  desiredPageIndex: 0,
+                ));
           }
         } else {
           Get.to(() => SignUpScreen());

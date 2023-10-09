@@ -125,129 +125,136 @@ class LargerPreviewScreen extends StatelessWidget {
                                 // confirmation overlay:
                                 Container(
                                     width: MediaQuery.of(context).size.width,
-                                    height: 340.0,
+                                    height: 420.0,
                                     margin: const EdgeInsets.only(
                                         left: 10.0, right: 10.0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.0),
                                       color: Colors.white,
                                     ),
-                                    child: Column(children: [
-                                      const SizedBox(
-                                        height: 30.0,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 20.0,
-                                            color: Colors.transparent,
-                                            child: Transform(
-                                              child: Image.asset(
-                                                'assets/placeholders/logo.jpeg',
-                                                width: 30.0,
+                                    child: SingleChildScrollView(
+                                      child: Column(children: [
+                                        const SizedBox(
+                                          height: 30.0,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 20.0,
+                                              color: Colors.transparent,
+                                              child: Transform(
+                                                child: Image.asset(
+                                                  'assets/placeholders/logo.jpeg',
+                                                  width: 30.0,
+                                                ),
+                                                alignment: Alignment.center,
+                                                transform:
+                                                    Matrix4.rotationZ(6.0),
                                               ),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 2.0),
+                                              color: Colors.transparent,
                                               alignment: Alignment.center,
-                                              transform: Matrix4.rotationZ(6.0),
+                                              child: const Text(
+                                                'LoverFly',
+                                                style: TextStyle(
+                                                    fontSize: 17.0,
+                                                    color: Colors.purple),
+                                              ),
                                             ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 24.0,
+                                        ),
+                                        const SizedBox(
+                                          height: 20.0,
+                                          child: Text(
+                                            "Notice: Deleting Memories",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.purple,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.only(
-                                                left: 2.0),
-                                            color: Colors.transparent,
-                                            alignment: Alignment.center,
-                                            child: const Text(
-                                              'LoverFly',
-                                              style: TextStyle(
-                                                  fontSize: 17.0,
-                                                  color: Colors.purple),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 8.0,
+                                              left: 25.0,
+                                              right: 25.0,
+                                              bottom: 8.0),
+                                          child: Text(
+                                            "Memories you set to delete will be permanently deleted after 30 days. This means, that if you delete a memory on accident or wish to retrieve a memory you once deleted, it will be possible only if the memory is retrieved within 30 days. You can view and retrieve your deleted memories in 'settings' > 'Activity' > 'Deleted Memories'. Deleted memories will not appear on your timeline or couple image list to be viewed by your followers",
+                                            textAlign: TextAlign.justify,
+                                            style: TextStyle(
+                                                color: Colors.purple,
+                                                height: 1.3),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20.0,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            CustomButton(
+                                              buttonlabel: "Cancel",
+                                              buttoncolor: Colors.purple,
+                                              rightmargin: 20.0,
+                                              borderradius: 10.0,
+                                              leftpadding: 20.0,
+                                              rightpadding: 20.0,
+                                              onpressedfunction: () {
+                                                showConfirmationOverlay.value =
+                                                    false;
+                                              },
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 24.0,
-                                      ),
-                                      const SizedBox(
-                                        height: 20.0,
-                                        child: Text(
-                                          "Notice: Deleting Memories",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.purple,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 25.0, right: 25.0),
-                                        child: const Text(
-                                          "Memories you set to delete will be permanently deleted after 30 days. This means, that if you delete a memory on accident or wish to retrieve a memory you once deleted, it will be possible only if the memory is retrieved within 30 days. You can view and retrieve your deleted memories in 'settings' > 'Activity' > 'Deleted Memories'. Deleted memories will not appear on your timeline or couple image list to be viewed by your followers",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.purple,
-                                              height: 1.3),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CustomButton(
-                                            buttonlabel: "Cancel",
-                                            buttoncolor: Colors.purple,
-                                            rightmargin: 20.0,
-                                            borderradius: 10.0,
-                                            leftpadding: 20.0,
-                                            rightpadding: 20.0,
-                                            onpressedfunction: () {
-                                              showConfirmationOverlay.value =
-                                                  false;
-                                            },
-                                          ),
-                                          CustomButton(
-                                            buttonlabel: "Delete",
-                                            buttoncolor: Colors.purple,
-                                            borderradius: 10.0,
-                                            leftpadding: 25.0,
-                                            rightpadding: 25.0,
-                                            onpressedfunction: () async {
-                                              deletePost(postId)
-                                                  .then((responseMap) {
-                                                if (responseMap[
-                                                    "post_deleted"]) {
-                                                  showConfirmationOverlay
-                                                      .value = false;
-
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                          const SnackBar(
-                                                        backgroundColor:
-                                                            Colors.purple,
-                                                        content: Text(
-                                                          'Memory Deleted!',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 2000),
-                                                      ))
-                                                      .closed
-                                                      .then((value) {
-                                                    resetPage();
-                                                    Get.back();
-                                                  });
-                                                }
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      )
-                                    ]),
+                                            CustomButton(
+                                              buttonlabel: "Delete",
+                                              buttoncolor: Colors.purple,
+                                              borderradius: 10.0,
+                                              leftpadding: 25.0,
+                                              rightpadding: 25.0,
+                                              onpressedfunction: () async {
+                                                deletePost(postId)
+                                                    .then((responseMap) {
+                                                  if (responseMap[
+                                                      "post_deleted"]) {
+                                                    showConfirmationOverlay
+                                                        .value = false;
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                          backgroundColor:
+                                                              Colors.purple,
+                                                          content: Text(
+                                                            'Memory Deleted!',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  2000),
+                                                        ))
+                                                        .closed
+                                                        .then((value) {
+                                                      resetPage();
+                                                      Get.back();
+                                                    });
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      ]),
+                                    ),
                                   )
                                 : const SizedBox(),
                           ],

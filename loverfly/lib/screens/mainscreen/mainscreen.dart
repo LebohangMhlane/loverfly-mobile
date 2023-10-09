@@ -15,12 +15,14 @@ import '../myprofilescreen/myprofilescreen.dart';
 import 'api/mainscreenapi.dart';
 
 class MainScreen extends StatelessWidget {
-  MainScreen({key}) : super(key: key);
+  MainScreen({key, required this.desiredPageIndex}) : super(key: key);
 
   final Rx<List> posts = Rx<List>([]);
   final Rx<bool> postsFound = Rx<bool>(false);
   final Rx<bool> pageLoading = Rx<bool>(true);
   final RxBool pageLoaded = RxBool(false);
+  final int desiredPageIndex;
+  final RxInt initialPageIndex = RxInt(0);
   final RxMap pageData = RxMap({
     "pagination_link": null,
     "couple": {},
@@ -138,7 +140,7 @@ class MainScreen extends StatelessWidget {
         // main body:
         body: Obx(
           () => DefaultTabController(
-              initialIndex: 0,
+              initialIndex: desiredPageIndex,
               length: 2,
               child: Column(verticalDirection: VerticalDirection.up, children: [
                 // tab bar switch buttons:
@@ -270,8 +272,6 @@ class MainScreen extends StatelessWidget {
                                 // user profile:
                                 child: MyProfile(
                               reloadPosts: preparePostsForFeed,
-                              couple: pageData["couple"],
-                              userProfile: pageData.value["user_profile"],
                             )),
                           ],
                         ))),

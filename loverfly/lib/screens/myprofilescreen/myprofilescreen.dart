@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_key_in_widget_constructors, avoid_print, avoid_unnecessary_containers, sized_box_for_whitespace
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/pageutils.dart';
 import '../couplelink/generatecode.dart';
 import '../couplelink/inputcode.dart';
@@ -14,14 +17,13 @@ import '../largerpreviewscreen/largerpreviewscreen.dart';
 
 class MyProfile extends StatelessWidget {
   final Function reloadPosts;
-  final Map couple;
-  final userProfile;
+  final RxMap userProfile =
+      RxMap({"is_straight": true, "username": "New User"});
+  final RxMap couple = RxMap({});
 
   MyProfile({
     Key? key,
     required this.reloadPosts,
-    this.couple = const {},
-    required this.userProfile,
   });
 
   final pageData = Rx<Map>({
@@ -31,10 +33,41 @@ class MyProfile extends StatelessWidget {
     "show_relationship_stage_options": false,
   });
 
+  Future<bool> preparePageData() async {
+    try {
+      bool pageReady = false;
+      // get the couple from cache:
+      SharedPreferences cache = await SharedPreferences.getInstance();
+      cache.containsKey("user_couple")
+          ? couple.value = jsonDecode(cache.getString("user_couple")!)
+          : couple.value = {};
+
+      cache.containsKey("user_profile")
+          ? userProfile.value = jsonDecode(cache.getString("user_profile")!)
+          : userProfile.value = {};
+      // get my couples posts:
+      if (couple.isNotEmpty) {
+        await getCouplePosts(couple["id"]).then((listOfPosts) {
+          pageData.update((map) {
+            map!["posts"] = listOfPosts["couple_posts"];
+            listOfPosts["couple_posts"].length == 0
+                ? couple["has_posts"] = false
+                : couple["has_posts"] = true;
+          });
+        });
+      }
+      pageReady = true;
+      return pageReady;
+    } catch (e) {
+      print("something went wrong while loading this page");
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("nuilding");
     preparePageData();
-
     return Obx(
       () => Scaffold(
           body: SingleChildScrollView(
@@ -67,7 +100,7 @@ class MyProfile extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         top: 5.0, bottom: 5.0),
                                     child: Text(
-                                        userProfile['is_straight']
+                                        userProfile.value['is_straight']
                                             ? 'Straight'
                                             : 'LGBTQ',
                                         style: const TextStyle(
@@ -806,7 +839,7 @@ class MyProfile extends StatelessWidget {
                                   child: TextButton(
                                       onPressed: () {
                                         if (couple.isNotEmpty) {
-                                          Get.to(() => CreateAPostScreen(
+                                          Get.off(() => CreateAPostScreen(
                                               resetPageFunction: reloadPosts));
                                         } else {
                                           SnackBars().displaySnackBar(
@@ -944,22 +977,5 @@ class MyProfile extends StatelessWidget {
         ),
       ))),
     );
-  }
-
-  Future<bool> preparePageData() async {
-    try {
-      bool pageReady = false;
-      if (couple.isNotEmpty) {
-        await getCouplePosts(couple["id"]).then((listOfPosts) {
-          pageData.update((val) {
-            val!["posts"] = listOfPosts["couple_posts"];
-          });
-        });
-      }
-      return pageReady;
-    } catch (e) {
-      print("something went wrong while loading this page");
-      return false;
-    }
   }
 }

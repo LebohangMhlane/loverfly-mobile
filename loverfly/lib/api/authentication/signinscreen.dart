@@ -25,7 +25,7 @@ class SignInScreen extends StatelessWidget {
             children: [
               // logo
               SizedBox(
-                width: 20.0,
+                width: 40.0,
                 height: MediaQuery.of(context).size.height,
                 child: Transform(
                   child: Image.asset(
@@ -46,10 +46,6 @@ class SignInScreen extends StatelessWidget {
   }
 
   void signInUser() async {
-    // check if the cache contains all the required user data:
-    // get the token using the user data:
-    // ensure there are no errors and that the token is saved to cache:
-    // navigate to the main screen if all is valid:
     try {
       String? username;
       String? email;
@@ -74,7 +70,9 @@ class SignInScreen extends StatelessWidget {
       if (token.isNotEmpty &&
           !token.containsKey("error_info") &&
           cache.getString("token") != "") {
-        Get.offAll(() => MainScreen());
+        Get.offAll(() => MainScreen(
+              desiredPageIndex: 0,
+            ));
       } else {
         signInStatus.value = false;
         signInResponse.value = token["error_info"];

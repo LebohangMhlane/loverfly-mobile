@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
 import 'dart:convert';
 import 'dart:io';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../environmentconfig/envconfig.dart';
@@ -57,19 +56,17 @@ class AuthenticationAPI {
     }
   }
 
-  // get a user profile and couple data from the database:
+  // gets and returns a user profile and couple data from the database:
   Future<Map> getUserProfileAndCoupleData(token) async {
     Map userProfileAndCoupleData = {};
     var url =
         Uri.parse(EnvConfig().baseUrl + '/get-user-profile-and-couple-data/');
     try {
-      // get the user profile and couple data from the server:
       var response = await http.post(
         url,
         headers: {'Authorization': 'TOKEN ' + token.toString()},
       );
 
-      // decode everything into a useable map object:
       if (response.statusCode == 200) {
         userProfileAndCoupleData = jsonDecode(response.body);
       } else {

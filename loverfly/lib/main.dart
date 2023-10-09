@@ -47,13 +47,15 @@ class MyApp extends StatelessWidget {
             name: '/usernamecreatescreen', page: () => UsernameCreateScreen()),
         GetPage(name: '/splashscreen', page: () => const SplashScreen()),
         GetPage(name: '/signinscreen', page: () => SignInScreen()),
-        GetPage(name: '/mainscreen', page: () => MainScreen()),
+        GetPage(
+            name: '/mainscreen',
+            page: () => MainScreen(
+                  desiredPageIndex: 0,
+                )),
         GetPage(
             name: '/myprofilescreen',
             page: () => MyProfile(
                   reloadPosts: () {},
-                  couple: const {},
-                  userProfile: const {},
                 )),
         GetPage(
             name: '/coupleprofilescreen',

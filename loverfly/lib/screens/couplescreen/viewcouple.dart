@@ -489,10 +489,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                         onPressed: () {
                                           Get.to(
                                               () => LargerPreviewScreen(
-                                                    imageurl:
-                                                        EnvConfig().baseUrl +
-                                                            posts[index]
-                                                                ["post_image"],
+                                                    imageurl: posts[index]
+                                                        ["post_image"],
                                                     myImage: false,
                                                     postId: 000,
                                                     resetPage: () {},
@@ -504,9 +502,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: NetworkImage(
-                                                      EnvConfig().baseUrl +
-                                                          posts[index]
-                                                              ["post_image"]),
+                                                      posts[index]
+                                                          ["post_image"]),
                                                   fit: BoxFit.cover),
                                             )),
                                       );
