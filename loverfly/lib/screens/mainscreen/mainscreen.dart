@@ -227,7 +227,7 @@ class MainScreen extends StatelessWidget {
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       color: Colors.purple,
-                                                      letterSpacing: 1.0,
+                                                      fontSize: 12.0,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),

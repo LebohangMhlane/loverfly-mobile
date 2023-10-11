@@ -32,7 +32,9 @@ class TrendingCouples extends StatelessWidget {
                         child: const Text(
                           'Trending',
                           style: TextStyle(
-                              fontWeight: FontWeight.w300, fontSize: 15.0),
+                              fontWeight: FontWeight.w300,
+                              fontSize: 12.0,
+                              color: Colors.purple),
                         ),
                       ),
 

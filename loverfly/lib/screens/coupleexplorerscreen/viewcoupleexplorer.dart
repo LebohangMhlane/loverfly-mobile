@@ -41,7 +41,9 @@ class CoupleExplorerScreen extends StatelessWidget {
                         child: Text(
                           "There are currently no couples to admire.",
                           style: TextStyle(
-                              fontWeight: FontWeight.w300, fontSize: 12.0),
+                              fontWeight: FontWeight.w300,
+                              fontSize: 12.0,
+                              color: Colors.purple),
                         ),
                       )
                     : Expanded(

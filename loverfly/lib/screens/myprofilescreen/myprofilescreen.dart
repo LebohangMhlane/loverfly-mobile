@@ -168,7 +168,6 @@ class MyProfile extends StatelessWidget {
                       userProfile['username'],
                       style: const TextStyle(
                         fontWeight: FontWeight.w300,
-                        letterSpacing: 2.0,
                         fontSize: 16.0,
                       ),
                     ),
@@ -301,8 +300,13 @@ class MyProfile extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     left: 30.0, right: 30.0),
                                 child: const Text(
-                                    'You appear to be Single. Not true? Link your account with your partners account to show the world who your heart belongs to and start sharing your sweetest moments together with the world!',
-                                    textAlign: TextAlign.center),
+                                  'You appear to be Single. Not true? Link your account with your partners account to show the world who your heart belongs to and start sharing your sweetest moments together with the world!',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.purple,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 12.0),
+                                ),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -317,13 +321,20 @@ class MyProfile extends StatelessWidget {
                                             Radius.circular(100.0)))),
                                 child: const Text(
                                   'Generate a Link Code',
-                                  style: TextStyle(color: Colors.blue),
+                                  style: TextStyle(
+                                      color: Colors.purple,
+                                      fontWeight: FontWeight.w300),
                                 ),
                               ),
                               const SizedBox(
                                 height: 20.0,
                               ),
-                              const Text("or"),
+                              const Text(
+                                "or",
+                                style: TextStyle(
+                                    color: Colors.purple,
+                                    fontWeight: FontWeight.w300),
+                              ),
                               const SizedBox(
                                 height: 20.0,
                               ),
@@ -340,7 +351,9 @@ class MyProfile extends StatelessWidget {
                                             Radius.circular(100.0)))),
                                 child: const Text(
                                   'Link accounts',
-                                  style: TextStyle(color: Colors.blue),
+                                  style: TextStyle(
+                                      color: Colors.purple,
+                                      fontWeight: FontWeight.w300),
                                 ),
                               ),
                               const SizedBox(
@@ -785,7 +798,7 @@ class MyProfile extends StatelessWidget {
                                   'Admired Couples',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w300,
-                                    color: Colors.black,
+                                    color: Colors.purple,
                                   ),
                                 ),
                               ),
@@ -818,7 +831,9 @@ class MyProfile extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 20.0, bottom: 19.0),
                       child: const Center(
                           child: Text('Memories',
-                              style: TextStyle(color: Colors.white)))),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300)))),
 
                   const SizedBox(height: 9.0),
 

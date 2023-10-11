@@ -171,6 +171,7 @@ class SignInScreen extends StatelessWidget {
                         color: const Color.fromRGBO(156, 39, 176, 1)),
                     borderRadius: BorderRadius.circular(10.0)),
                 child: TextFormField(
+                  obscureText: true,
                   style: const TextStyle(fontSize: 13.0),
                   onChanged: (value) {
                     signInResponse.value = "";

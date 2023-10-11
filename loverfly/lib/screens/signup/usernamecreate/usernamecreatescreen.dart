@@ -13,6 +13,7 @@ class UsernameCreateScreen extends StatelessWidget {
   final RxBool usernameTaken = RxBool(false);
   final RxBool profanityFound = RxBool(false);
   final TextEditingController usernameController = TextEditingController();
+  final RxBool completingSignUp = RxBool(false);
 
   // TODO: Complete username validations:
 
@@ -81,11 +82,17 @@ class UsernameCreateScreen extends StatelessWidget {
                 }, context)
               : SnackBars().displaySnackBar(
                   "Sign up failed. We're looking into it.", () {}, context);
+          completingSignUp.value = false;
         } else {
           SnackBars().displaySnackBar(
               "Something went wrong. We're looking into it.", () {}, context);
+          completingSignUp.value = false;
         }
+      } else {
+        completingSignUp.value = false;
       }
+    } else {
+      completingSignUp.value = false;
     }
   }
 
@@ -206,22 +213,29 @@ class UsernameCreateScreen extends StatelessWidget {
                             const SizedBox(
                               height: 15.0,
                             ),
-                            CustomButton(
-                                buttonlabel: "Continue",
-                                buttoncolor: Colors.purple,
-                                borderradius: 10.0,
-                                leftmargin: 60.0,
-                                rightmargin: 60.0,
-                                onpressedfunction: () async {
-                                  // hide the keyboard:
-                                  // clean the username:
-                                  // call processUsername function:
-                                  FocusScope.of(context).unfocus();
-                                  String username = usernameController.text
-                                      .trim()
-                                      .replaceAll(RegExp(r'\s+'), '');
-                                  processUsername(username, context);
-                                }),
+
+                            // TODO: Ensure white space regex is applied on all password and email fields:
+
+                            Obx(
+                              () => CustomButton(
+                                  buttonlabel: completingSignUp.isTrue
+                                      ? "..."
+                                      : "Continue",
+                                  buttoncolor: Colors.purple,
+                                  borderradius: 10.0,
+                                  leftmargin: 60.0,
+                                  rightmargin: 60.0,
+                                  onpressedfunction: () async {
+                                    if (completingSignUp.isFalse) {
+                                      completingSignUp.value = true;
+                                      FocusScope.of(context).unfocus();
+                                      String username = usernameController.text
+                                          .trim()
+                                          .replaceAll(RegExp(r'\s+'), '');
+                                      processUsername(username, context);
+                                    }
+                                  }),
+                            ),
                             const SizedBox(
                               height: 50.0,
                             )
