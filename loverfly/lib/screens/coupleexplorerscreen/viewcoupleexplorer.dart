@@ -1,5 +1,3 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcouplecard.dart';
@@ -37,20 +35,27 @@ class CoupleExplorerScreen extends StatelessWidget {
                 ),
 
                 // couples:
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                    child: ListView.builder(
-                        itemCount: couples.value.length,
-                        itemBuilder: (context, index) {
-                          // couple card:
-                          return CoupleCard(
-                            coupleData: couples.value[index],
-                            rebuildCoupleExplorer: preparePageData,
-                          );
-                        }),
-                  ),
-                ),
+                couples.value.isEmpty
+                    ? const Expanded(
+                        flex: 5,
+                        child: Text(
+                          "There are currently no couples to admire.",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w300, fontSize: 12.0),
+                        ),
+                      )
+                    : Expanded(
+                        flex: 5,
+                        child: ListView.builder(
+                            itemCount: couples.value.length,
+                            itemBuilder: (context, index) {
+                              // couple card:
+                              return CoupleCard(
+                                coupleData: couples.value[index],
+                                rebuildCoupleExplorer: preparePageData,
+                              );
+                            }),
+                      ),
               ],
             )),
       ),

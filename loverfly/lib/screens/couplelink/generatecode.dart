@@ -27,7 +27,10 @@ class GenerateCodeScreen extends StatelessWidget {
             child: Text(
               "Generate a link code to share with your partner, Keep it secret, you don't want someone else claiming you now, do you?",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.purple, fontSize: 11.0),
+              style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w300),
             ),
           )),
           const SizedBox(
@@ -83,7 +86,10 @@ class GenerateCodeScreen extends StatelessWidget {
             child: Obx(() => Text(
                   message.value,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.purple, fontSize: 10.0),
+                  style: const TextStyle(
+                      color: Colors.purple,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w300),
                 )),
           )),
         ],

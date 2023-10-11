@@ -11,6 +11,37 @@ class InputCodeScreen extends StatelessWidget {
   final Rx<String> code = Rx("");
   final Rx<String> message = Rx("Make sure the code is correct!");
   final TextEditingController _textEditingController = TextEditingController();
+  final RxBool linking = RxBool(false);
+
+  void linkCouple() async {
+    if (_textEditingController.text.length == 5 && !linking.value) {
+      linking.value = true;
+      try {
+        await SharedPreferences.getInstance().then((cache) {
+          String code = _textEditingController.text;
+          if (cache.containsKey("generatedcode") &&
+              cache.get("generatedcode") == code) {
+            message.value =
+                "You cannot be in a relationship with yourself... Well, technically speaking...";
+            linking.value = false;
+          } else {
+            inputLinkCode(code).then((serverResponse) {
+              if (serverResponse.containsKey("error")) {
+                message.value = serverResponse["error"];
+                linking.value = false;
+              } else {
+                message.value = serverResponse["success"];
+                linking.value = false;
+              }
+            });
+          }
+        });
+      } catch (e) {
+        message.value = e.toString();
+        linking.value = false;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +59,10 @@ class InputCodeScreen extends StatelessWidget {
               child: Text(
                 "Have your significant other generate a code for you to link your accounts then input it below.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.purple, fontSize: 11.0),
+                style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w300),
               ),
             )),
             const SizedBox(
@@ -52,6 +86,7 @@ class InputCodeScreen extends StatelessWidget {
                 showCursor: false,
                 controller: _textEditingController,
                 onChanged: (value) {
+                  message.value = "Make sure the code is correct";
                   if (_textEditingController.text.length == 5) {
                     FocusScope.of(context).unfocus();
                   } else if (_textEditingController.text.length > 5) {
@@ -60,7 +95,8 @@ class InputCodeScreen extends StatelessWidget {
                 },
                 textAlign: TextAlign.center,
                 decoration: const InputDecoration(
-                  hintStyle: TextStyle(fontSize: 11.0),
+                  hintStyle:
+                      TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300),
                   hintText: "Enter a link code here",
                   border: InputBorder.none,
                 ),
@@ -69,37 +105,18 @@ class InputCodeScreen extends StatelessWidget {
             const SizedBox(
               height: 50.0,
             ),
-            CustomButton(
-              onpressedfunction: () {
-                if (_textEditingController.text.length == 5) {
-                  try {
-                    SharedPreferences.getInstance().then((db) {
-                      String code = _textEditingController.text;
-                      if (db.containsKey("generatedcode") &&
-                          db.get("generatedcode") == code) {
-                        message.value =
-                            "You cannot be in a relationship with yourself... Well, technically speaking...";
-                      } else {
-                        inputLinkCode(code).then((value) {
-                          if (value.containsKey("error")) {
-                            message.value = value["error"];
-                          } else {
-                            message.value = value["success"];
-                          }
-                        });
-                      }
-                    });
-                  } catch (e) {
-                    message.value = e.toString();
-                  }
-                }
-              },
-              buttonlabel: "Link",
-              leftmargin: 20.0,
-              rightmargin: 20.0,
+            Obx(
+              () => CustomButton(
+                onpressedfunction: () {
+                  linkCouple();
+                },
+                buttonlabel: linking.value ? "LoveLinking" : "LoveLink",
+                leftmargin: 20.0,
+                rightmargin: 20.0,
+              ),
             ),
             const SizedBox(
-              height: 50.0,
+              height: 30.0,
             ),
             Center(
                 child: Padding(
@@ -108,7 +125,10 @@ class InputCodeScreen extends StatelessWidget {
                 () => Text(
                   message.value,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.purple, fontSize: 10.0),
+                  style: const TextStyle(
+                      color: Colors.purple,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w300),
                 ),
               ),
             )),

@@ -1,7 +1,6 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
   final Color? buttoncolor;
   final Color textcolor;
@@ -43,7 +42,6 @@ class CustomButton extends StatelessWidget {
     this.customchild,
     this.height = 55.0,
     this.fontWeight = FontWeight.normal,
-
   }) : super(key: key);
 
   @override
@@ -57,36 +55,38 @@ class CustomButton extends StatelessWidget {
             onpressedfunction!();
           } else {}
         },
-        child: customchild == null ? icon != null
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                icon!,
-                const SizedBox(
-                  width: 10.0,
-                ),
-                Text(
-                  buttonlabel,
-                  style: TextStyle(
-                    color: textcolor,
-                  ),
-                )
-              ],
-            )
-          : Container(
-              padding: EdgeInsets.only(left: leftpadding, right: rightpadding),
-              alignment: Alignment.center,
-              child: Text(
-                buttonlabel,
-                style: TextStyle(
-                  color: textcolor, 
-                  fontSize: textfontsize,
-                  fontWeight: fontWeight,
-                ),
-              )
-          ) : Center(
-            child: customchild,
-          ),
+        child: customchild == null
+            ? icon != null
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      icon!,
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        buttonlabel,
+                        style: TextStyle(
+                          color: textcolor,
+                        ),
+                      )
+                    ],
+                  )
+                : Container(
+                    padding:
+                        EdgeInsets.only(left: leftpadding, right: rightpadding),
+                    alignment: Alignment.center,
+                    child: Text(
+                      buttonlabel,
+                      style: TextStyle(
+                        color: textcolor,
+                        fontSize: textfontsize,
+                        fontWeight: fontWeight,
+                      ),
+                    ))
+            : Center(
+                child: customchild,
+              ),
         style: TextButton.styleFrom(
           side: BorderSide(
               width: borderwidth, color: bordercolor, style: BorderStyle.solid),
@@ -94,9 +94,8 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderradius)),
           backgroundColor: buttoncolor,
-        ), 
+        ),
       ),
     );
   }
 }
-

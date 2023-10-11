@@ -1,7 +1,7 @@
-// ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../environmentconfig/envconfig.dart';
 
@@ -56,7 +56,7 @@ class AuthenticationAPI {
   }
 
   // gets and returns a user profile and couple data from the database:
-  Future<Map> getUserProfileAndCoupleData(token) async {
+  Future<Map> getUserProfileAndCoupleData(token, context) async {
     Map userProfileAndCoupleData = {};
     var url =
         Uri.parse(EnvConfig().baseUrl + '/get-user-profile-and-couple-data/');
@@ -72,9 +72,11 @@ class AuthenticationAPI {
         userProfileAndCoupleData = {'error': true};
       }
     } on SocketException {
-      print('No connection made');
+      SnackBars()
+          .displaySnackBar("Failed to connect to server", () => null, context);
     } catch (e) {
-      print(e);
+      SnackBars().displaySnackBar(
+          "Something went wrong. We're looking into it.", () => null, context);
     }
     return userProfileAndCoupleData;
   }

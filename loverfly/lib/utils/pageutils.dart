@@ -20,6 +20,7 @@ class SnackBars {
           content: Text(
             message,
             textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.w300),
           ),
           duration: const Duration(milliseconds: 4000),
           dismissDirection: DismissDirection.horizontal,

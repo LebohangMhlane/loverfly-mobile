@@ -1,7 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, prefer_typing_uninitialized_variables, avoid_print, avoid_function_literals_in_foreach_calls, avoid_unnecessary_containers, sized_box_for_whitespace
-
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,13 +27,14 @@ class MainScreen extends StatelessWidget {
     "couple": {},
   });
 
-  void preparePageData(comingFromCouplePage) async {
+  // TODO: find a way to globally have access to the shared preferences instance so i don't call it everywhere:
+
+  void preparePageData(comingFromCouplePage, context) async {
     if (!pageLoaded.value || comingFromCouplePage == true) {
       try {
-        // TODO: find a way to globally have access to the shared preferences instance so i don't call it everywhere:
         var instance = await SharedPreferences.getInstance();
         await AuthenticationAPI()
-            .getUserProfileAndCoupleData(instance.get("token"))
+            .getUserProfileAndCoupleData(instance.get("token"), context)
             .then((Map response) async {
           if (!response.keys.contains("error")) {
             var userProfile = response["user_profile"];
@@ -47,25 +45,28 @@ class MainScreen extends StatelessWidget {
             instance.setString("user_couple", jsonEncode(couple));
 
             // update pagedata with new data:
-            pageData.value["user_profile"] = userProfile;
-            pageData.value["couple"] = couple;
+            pageData["user_profile"] = userProfile;
+            pageData["couple"] = couple;
           }
           preparePostsForFeed();
         });
       } catch (e) {
-        print("Something went wrong loading this page");
+        SnackBars().displaySnackBar(
+            "Something went wrong while loading this page.",
+            () => null,
+            context);
       }
     }
   }
 
   void preparePostsForFeed() async {
-    pageData.value["pagination_link"] = null;
+    pageData["pagination_link"] = null;
     await getPostsForFeed(null).then((Map response) {
       if (response["posts"] != null) {
         posts.value = response["posts"];
         response["pagination_link"] != null
-            ? pageData.value["pagination_link"] = response["pagination_link"]
-            : pageData.value["pagination_link"] = "";
+            ? pageData["pagination_link"] = response["pagination_link"]
+            : pageData["pagination_link"] = "";
       } else {
         posts.value = [];
       }
@@ -75,7 +76,7 @@ class MainScreen extends StatelessWidget {
   }
 
   void addMorePosts(context) async {
-    var paginationLink = pageData.value["pagination_link"];
+    var paginationLink = pageData["pagination_link"];
     if (paginationLink != "") {
       await getPostsForFeed(paginationLink).then((Map response) {
         if (!response.containsKey("error")) {
@@ -87,8 +88,8 @@ class MainScreen extends StatelessWidget {
               "There was an error adding more posts", () => null, context);
         }
         response["pagination_link"] != null
-            ? pageData.value["pagination_link"] = response["pagination_link"]
-            : pageData.value["pagination_link"] = null;
+            ? pageData["pagination_link"] = response["pagination_link"]
+            : pageData["pagination_link"] = null;
       });
     }
   }
@@ -106,10 +107,10 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    preparePageData(false);
+    preparePageData(false, context);
 
     return Scaffold(
-        drawer: Container(
+        drawer: SizedBox(
           width: 250.0,
 
           // drawer menu
@@ -121,7 +122,7 @@ class MainScreen extends StatelessWidget {
                 ),
 
                 // couple explorer button
-                Container(
+                SizedBox(
                   height: 60.0,
                   child: CustomButton(
                     buttonlabel: 'Couple Explorer',
@@ -191,17 +192,14 @@ class MainScreen extends StatelessWidget {
                                 child: pageLoading.value
                                     ?
                                     // loading indicator:
-                                    Container(
-                                        child: Center(
-                                          child: Container(
-                                            width: 20.0,
-                                            height: 20.0,
-                                            child:
-                                                const CircularProgressIndicator(
-                                              strokeWidth: 2.0,
-                                              backgroundColor: Colors.white,
-                                              color: Colors.purpleAccent,
-                                            ),
+                                    const Center(
+                                        child: SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.0,
+                                            backgroundColor: Colors.white,
+                                            color: Colors.purpleAccent,
                                           ),
                                         ),
                                       )
@@ -209,55 +207,49 @@ class MainScreen extends StatelessWidget {
                                         ?
 
                                         // couple explorer navigator page:
-                                        Container(
-                                            child: Column(
-                                              children: [
-                                                const SizedBox(height: 100.0),
-                                                // welcome to loverfly text
-                                                Container(
-                                                  child: const Center(
-                                                      child: Text(
-                                                    'Welcome to LoverFly!',
-                                                    style: TextStyle(
-                                                        color: Colors.purple),
-                                                  )),
+                                        Column(
+                                            children: [
+                                              const SizedBox(height: 100.0),
+                                              // welcome to loverfly text
+                                              const Center(
+                                                  child: Text(
+                                                'Welcome to LoverFly!',
+                                                style: TextStyle(
+                                                    color: Colors.purple),
+                                              )),
+                                              const SizedBox(height: 50.0),
+                                              // descriptive text
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 30.0, right: 30.0),
+                                                child: const Text(
+                                                  "It looks like you're not following any couples. Start by exploring some below",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.purple,
+                                                      letterSpacing: 1.0,
+                                                      fontWeight:
+                                                          FontWeight.w300),
                                                 ),
-                                                const SizedBox(height: 50.0),
-                                                // descriptive text
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 30.0,
-                                                          right: 30.0),
-                                                  child: const Text(
-                                                    "It looks like you're not following any couples. Start by exploring some below",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.purple,
-                                                        letterSpacing: 1.0,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
+                                              ),
+                                              const SizedBox(height: 50.0),
+                                              // couple explorer navigation button
+                                              Container(
+                                                width: 170.0,
+                                                height: 60.0,
+                                                color: Colors.white,
+                                                child: CustomButton(
+                                                  buttonlabel:
+                                                      'Couple Explorer',
+                                                  borderradius: 20.0,
+                                                  buttoncolor: Colors.purple,
+                                                  onpressedfunction: () {
+                                                    Get.to(() =>
+                                                        CoupleExplorerScreen());
+                                                  },
                                                 ),
-                                                const SizedBox(height: 50.0),
-                                                // couple explorer navigation button
-                                                Container(
-                                                  width: 170.0,
-                                                  height: 60.0,
-                                                  color: Colors.white,
-                                                  child: CustomButton(
-                                                    buttonlabel:
-                                                        'Couple Explorer',
-                                                    borderradius: 20.0,
-                                                    buttoncolor: Colors.purple,
-                                                    onpressedfunction: () {
-                                                      Get.to(() =>
-                                                          CoupleExplorerScreen());
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           )
                                         :
 
@@ -266,14 +258,13 @@ class MainScreen extends StatelessWidget {
                                             itemCount: posts.value.length,
                                             scrollDirection: Axis.vertical,
                                             itemBuilder: (context, index) {
-                                              print(index + 1);
                                               // trigger pagination when at the end of the list:
                                               if (index + 1 ==
                                                   posts.value.length) {
-                                                if (pageData.value[
+                                                if (pageData[
                                                             "pagination_link"] !=
                                                         "" ||
-                                                    pageData.value[
+                                                    pageData[
                                                             "pagination_link"] !=
                                                         null) {
                                                   addMorePosts(context);
@@ -289,11 +280,9 @@ class MainScreen extends StatelessWidget {
                                             })),
 
                             // user profile page:
-                            Container(
-                                // user profile:
-                                child: MyProfile(
+                            MyProfile(
                               reloadPosts: preparePostsForFeed,
-                            )),
+                            ),
                           ],
                         ))),
               ])),
