@@ -338,9 +338,9 @@ class CouplePost extends StatelessWidget {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(left: 16.0),
                       alignment: Alignment.center,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
                             child: const Text(
@@ -408,9 +408,9 @@ class CouplePost extends StatelessWidget {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(left: 20.0),
                       alignment: Alignment.center,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // like text
                           Container(

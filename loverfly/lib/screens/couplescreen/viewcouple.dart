@@ -37,8 +37,8 @@ class CoupleProfileScreen extends StatelessWidget {
     return WillPopScope(
         onWillPop: () {
           return Future.value(true).whenComplete(() {
-            rebuildPageFunction(true);
             Get.back();
+            rebuildPageFunction(true);
           });
         },
         child: Scaffold(
