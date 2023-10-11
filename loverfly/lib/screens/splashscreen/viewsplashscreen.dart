@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ));
           }
         } else {
-          Get.to(() => SignUpScreen());
+          Get.to(() => SignInScreen());
         }
       });
     });

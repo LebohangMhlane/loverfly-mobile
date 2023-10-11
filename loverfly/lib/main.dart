@@ -16,11 +16,17 @@ import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
 import 'package:loverfly/screens/myprofilescreen/myprofilescreen.dart';
 import 'package:loverfly/screens/signup/usernamecreate/usernamecreatescreen.dart';
 import 'package:loverfly/testpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // temp:
+  SharedPreferences.getInstance().then((value) {
+    value.clear();
+  });
 
   // change status bar color to transparent:
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -91,7 +97,7 @@ class MyApp extends StatelessWidget {
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),
       ],
-      initialRoute: '/signinscreen',
+      initialRoute: '/splashscreen',
     );
   }
 }

@@ -1,10 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, prefer_typing_uninitialized_variables, avoid_print, avoid_function_literals_in_foreach_calls, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
+import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
@@ -31,7 +33,7 @@ class MainScreen extends StatelessWidget {
   void preparePageData(comingFromCouplePage) async {
     if (!pageLoaded.value || comingFromCouplePage == true) {
       try {
-        // TODO: find a way to globally have access to the shared preferences instance:
+        // TODO: find a way to globally have access to the shared preferences instance so i don't call it everywhere:
         var instance = await SharedPreferences.getInstance();
         await AuthenticationAPI()
             .getUserProfileAndCoupleData(instance.get("token"))
@@ -91,6 +93,17 @@ class MainScreen extends StatelessWidget {
     }
   }
 
+  void logOut(context) async {
+    try {
+      SharedPreferences cache = await SharedPreferences.getInstance();
+      cache.clear();
+      Get.offAll(() => SignInScreen());
+    } catch (e) {
+      SnackBars().displaySnackBar(
+          "There was an error logging out.", () => null, context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     preparePageData(false);
@@ -130,6 +143,13 @@ class MainScreen extends StatelessWidget {
                 Container(
                   height: 60.0,
                   color: Colors.yellow,
+                  child: CustomButton(
+                    buttonlabel: "Log Out",
+                    textfontsize: 12.0,
+                    onpressedfunction: () {
+                      logOut(context);
+                    },
+                  ),
                 )
               ],
             ),
@@ -213,9 +233,10 @@ class MainScreen extends StatelessWidget {
                                                     "It looks like you're not following any couples. Start by exploring some below",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      color: Colors.purple,
-                                                      letterSpacing: 1.0,
-                                                    ),
+                                                        color: Colors.purple,
+                                                        letterSpacing: 1.0,
+                                                        fontWeight:
+                                                            FontWeight.w300),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 50.0),

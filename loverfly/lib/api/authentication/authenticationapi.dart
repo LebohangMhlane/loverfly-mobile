@@ -17,8 +17,7 @@ class AuthenticationAPI {
     });
   }
 
-  Future<Map> getAndCacheAPIToken({username, email, password}) async {
-    // make the request to get a api token:
+  Future<Map> getAndCacheAPIToken({username, password}) async {
     Map token = {};
     try {
       var url = Uri.parse(EnvConfig().baseUrl + '/api-token-auth/');
@@ -28,12 +27,12 @@ class AuthenticationAPI {
             headers: {'content-type': 'application/json'},
             body: jsonEncode({'username': username, 'password': password}),
           )
-          .timeout(const Duration(seconds: 30));
+          .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
-        var responseAsJson = jsonDecode(response.body);
+        var serverResponse = jsonDecode(response.body);
         db.clear();
-        db.setString('token', responseAsJson['token']);
-        token["token"] = responseAsJson['token'];
+        db.setString('token', serverResponse['token']);
+        token["token"] = serverResponse['token'];
         return token;
       } else {
         var responseBody = jsonDecode(response.body);

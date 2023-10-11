@@ -100,7 +100,7 @@ class MyProfile extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         top: 5.0, bottom: 5.0),
                                     child: Text(
-                                        userProfile.value['is_straight']
+                                        userProfile['is_straight']
                                             ? 'Straight'
                                             : 'LGBTQ',
                                         style: const TextStyle(

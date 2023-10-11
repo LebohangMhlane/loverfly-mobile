@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signup/signupapi.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +14,81 @@ class UsernameCreateScreen extends StatelessWidget {
   final RxBool usernameTaken = RxBool(false);
   final RxBool profanityFound = RxBool(false);
   final TextEditingController usernameController = TextEditingController();
+
+  // TODO: Complete username validations:
+
+  // TODO: Isolate the save to shared preferences function and make it reuseable:
+
+  Future<bool> isProfanityFound(String username) async {
+    try {
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> isUsernameTaken(String username) async {
+    try {
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> saveToSharedPreferences(String username) async {
+    try {
+      SharedPreferences db = await SharedPreferences.getInstance();
+      db.setString("username", username);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  void getTokenAndNavigate(context) async {
+    try {
+      SharedPreferences cache = await SharedPreferences.getInstance();
+      if (!cache.containsKey("token") &&
+          cache.containsKey("username") &&
+          cache.containsKey("password")) {
+        String? username = cache.getString("username");
+        String? password = cache.getString("password");
+        Map tokenResponse = await AuthenticationAPI()
+            .getAndCacheAPIToken(username: username, password: password);
+        if (tokenResponse.containsKey("token") &&
+            tokenResponse["token"] != "") {
+          Get.offAll(() => MainScreen(desiredPageIndex: 0));
+        }
+      } else {
+        SnackBars().displaySnackBar(
+            "Something went wrong. We will fix it soon!", () => null, context);
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
+  void processUsername(String username, context) async {
+    if (username != "") {
+      profanityFound.value = await isProfanityFound(username);
+      usernameTaken.value = await isUsernameTaken(username);
+      if (!profanityFound.value && !usernameTaken.value) {
+        bool savedToCache = await saveToSharedPreferences(username);
+        if (savedToCache) {
+          bool accountCreated = await signUp();
+          accountCreated
+              ? SnackBars().displaySnackBar("All done. Signing you in!", () {
+                  getTokenAndNavigate(context);
+                }, context)
+              : SnackBars().displaySnackBar(
+                  "Sign up failed. We're looking into it.", () {}, context);
+        } else {
+          SnackBars().displaySnackBar(
+              "Something went wrong. We're looking into it.", () {}, context);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,60 +234,5 @@ class UsernameCreateScreen extends StatelessWidget {
             ),
           ),
         ));
-  }
-
-  Future<bool> isProfanityFound(String username) async {
-    try {
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> isUsernameTaken(String username) async {
-    try {
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> saveToSharedPreferences(String username) async {
-    try {
-      SharedPreferences db = await SharedPreferences.getInstance();
-      db.setString("username", username);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  void processUsername(String username, context) async {
-    // if the username is not an empty string:
-    // validate the username:
-    // save it to the cache:
-    // when saved, sign up the user:
-    // navigate to the sign in screen to do the sign in process for the new user:
-    if (username != "") {
-      // TODO: Complete username validations:
-      profanityFound.value = await isProfanityFound(username);
-      usernameTaken.value = await isUsernameTaken(username);
-      if (!profanityFound.value && !usernameTaken.value) {
-        await saveToSharedPreferences(username).then((saved) async {
-          if (saved) {
-            bool accountCreated = await signUp();
-            accountCreated
-                ? SnackBars().displaySnackBar("All done. Signing you up.", () {
-                    Get.to(() => SignInScreen());
-                  }, context)
-                : SnackBars().displaySnackBar(
-                    "Sign up failed. We're looking into it.", () {}, context);
-          } else {
-            SnackBars().displaySnackBar(
-                "Something went wrong. We're looking into it.", () {}, context);
-          }
-        });
-      }
-    }
   }
 }
