@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
-import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -58,10 +57,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void runappchecks() async {
     await Future.delayed(const Duration(seconds: 3)).whenComplete(() {
-      SharedPreferences.getInstance().then((instance) {
-        if (instance.containsKey("token") && instance.get("token") != "") {
-          if (instance.containsKey("user_profile") &&
-              instance.get("user_profile") != "") {
+      SharedPreferences.getInstance().then((cache) {
+        if (cache.containsKey("token") && cache.get("token") != "") {
+          if (cache.containsKey("user_profile") &&
+              cache.get("user_profile") != "") {
             Get.to(() => MainScreen(
                   desiredPageIndex: 0,
                 ));
