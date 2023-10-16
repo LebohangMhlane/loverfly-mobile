@@ -191,23 +191,21 @@ class MainScreen extends StatelessWidget {
                             Container(
                                 child: pageLoading.value
                                     ?
+
                                     // loading indicator:
                                     const Center(
                                         child: SizedBox(
                                           width: 20.0,
                                           height: 20.0,
                                           child: CircularProgressIndicator(
-                                            strokeWidth: 2.0,
+                                            strokeWidth: 1.0,
                                             backgroundColor: Colors.white,
                                             color: Colors.purpleAccent,
                                           ),
                                         ),
                                       )
                                     : postsFound.value == false
-                                        ?
-
-                                        // couple explorer navigator page:
-                                        Column(
+                                        ? Column(
                                             children: [
                                               const SizedBox(height: 100.0),
                                               // welcome to loverfly text
@@ -271,7 +269,7 @@ class MainScreen extends StatelessWidget {
                                                 }
                                               }
 
-                                              // couple post
+                                              // couple post:
                                               return CouplePost(
                                                 postdata: posts.value[index],
                                                 rebuildPageFunction:

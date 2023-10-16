@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_this, avoid_unnecessary_containers, sized_box_for_whitespace, use_key_in_widget_constructors, avoid_print
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -18,14 +18,29 @@ class CouplePost extends StatelessWidget {
 
   // prepare the data
   final RxMap post = RxMap({});
+
   final RxMap couple = RxMap({});
+
   final Rx<bool> isliked = RxBool(false);
+
   final RxBool isAdmired = RxBool(false);
+
   final RxMap postdate = RxMap({});
+
   final RxInt admirers = RxInt(0);
+
   final RxInt likecount = RxInt(0);
+
   final RxDouble imageHeight = RxDouble(0.0);
+
   final RxBool pageLoaded = RxBool(false);
+
+  // gets the image from aws s3 storage bucket:
+  Future<http.Response> fetchImage(String imageUrl) async {
+    Uri url = Uri.parse(imageUrl);
+    final response = await http.get(url);
+    return response;
+  }
 
   void preparePageData() {
     if (!pageLoaded.value) {
@@ -44,7 +59,6 @@ class CouplePost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     preparePageData();
-    print('page built');
     return Container(
         child: Column(children: [
       // profile picture and admirers section:
@@ -60,7 +74,7 @@ class CouplePost extends StatelessWidget {
           height: 100.0,
           child: Row(
             children: [
-              // profile pictures
+              // profile pictures:
               SizedBox(
                   width: 120.0,
                   height: 110.0,
@@ -107,7 +121,7 @@ class CouplePost extends StatelessWidget {
                             ),
                           ),
 
-                          // couple partner 2
+                          // couple partner 2 profile picture:
                           Positioned(
                             top: 25.0,
                             right: 40.0,
@@ -151,6 +165,7 @@ class CouplePost extends StatelessWidget {
                     ),
                   )),
 
+              // usernames:
               SizedBox(
                 width: 165.0,
                 child: Align(
@@ -179,7 +194,7 @@ class CouplePost extends StatelessWidget {
                     )),
               ),
 
-              // admirers section:
+              // top right corner admirers section:
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -187,7 +202,6 @@ class CouplePost extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      // svg heart icon:
                       Expanded(
                           child: SvgPicture.asset(
                         'assets/svg/heart.svg',
@@ -195,14 +209,16 @@ class CouplePost extends StatelessWidget {
                         colorFilter: const ColorFilter.mode(
                             Colors.lightBlue, BlendMode.srcIn),
                       )),
-                      // admirers count:
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            couple["admirers"].toString(),
-                            style: const TextStyle(fontWeight: FontWeight.w300),
+                      Obx(
+                        () => Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Text(
+                              couple["admirers"].toString(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                            ),
                           ),
                         ),
                       )
@@ -224,38 +240,27 @@ class CouplePost extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             children: [
               // image:
-              LayoutBuilder(builder: (context, constraints) {
-                double maxHeight = 550.0;
-                BoxFit boxFit = BoxFit.fill;
-                bool isMaxHeightReached = constraints.maxHeight >= maxHeight;
-                if (isMaxHeightReached) {
-                  boxFit;
-                }
-                imageHeight.update((val) {
-                  val = constraints.maxHeight;
-                });
-                return GestureDetector(
+              GestureDetector(
                   onTap: () => Get.to(
                       () => LargerPreviewScreen(
-                            imageurl: post["post_image"] ??
-                                "", // TODO: should have a suitable placeholder:
+                            imageurl: post["post_image"] ?? "",
                             myImage: false,
                             postId: 000,
                             resetPage: () {},
                           ),
                       opaque: false),
                   child: Container(
-                    constraints: BoxConstraints(maxHeight: maxHeight),
+                    height: 350.0,
                     width: MediaQuery.of(context).size.width,
                     child: Transform.scale(
                         scale: 1.0,
-                        child: CachedNetworkImage(
+                        child: FadeInImage.assetNetwork(
+                          fadeInDuration: const Duration(milliseconds: 250),
                           fit: BoxFit.cover,
-                          imageUrl: post["post_image"] ?? "",
+                          placeholder: "assets/placeholders/loadingImage.gif",
+                          image: post["post_image"] ?? "",
                         )),
-                  ),
-                );
-              }),
+                  )),
 
               // caption
               Opacity(
