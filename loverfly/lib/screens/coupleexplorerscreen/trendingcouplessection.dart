@@ -76,22 +76,21 @@ class TrendingCouples extends StatelessWidget {
                                                   width: 50.0,
                                                   height: 50.0,
                                                   child: CircleAvatar(
-                                                    backgroundImage: trendingCouples[
-                                                                            index]
-                                                                        [
-                                                                        "couple"]
-                                                                    [
-                                                                    "partner_one"]
-                                                                [
-                                                                "profile_picture"] ==
+                                                    backgroundImage: trendingCouples[index]
+                                                                            ["couple"]
+                                                                        ["partner_one"]
+                                                                    ["profile_picture"]
+                                                                ["image"] ==
                                                             null
                                                         ? const NetworkImage(
                                                             'https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg')
-                                                        : NetworkImage(trendingCouples[
-                                                                        index][
-                                                                    "couple"]
-                                                                ['partner_one'][
-                                                            "profile_picture"]),
+                                                        : NetworkImage(trendingCouples[index]
+                                                                        ["couple"]
+                                                                    [
+                                                                    'partner_one']
+                                                                [
+                                                                "profile_picture"]
+                                                            ["image"]),
                                                     radius: 40.0,
                                                   ),
                                                 ),
@@ -116,22 +115,21 @@ class TrendingCouples extends StatelessWidget {
                                                   width: 50.0,
                                                   height: 50.0,
                                                   child: CircleAvatar(
-                                                    backgroundImage: trendingCouples[
-                                                                            index]
-                                                                        [
-                                                                        "couple"]
-                                                                    [
-                                                                    'partner_two']
-                                                                [
-                                                                "profile_picture"] ==
+                                                    backgroundImage: trendingCouples[index]
+                                                                            ["couple"]
+                                                                        ['partner_two']
+                                                                    ["profile_picture"]
+                                                                ["image"] ==
                                                             null
                                                         ? const NetworkImage(
                                                             'https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg')
-                                                        : NetworkImage(trendingCouples[
-                                                                        index][
-                                                                    "couple"]
-                                                                ['partner_two'][
-                                                            "profile_picture"]),
+                                                        : NetworkImage(trendingCouples[index]
+                                                                        ["couple"]
+                                                                    [
+                                                                    'partner_two']
+                                                                [
+                                                                "profile_picture"]
+                                                            ["image"]),
                                                     radius: 25.0,
                                                   ),
                                                 ),

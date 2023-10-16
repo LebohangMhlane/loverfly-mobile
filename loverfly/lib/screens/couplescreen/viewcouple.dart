@@ -132,14 +132,16 @@ class CoupleProfileScreen extends StatelessWidget {
                                                     height: 70.0,
                                                     child: CircleAvatar(
                                                       backgroundImage: couple[
-                                                                      "partner_one"]
-                                                                  [
-                                                                  "profile_picture"] !=
+                                                                          "partner_one"]
+                                                                      [
+                                                                      "profile_picture"]
+                                                                  ["image"] !=
                                                               null
                                                           ? NetworkImage(couple[
-                                                                  "partner_one"]
-                                                              [
-                                                              "profile_picture"])
+                                                                      "partner_one"]
+                                                                  [
+                                                                  "profile_picture"]
+                                                              ["image"])
                                                           : const NetworkImage(
                                                               "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                                       radius: 25.0,
@@ -181,14 +183,16 @@ class CoupleProfileScreen extends StatelessWidget {
                                                     height: 65.0,
                                                     child: CircleAvatar(
                                                       backgroundImage: couple[
-                                                                      "partner_two"]
-                                                                  [
-                                                                  "profile_picture"] !=
+                                                                          "partner_two"]
+                                                                      [
+                                                                      "profile_picture"]
+                                                                  ["image"] !=
                                                               null
                                                           ? NetworkImage(couple[
-                                                                  "partner_two"]
-                                                              [
-                                                              "profile_picture"])
+                                                                      "partner_two"]
+                                                                  [
+                                                                  "profile_picture"]
+                                                              ["image"])
                                                           : const NetworkImage(
                                                               "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                                       radius: 25.0,

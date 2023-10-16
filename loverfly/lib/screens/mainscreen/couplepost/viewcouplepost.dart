@@ -89,7 +89,7 @@ class CouplePost extends StatelessWidget {
                               onTap: () => Get.to(
                                   () => LargerPreviewScreen(
                                         imageurl: couple["partner_one"]
-                                                ["profile_picture"] ??
+                                                ["profile_picture"]["image"] ??
                                             "",
                                         myImage: false,
                                         resetPage: () {},
@@ -108,10 +108,10 @@ class CouplePost extends StatelessWidget {
                                   height: 60.0,
                                   child: CircleAvatar(
                                     backgroundImage: couple["partner_one"]
-                                                ["profile_picture"] !=
+                                                ["profile_picture"]["image"] !=
                                             null
                                         ? NetworkImage(couple["partner_one"]
-                                            ["profile_picture"])
+                                            ["profile_picture"]["image"])
                                         : const NetworkImage(
                                             "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                     radius: 25.0,
@@ -129,7 +129,7 @@ class CouplePost extends StatelessWidget {
                               onTap: () => Get.to(
                                   () => LargerPreviewScreen(
                                         imageurl: couple["partner_two"]
-                                                ["profile_picture"] ??
+                                                ["profile_picture"]["image"] ??
                                             "",
                                         myImage: false,
                                         postId: 000,
@@ -148,10 +148,10 @@ class CouplePost extends StatelessWidget {
                                   height: 60.0,
                                   child: CircleAvatar(
                                     backgroundImage: couple["partner_two"]
-                                                ["profile_picture"] !=
+                                                ["profile_picture"]["image"] !=
                                             null
                                         ? NetworkImage(couple["partner_two"]
-                                            ["profile_picture"])
+                                            ["profile_picture"]["image"])
                                         : const NetworkImage(
                                             "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                     radius: 25.0,

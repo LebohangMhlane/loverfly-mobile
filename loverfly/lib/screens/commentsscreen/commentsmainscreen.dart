@@ -109,12 +109,13 @@ class _CommentScreenState extends State<CommentScreen> {
                                     height: 60.0,
                                     child: CircleAvatar(
                                       backgroundImage: widget
-                                                      .couple["partner_one"]
-                                                  ["profile_picture"] !=
+                                                          .couple["partner_one"]
+                                                      ["profile_picture"]
+                                                  ["image"] !=
                                               null
                                           ? NetworkImage(
                                               widget.couple["partner_one"]
-                                                  ["profile_picture"])
+                                                  ["profile_picture"]["image"])
                                           : const NetworkImage(
                                               "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
@@ -150,12 +151,13 @@ class _CommentScreenState extends State<CommentScreen> {
                                     height: 60.0,
                                     child: CircleAvatar(
                                       backgroundImage: widget
-                                                      .couple["partner_two"]
-                                                  ["profile_picture"] !=
+                                                          .couple["partner_two"]
+                                                      ["profile_picture"]
+                                                  ["image"] !=
                                               null
                                           ? NetworkImage(
                                               widget.couple["partner_two"]
-                                                  ["profile_picture"])
+                                                  ["profile_picture"]["image"])
                                           : const NetworkImage(
                                               "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
