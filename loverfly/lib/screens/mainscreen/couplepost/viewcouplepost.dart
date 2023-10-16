@@ -76,7 +76,7 @@ class CouplePost extends StatelessWidget {
             children: [
               // profile pictures:
               SizedBox(
-                  width: 120.0,
+                  width: 121.0,
                   height: 110.0,
                   child: Center(
                     child: Container(
@@ -166,32 +166,34 @@ class CouplePost extends StatelessWidget {
                   )),
 
               // usernames:
-              SizedBox(
-                width: 165.0,
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 35.0),
-                      child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: couple["partner_one"]["username"],
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w200,
-                                  color: Colors.black)),
-                          const TextSpan(
-                              text: " + ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w200,
-                                  color: Colors.black)),
-                          TextSpan(
-                              text: couple["partner_two"]["username"],
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w200,
-                                  color: Colors.black)),
-                        ]),
-                      ),
-                    )),
+              Expanded(
+                flex: 6,
+                child: SizedBox(
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 40.0),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: couple["partner_one"]["username"],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black)),
+                            const TextSpan(
+                                text: " + ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black)),
+                            TextSpan(
+                                text: couple["partner_two"]["username"],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black)),
+                          ]),
+                        ),
+                      )),
+                ),
               ),
 
               // top right corner admirers section:
