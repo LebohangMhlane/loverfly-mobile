@@ -321,7 +321,7 @@ class CouplePost extends StatelessWidget {
 
       // user interactions:
       Container(
-        height: 110.0,
+        height: 80.0,
         child: Row(children: [
           // admire couple button:
           !postdata["is_my_post"]

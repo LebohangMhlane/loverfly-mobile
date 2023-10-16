@@ -107,9 +107,10 @@ class CoupleProfileScreen extends StatelessWidget {
                                                 onTap: () => Get.to(
                                                     () => LargerPreviewScreen(
                                                           imageurl: couple[
-                                                                      "partner_one"]
-                                                                  [
-                                                                  "profile_picture"] ??
+                                                                          "partner_one"]
+                                                                      [
+                                                                      "profile_picture"]
+                                                                  ["image"] ??
                                                               "",
                                                           myImage: false,
                                                           resetPage: () {},
@@ -158,9 +159,10 @@ class CoupleProfileScreen extends StatelessWidget {
                                                 onTap: () => Get.to(
                                                     () => LargerPreviewScreen(
                                                           imageurl: couple[
-                                                                      "partner_two"]
-                                                                  [
-                                                                  "profile_picture"] ??
+                                                                          "partner_two"]
+                                                                      [
+                                                                      "profile_picture"]
+                                                                  ["image"] ??
                                                               "",
                                                           myImage: false,
                                                           postId: 000,

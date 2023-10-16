@@ -49,6 +49,8 @@ class YesOrNoModal extends StatelessWidget {
                       borderradius: 10.0,
                       buttoncolor: Colors.purple,
                       buttonlabel: "No",
+                      leftpadding: 20.0,
+                      rightpadding: 20.0,
                       onpressedfunction: () => Navigator.of(context).pop(false),
                     ),
                   ],
