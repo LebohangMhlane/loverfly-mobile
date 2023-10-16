@@ -29,7 +29,7 @@ class CoupleCard extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 10.0),
 
           // section 1 - usernames
           Container(

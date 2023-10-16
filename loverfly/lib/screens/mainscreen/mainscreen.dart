@@ -7,6 +7,7 @@ import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
+import 'package:loverfly/screens/modals/exitappmodal.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../coupleexplorerscreen/viewcoupleexplorer.dart';
@@ -26,6 +27,7 @@ class MainScreen extends StatelessWidget {
     "pagination_link": null,
     "couple": {},
   });
+  final RxBool showExitModal = RxBool(false);
 
   // TODO: find a way to globally have access to the shared preferences instance so i don't call it everywhere:
 
@@ -94,6 +96,22 @@ class MainScreen extends StatelessWidget {
     }
   }
 
+  Future<bool> getExitDecision(context) async {
+    bool exitApp = await showDialog(
+      context: context,
+      builder: (context) => GestureDetector(
+        onTap: () => Navigator.of(context).pop(false),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: const Color.fromARGB(199, 0, 0, 0),
+          child: const YesOrNoModal(),
+        ),
+      ),
+    );
+    return exitApp;
+  }
+
   void logOut(context) async {
     try {
       SharedPreferences cache = await SharedPreferences.getInstance();
@@ -108,182 +126,208 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     preparePageData(false, context);
+    return WillPopScope(
+      onWillPop: () async {
+        bool exitApp = await getExitDecision(context);
+        return exitApp;
+      },
+      child: Scaffold(
+          drawer: SizedBox(
+            width: 250.0,
 
-    return Scaffold(
-        drawer: SizedBox(
-          width: 250.0,
-
-          // drawer menu
-          child: Drawer(
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 100.0,
-                ),
-
-                // couple explorer button
-                SizedBox(
-                  height: 60.0,
-                  child: CustomButton(
-                    buttonlabel: 'Couple Explorer',
-                    textfontsize: 12.0,
-                    buttoncolor: Colors.purple,
-                    onpressedfunction: () {
-                      Get.to(() => CoupleExplorerScreen());
-                    },
+            // drawer menu
+            child: Drawer(
+              child: ListView(
+                children: [
+                  const SizedBox(
+                    height: 100.0,
                   ),
-                ),
 
-                // button 2
-                Container(
-                  height: 60.0,
-                  color: Colors.blue,
-                ),
-
-                //  button 3
-                Container(
-                  height: 60.0,
-                  color: Colors.yellow,
-                  child: CustomButton(
-                    buttonlabel: "Log Out",
-                    textfontsize: 12.0,
-                    onpressedfunction: () {
-                      logOut(context);
-                    },
+                  // couple explorer button
+                  SizedBox(
+                    height: 60.0,
+                    child: CustomButton(
+                      buttonlabel: 'Couple Explorer',
+                      textfontsize: 12.0,
+                      buttoncolor: Colors.purple,
+                      onpressedfunction: () {
+                        Get.to(() => CoupleExplorerScreen());
+                      },
+                    ),
                   ),
-                )
-              ],
+
+                  // button 2
+                  Container(
+                    height: 60.0,
+                    color: Colors.blue,
+                  ),
+
+                  //  button 3
+                  Container(
+                    height: 60.0,
+                    color: Colors.yellow,
+                    child: CustomButton(
+                      buttonlabel: "Log Out",
+                      textfontsize: 12.0,
+                      onpressedfunction: () {
+                        logOut(context);
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        appBar: customAppBar(context, ''),
+          appBar: customAppBar(context, ''),
+          body: Stack(children: [
+            // main page:
+            Obx(
+              () => DefaultTabController(
+                  initialIndex: desiredPageIndex,
+                  length: 2,
+                  child: Column(
+                      verticalDirection: VerticalDirection.up,
+                      children: [
+                        // tab bar switch buttons:
+                        Container(
+                          height: 40.0,
+                          color: Colors.black,
+                          child: const TabBar(
+                            indicatorColor: Colors.purple,
+                            tabs: [
+                              // home feed button
+                              Tab(text: 'Couples'),
+                              // my profile button
+                              Tab(
+                                child: Icon(Icons.person),
+                              ),
+                            ],
+                          ),
+                        ),
 
-        // main body:
-        body: Obx(
-          () => DefaultTabController(
-              initialIndex: desiredPageIndex,
-              length: 2,
-              child: Column(verticalDirection: VerticalDirection.up, children: [
-                // tab bar switch buttons:
-                Container(
-                  height: 40.0,
-                  color: Colors.black,
-                  child: const TabBar(
-                    indicatorColor: Colors.purple,
-                    tabs: [
-                      // home feed button
-                      Tab(text: 'Couples'),
-                      // my profile button
-                      Tab(
-                        child: Icon(Icons.person),
-                      ),
-                    ],
-                  ),
-                ),
+                        // tab screens:
+                        Expanded(
+                            child: Container(
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                child: TabBarView(
+                                  children: [
+                                    // couple posts page:
+                                    Container(
+                                        child: pageLoading.value
+                                            ?
 
-                // tab screens:
-                Expanded(
-                    child: Container(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        child: TabBarView(
-                          children: [
-                            // couple posts page:
-                            Container(
-                                child: pageLoading.value
-                                    ?
-
-                                    // loading indicator:
-                                    const Center(
-                                        child: SizedBox(
-                                          width: 20.0,
-                                          height: 20.0,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 1.0,
-                                            backgroundColor: Colors.white,
-                                            color: Colors.purpleAccent,
-                                          ),
-                                        ),
-                                      )
-                                    : postsFound.value == false
-                                        ? Column(
-                                            children: [
-                                              const SizedBox(height: 100.0),
-                                              // welcome to loverfly text
-                                              const Center(
-                                                  child: Text(
-                                                'Welcome to LoverFly!',
-                                                style: TextStyle(
-                                                    color: Colors.purple),
-                                              )),
-                                              const SizedBox(height: 50.0),
-                                              // descriptive text
-                                              Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 30.0, right: 30.0),
-                                                child: const Text(
-                                                  "It looks like you're not following any couples. Start by exploring some below",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.purple,
-                                                      fontSize: 12.0,
-                                                      fontWeight:
-                                                          FontWeight.w300),
+                                            // loading indicator:
+                                            const Center(
+                                                child: SizedBox(
+                                                  width: 20.0,
+                                                  height: 20.0,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 1.0,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    color: Colors.purpleAccent,
+                                                  ),
                                                 ),
-                                              ),
-                                              const SizedBox(height: 50.0),
-                                              // couple explorer navigation button
-                                              Container(
-                                                width: 170.0,
-                                                height: 60.0,
-                                                color: Colors.white,
-                                                child: CustomButton(
-                                                  buttonlabel:
-                                                      'Couple Explorer',
-                                                  borderradius: 20.0,
-                                                  buttoncolor: Colors.purple,
-                                                  onpressedfunction: () {
-                                                    Get.to(() =>
-                                                        CoupleExplorerScreen());
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        :
+                                              )
+                                            : postsFound.value == false
+                                                ? Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                          height: 100.0),
+                                                      // welcome to loverfly text
+                                                      const Center(
+                                                          child: Text(
+                                                        'Welcome to LoverFly!',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.purple),
+                                                      )),
+                                                      const SizedBox(
+                                                          height: 50.0),
+                                                      // descriptive text
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 30.0,
+                                                                right: 30.0),
+                                                        child: const Text(
+                                                          "It looks like you're not following any couples. Start by exploring some below",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.purple,
+                                                              fontSize: 12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 50.0),
+                                                      // couple explorer navigation button
+                                                      Container(
+                                                        width: 170.0,
+                                                        height: 60.0,
+                                                        color: Colors.white,
+                                                        child: CustomButton(
+                                                          buttonlabel:
+                                                              'Couple Explorer',
+                                                          borderradius: 20.0,
+                                                          buttoncolor:
+                                                              Colors.purple,
+                                                          onpressedfunction:
+                                                              () {
+                                                            Get.to(() =>
+                                                                CoupleExplorerScreen());
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                :
 
-                                        // couple post page view:
-                                        ListView.builder(
-                                            itemCount: posts.value.length,
-                                            scrollDirection: Axis.vertical,
-                                            itemBuilder: (context, index) {
-                                              // trigger pagination when at the end of the list:
-                                              if (index + 1 ==
-                                                  posts.value.length) {
-                                                if (pageData[
-                                                            "pagination_link"] !=
-                                                        "" ||
-                                                    pageData[
-                                                            "pagination_link"] !=
-                                                        null) {
-                                                  addMorePosts(context);
-                                                }
-                                              }
+                                                // couple post page view:
+                                                ListView.builder(
+                                                    itemCount:
+                                                        posts.value.length,
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      // trigger pagination when at the end of the list:
+                                                      if (index + 1 ==
+                                                          posts.value.length) {
+                                                        if (pageData[
+                                                                    "pagination_link"] !=
+                                                                "" ||
+                                                            pageData[
+                                                                    "pagination_link"] !=
+                                                                null) {
+                                                          addMorePosts(context);
+                                                        }
+                                                      }
 
-                                              // couple post:
-                                              return CouplePost(
-                                                postdata: posts.value[index],
-                                                rebuildPageFunction:
-                                                    preparePageData,
-                                              );
-                                            })),
+                                                      // couple post:
+                                                      return CouplePost(
+                                                        postdata:
+                                                            posts.value[index],
+                                                        rebuildPageFunction:
+                                                            preparePageData,
+                                                      );
+                                                    })),
 
-                            // user profile page:
-                            MyProfile(
-                              reloadPosts: preparePostsForFeed,
-                            ),
-                          ],
-                        ))),
-              ])),
-        ));
+                                    // user profile page:
+                                    MyProfile(
+                                      reloadPosts: preparePostsForFeed,
+                                    ),
+                                  ],
+                                ))),
+                      ])),
+            ),
+          ])),
+    );
   }
 }

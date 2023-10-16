@@ -476,13 +476,13 @@ class CouplePost extends StatelessWidget {
                       couple: couple,
                     ));
               },
-              child: Container(
-                padding: const EdgeInsets.only(top: 5.0),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.comment,
-                  color: Colors.purple,
-                  size: 20.0,
+              child: const Center(
+                child: SizedBox(
+                  child: Icon(
+                    Icons.comment,
+                    color: Colors.purple,
+                    size: 20.0,
+                  ),
                 ),
               ),
             ),

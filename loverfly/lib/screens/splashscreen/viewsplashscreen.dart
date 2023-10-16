@@ -61,9 +61,8 @@ class _SplashScreenState extends State<SplashScreen> {
         if (cache.containsKey("token") && cache.get("token") != "") {
           if (cache.containsKey("user_profile") &&
               cache.get("user_profile") != "") {
-            Get.to(() => MainScreen(
-                  desiredPageIndex: 0,
-                ));
+            Get.offAndToNamed("/mainscreen",
+                parameters: {"desiredPageIndex": "0"});
           }
         } else {
           Get.to(() => SignInScreen());
