@@ -40,7 +40,7 @@ class YesOrNoModal extends StatelessWidget {
                       buttonlabel: "Yes",
                       leftpadding: 20.0,
                       rightpadding: 20.0,
-                      onpressedfunction: () => Navigator.of(context).pop(true),
+                      onpressedfunction: () => true,
                     ),
                     const SizedBox(
                       width: 20.0,
@@ -51,7 +51,7 @@ class YesOrNoModal extends StatelessWidget {
                       buttonlabel: "No",
                       leftpadding: 20.0,
                       rightpadding: 20.0,
-                      onpressedfunction: () => Navigator.of(context).pop(false),
+                      onpressedfunction: () => false,
                     ),
                   ],
                 ),

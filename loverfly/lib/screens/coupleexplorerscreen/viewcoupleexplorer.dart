@@ -21,7 +21,7 @@ class CoupleExplorerScreen extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () {
-        Get.off(() => MainScreen(
+        Get.offAll(() => MainScreen(
               desiredPageIndex: 0,
             ));
         return Future.value(true);

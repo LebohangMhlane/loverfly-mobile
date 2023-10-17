@@ -96,22 +96,6 @@ class MainScreen extends StatelessWidget {
     }
   }
 
-  Future<bool> getExitDecision(context) async {
-    bool exitApp = await showDialog(
-      context: context,
-      builder: (context) => GestureDetector(
-        onTap: () => Navigator.of(context).pop(false),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: const Color.fromARGB(199, 0, 0, 0),
-          child: const YesOrNoModal(),
-        ),
-      ),
-    );
-    return exitApp;
-  }
-
   void logOut(context) async {
     try {
       SharedPreferences cache = await SharedPreferences.getInstance();
@@ -128,7 +112,68 @@ class MainScreen extends StatelessWidget {
     preparePageData(false, context);
     return WillPopScope(
       onWillPop: () async {
-        bool exitApp = await getExitDecision(context);
+        bool exitApp = await showDialog(
+          context: context,
+          builder: (context) => Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 300.0,
+                  padding: const EdgeInsets.all(20.0),
+                  margin: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 80.0),
+                        child: Text(
+                          "Are you sure you want to exit?",
+                          style: TextStyle(color: Colors.purple),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 18.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(
+                              borderradius: 10.0,
+                              buttoncolor: Colors.purple,
+                              buttonlabel: "Yes",
+                              leftpadding: 20.0,
+                              rightpadding: 20.0,
+                              onpressedfunction: () =>
+                                  Navigator.of(context).pop(true),
+                            ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            CustomButton(
+                              borderradius: 10.0,
+                              buttoncolor: Colors.purple,
+                              buttonlabel: "No",
+                              leftpadding: 20.0,
+                              rightpadding: 20.0,
+                              onpressedfunction: () =>
+                                  Navigator.of(context).pop(false),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
         return exitApp;
       },
       child: Scaffold(

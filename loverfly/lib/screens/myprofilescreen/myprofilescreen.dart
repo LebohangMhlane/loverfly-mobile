@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
+import 'package:loverfly/screens/editprofilepicturescreen/editprofilepicturescreen.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/pageutils.dart';
@@ -114,25 +115,53 @@ class MyProfile extends StatelessWidget {
                                   Expanded(
                                     child: Container(
                                       alignment: Alignment.center,
-                                      child: Container(
-                                          width: 95.0,
-                                          height: 95.0,
-                                          decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(100.0)),
-                                              color: Colors.purpleAccent),
-                                          padding: const EdgeInsets.all(1.0),
-                                          child: CircleAvatar(
-                                              radius: 40.0,
-                                              backgroundImage: userProfile[
-                                                              "profile_picture"]
-                                                          ["image"] !=
-                                                      null
-                                                  ? NetworkImage(userProfile[
-                                                          'profile_picture']
-                                                      ["image"])
-                                                  : const NetworkImage(
-                                                      "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"))),
+                                      child: Stack(children: [
+                                        Container(
+                                            width: 95.0,
+                                            height: 95.0,
+                                            decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(100.0)),
+                                                color: Colors.purpleAccent),
+                                            padding: const EdgeInsets.all(1.0),
+                                            child: CircleAvatar(
+                                                radius: 40.0,
+                                                backgroundImage: userProfile[
+                                                                "profile_picture"]
+                                                            ["image"] !=
+                                                        null
+                                                    ? NetworkImage(userProfile[
+                                                            'profile_picture']
+                                                        ["image"])
+                                                    : const NetworkImage(
+                                                        "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"))),
+                                        Positioned(
+                                          bottom: 7.0,
+                                          left: 70.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Get.to(() =>
+                                                  const EditProfilePictureScreen());
+                                            },
+                                            child: Container(
+                                              width: 25.0,
+                                              height: 25.0,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.purple,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50.0)),
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                  size: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
                                     ),
                                   ),
 

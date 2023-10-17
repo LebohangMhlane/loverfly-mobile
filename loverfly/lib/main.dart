@@ -8,6 +8,7 @@ import 'package:loverfly/screens/couplelink/inputcode.dart';
 import 'package:loverfly/screens/commentsscreen/commentsmainscreen.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/createapostscreen/createapost.dart';
+import 'package:loverfly/screens/editprofilepicturescreen/editprofilepicturescreen.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
@@ -87,6 +88,9 @@ class MyApp extends StatelessWidget {
             page: () => ListViewScreen(
                   listType: "None",
                 )),
+        GetPage(
+            name: '/editprofilepicturescreen',
+            page: () => const EditProfilePictureScreen()),
 
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),
