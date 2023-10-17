@@ -6,7 +6,6 @@ import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signup/signupapi.dart';
 import 'package:loverfly/utils/pageutils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UsernameCreateScreen extends StatelessWidget {
   UsernameCreateScreen({Key? key}) : super(key: key);

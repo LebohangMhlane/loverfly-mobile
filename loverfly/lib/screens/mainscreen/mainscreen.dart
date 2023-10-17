@@ -9,7 +9,6 @@ import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
 import 'package:loverfly/utils/pageutils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../coupleexplorerscreen/viewcoupleexplorer.dart';
 import '../myprofilescreen/myprofilescreen.dart';
 import 'api/mainscreenapi.dart';

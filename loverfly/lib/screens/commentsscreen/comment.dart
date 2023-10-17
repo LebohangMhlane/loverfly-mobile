@@ -43,7 +43,7 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
     pageData.value = {
       "ownerUsername": widget.commentData["comment"]["owner"]["username"],
       "ownerProfilePicture": widget.commentData["comment"]["owner"]
-          ["profile_picture"],
+          ["profile_picture"]["image"],
       "comment": decodeComment(widget.commentData["comment"]["comment"])
     };
     commentLikes.value = widget.commentData["comment"]["comment_likes"];

@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/signup/usernamecreate/usernamecreatescreen.dart';
 import 'package:loverfly/utils/pageutils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({
