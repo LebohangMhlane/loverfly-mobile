@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -11,10 +11,25 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final cache = GetStorage();
+
   @override
   void initState() {
     super.initState();
     runappchecks();
+  }
+
+  void runappchecks() async {
+    await Future.delayed(const Duration(seconds: 3)).whenComplete(() {
+      if (cache.hasData("token") && cache.read("token") != "") {
+        if (cache.hasData("user_profile") && cache.read("user_profile") != "") {
+          Get.offAndToNamed("/mainscreen",
+              parameters: {"desiredPageIndex": "0"});
+        }
+      } else {
+        Get.to(() => SignInScreen());
+      }
+    });
   }
 
   @override
@@ -52,21 +67,5 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
-  }
-
-  void runappchecks() async {
-    await Future.delayed(const Duration(seconds: 3)).whenComplete(() {
-      SharedPreferences.getInstance().then((cache) {
-        if (cache.containsKey("token") && cache.get("token") != "") {
-          if (cache.containsKey("user_profile") &&
-              cache.get("user_profile") != "") {
-            Get.offAndToNamed("/mainscreen",
-                parameters: {"desiredPageIndex": "0"});
-          }
-        } else {
-          Get.to(() => SignInScreen());
-        }
-      });
-    });
   }
 }

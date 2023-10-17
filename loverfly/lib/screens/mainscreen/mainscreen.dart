@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
-import 'package:loverfly/screens/modals/exitappmodal.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../coupleexplorerscreen/viewcoupleexplorer.dart';
@@ -28,23 +28,21 @@ class MainScreen extends StatelessWidget {
     "couple": {},
   });
   final RxBool showExitModal = RxBool(false);
-
-  // TODO: find a way to globally have access to the shared preferences instance so i don't call it everywhere:
+  final cache = GetStorage();
 
   void preparePageData(comingFromCouplePage, context) async {
     if (!pageLoaded.value || comingFromCouplePage == true) {
       try {
-        var instance = await SharedPreferences.getInstance();
         await AuthenticationAPI()
-            .getUserProfileAndCoupleData(instance.get("token"), context)
+            .getUserProfileAndCoupleData(cache.read("token"), context)
             .then((Map response) async {
           if (!response.keys.contains("error")) {
             var userProfile = response["user_profile"];
             var couple = response["couple"];
 
             // update local storage with new data:
-            instance.setString("user_profile", jsonEncode(userProfile));
-            instance.setString("user_couple", jsonEncode(couple));
+            cache.write("user_profile", jsonEncode(userProfile));
+            cache.write("user_couple", jsonEncode(couple));
 
             // update pagedata with new data:
             pageData["user_profile"] = userProfile;
@@ -98,8 +96,7 @@ class MainScreen extends StatelessWidget {
 
   void logOut(context) async {
     try {
-      SharedPreferences cache = await SharedPreferences.getInstance();
-      cache.clear();
+      cache.erase();
       Get.offAll(() => SignInScreen());
     } catch (e) {
       SnackBars().displaySnackBar(

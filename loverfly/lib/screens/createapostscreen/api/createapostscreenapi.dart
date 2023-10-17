@@ -20,7 +20,6 @@ Future<Map> createAPost(caption, imageFile) async {
     request.files.add(multipartFile);
     request.fields["caption"] = caption;
     var response = await request.send();
-
     if (response.statusCode == 201) {
       return {"post_created": true};
     } else {

@@ -57,20 +57,26 @@ class CustomButton extends StatelessWidget {
         },
         child: customchild == null
             ? icon != null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      icon!,
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        buttonlabel,
-                        style: TextStyle(
-                          color: textcolor,
+                ? Padding(
+                    padding:
+                        EdgeInsets.only(left: leftpadding, right: rightpadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        icon!,
+                        SizedBox(
+                          width: buttonlabel != "" ? 10.0 : 0.0,
                         ),
-                      )
-                    ],
+                        buttonlabel != ""
+                            ? Text(
+                                buttonlabel,
+                                style: TextStyle(
+                                  color: textcolor,
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
                   )
                 : Container(
                     padding:

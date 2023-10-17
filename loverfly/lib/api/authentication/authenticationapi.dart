@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,13 +10,7 @@ class AuthenticationAPI {
   // =========================================================================
   // handles authentication throughout the app
   // =========================================================================
-  late SharedPreferences db;
-
-  AuthenticationAPI() {
-    SharedPreferences.getInstance().then((value) {
-      db = value;
-    });
-  }
+  final cache = GetStorage();
 
   Future<Map> getAndCacheAPIToken({username, password}) async {
     Map token = {};
@@ -30,8 +25,7 @@ class AuthenticationAPI {
           .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         var serverResponse = jsonDecode(response.body);
-        db.clear();
-        db.setString('token', serverResponse['token']);
+        cache.write('token', serverResponse['token']);
         token["token"] = serverResponse['token'];
         return token;
       } else {

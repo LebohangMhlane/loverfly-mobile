@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/signup/usernamecreate/usernamecreatescreen.dart';
 import 'package:loverfly/utils/pageutils.dart';
@@ -23,6 +24,9 @@ class SignUpScreen extends StatelessWidget {
 
   // global form validator:
   final RxBool formIsValid = RxBool(false);
+
+  // cache:
+  final cache = GetStorage();
 
   void preparePageData() {}
 
@@ -56,12 +60,11 @@ class SignUpScreen extends StatelessWidget {
     return emailRegExp.hasMatch(email);
   }
 
-  Future<bool> saveToSharedPreferences(String email, String password) async {
+  Future<bool> saveToCache(String email, String password) async {
     try {
-      SharedPreferences db = await SharedPreferences.getInstance();
-      await db.clear();
-      await db.setString("email", email);
-      await db.setString("password", password);
+      await cache.erase();
+      await cache.write("email", email);
+      await cache.write("password", password);
       return true;
     } catch (e) {
       return false;
@@ -95,7 +98,7 @@ class SignUpScreen extends StatelessWidget {
     // verify everything is valid and process it:
     if (formIsValid.value) {
       try {
-        saveToSharedPreferences(email, password).then((saved) => {
+        saveToCache(email, password).then((saved) => {
               saved
                   ? SnackBars()
                       .displaySnackBar("Saved! Continuing with sign up.", () {

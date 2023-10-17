@@ -22,7 +22,7 @@ class SnackBars {
             textAlign: TextAlign.center,
             style: const TextStyle(fontWeight: FontWeight.w300),
           ),
-          duration: const Duration(milliseconds: 4000),
+          duration: const Duration(milliseconds: 2000),
           dismissDirection: DismissDirection.horizontal,
         ))
         .closed

@@ -18,10 +18,14 @@ import 'package:loverfly/screens/myprofilescreen/myprofilescreen.dart';
 import 'package:loverfly/screens/signup/usernamecreate/usernamecreatescreen.dart';
 import 'package:loverfly/testpage.dart';
 import 'screens/coupleexplorerscreen/viewcoupleexplorer.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // initialize GetStorage:
+  await GetStorage.init();
 
   // change status bar color to transparent:
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -90,7 +94,9 @@ class MyApp extends StatelessWidget {
                 )),
         GetPage(
             name: '/editprofilepicturescreen',
-            page: () => const EditProfilePictureScreen()),
+            page: () => EditProfilePictureScreen(
+                  reloadProfilePage: () {},
+                )),
 
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),

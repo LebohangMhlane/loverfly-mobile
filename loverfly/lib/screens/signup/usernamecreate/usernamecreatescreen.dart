@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
@@ -14,6 +15,9 @@ class UsernameCreateScreen extends StatelessWidget {
   final RxBool profanityFound = RxBool(false);
   final TextEditingController usernameController = TextEditingController();
   final RxBool completingSignUp = RxBool(false);
+
+  // cache:
+  final cache = GetStorage();
 
   // TODO: Complete username validations:
 
@@ -35,10 +39,9 @@ class UsernameCreateScreen extends StatelessWidget {
     }
   }
 
-  Future<bool> saveToSharedPreferences(String username) async {
+  Future<bool> saveToCache(String username) async {
     try {
-      SharedPreferences db = await SharedPreferences.getInstance();
-      db.setString("username", username);
+      cache.write("username", username);
       return true;
     } catch (e) {
       return false;
@@ -47,12 +50,11 @@ class UsernameCreateScreen extends StatelessWidget {
 
   void getTokenAndNavigate(context) async {
     try {
-      SharedPreferences cache = await SharedPreferences.getInstance();
-      if (!cache.containsKey("token") &&
-          cache.containsKey("username") &&
-          cache.containsKey("password")) {
-        String? username = cache.getString("username");
-        String? password = cache.getString("password");
+      if (!cache.hasData("token") &&
+          cache.hasData("username") &&
+          cache.hasData("password")) {
+        String? username = cache.read("username");
+        String? password = cache.read("password");
         Map tokenResponse = await AuthenticationAPI()
             .getAndCacheAPIToken(username: username, password: password);
         if (tokenResponse.containsKey("token") &&
@@ -73,7 +75,7 @@ class UsernameCreateScreen extends StatelessWidget {
       profanityFound.value = await isProfanityFound(username);
       usernameTaken.value = await isUsernameTaken(username);
       if (!profanityFound.value && !usernameTaken.value) {
-        bool savedToCache = await saveToSharedPreferences(username);
+        bool savedToCache = await saveToCache(username);
         if (savedToCache) {
           bool accountCreated = await signUp();
           accountCreated
