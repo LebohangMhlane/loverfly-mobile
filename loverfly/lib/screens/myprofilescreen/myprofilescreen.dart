@@ -72,7 +72,9 @@ class MyProfile extends StatelessWidget {
   void updateProfilePicture() async {
     userProfile.value = jsonDecode(cache.read("user_profile"));
     profilePicture.value = "";
-    profilePicture.value = userProfile["profile_picture"]["image"];
+    profilePicture.value = userProfile["profile_picture"] == null
+        ? ""
+        : userProfile["profile_picture"]["image"];
   }
 
   @override
@@ -151,10 +153,13 @@ class MyProfile extends StatelessWidget {
                                         onTap: () {
                                           profilePicture.value = "";
                                           Get.to(() => EditProfilePictureScreen(
-                                                currentProfilePicture:
-                                                    userProfile["profile_picture"]
-                                                            ["image"] ??
-                                                        "",
+                                                currentProfilePicture: userProfile[
+                                                            "profile_picture"] ==
+                                                        null
+                                                    ? ""
+                                                    : userProfile[
+                                                            "profile_picture"]
+                                                        ["image"],
                                                 reloadProfilePage:
                                                     updateProfilePicture,
                                               ));
