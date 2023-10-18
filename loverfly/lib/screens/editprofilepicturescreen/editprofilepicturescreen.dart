@@ -9,10 +9,14 @@ import 'package:loverfly/screens/editprofilepicturescreen/api.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
 class EditProfilePictureScreen extends StatefulWidget {
-  const EditProfilePictureScreen({Key? key, required this.reloadProfilePage})
+  const EditProfilePictureScreen(
+      {Key? key,
+      required this.reloadProfilePage,
+      required this.currentProfilePicture})
       : super(key: key);
 
   final Function reloadProfilePage;
+  final String currentProfilePicture;
 
   @override
   State<EditProfilePictureScreen> createState() =>
@@ -75,12 +79,15 @@ class _EditProfilePictureScreenState extends State<EditProfilePictureScreen> {
                         height: 160.0,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: selectedImage != null
-                                  ? Image.file(File(selectedImage!.path)).image
-                                  : const NetworkImage(
-                                      "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"),
-                            ),
+                                fit: BoxFit.cover,
+                                image: selectedImage != null
+                                    ? Image.file(File(selectedImage!.path))
+                                        .image
+                                    : widget.currentProfilePicture == ""
+                                        ? const NetworkImage(
+                                            "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg")
+                                        : NetworkImage(
+                                            widget.currentProfilePicture)),
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(100.0)),
                       ),

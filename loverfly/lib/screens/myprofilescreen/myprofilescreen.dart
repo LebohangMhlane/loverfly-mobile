@@ -149,6 +149,10 @@ class MyProfile extends StatelessWidget {
                                         onTap: () {
                                           profilePicture.value = "";
                                           Get.to(() => EditProfilePictureScreen(
+                                                currentProfilePicture:
+                                                    userProfile["profile_picture"]
+                                                            ["image"] ??
+                                                        "",
                                                 reloadProfilePage:
                                                     updateProfilePicture,
                                               ));

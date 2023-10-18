@@ -95,6 +95,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/editprofilepicturescreen',
             page: () => EditProfilePictureScreen(
+                  currentProfilePicture: "",
                   reloadProfilePage: () {},
                 )),
 
