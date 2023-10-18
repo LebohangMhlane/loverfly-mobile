@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/environmentconfig/envconfig.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 Future<bool> uploadProfilePicture(imageFile) async {
-  var db = await SharedPreferences.getInstance();
+  var cache = GetStorage();
   try {
     // prepare the request:
     var url = Uri.parse(EnvConfig().baseUrl + '/update-profile-picture');
@@ -15,7 +15,7 @@ Future<bool> uploadProfilePicture(imageFile) async {
       url,
     );
     request.headers["Authorization"] =
-        "TOKEN " + db.getString('token')!.toString();
+        "TOKEN " + cache.read('token')!.toString();
     var multipartFile = await http.MultipartFile.fromPath(
       'image',
       imageFile.path,
@@ -27,9 +27,9 @@ Future<bool> uploadProfilePicture(imageFile) async {
     response.stream.listen((value) {
       final dataChunk = String.fromCharCodes(value);
       Map newProfilePicture = jsonDecode(dataChunk);
-      Map userProfile = jsonDecode(db.getString("user_profile")!);
+      Map userProfile = jsonDecode(cache.read("user_profile")!);
       userProfile["profile_picture"] = newProfilePicture["profile_picture"];
-      db.setString("user_profile", jsonEncode(userProfile));
+      cache.write("user_profile", jsonEncode(userProfile));
     });
     if (response.statusCode == 200) {
       return true;

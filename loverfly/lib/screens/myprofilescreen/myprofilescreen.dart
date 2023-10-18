@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 import 'package:loverfly/screens/editprofilepicturescreen/editprofilepicturescreen.dart';
 import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/pageutils.dart';
 import '../couplelink/generatecode.dart';
 import '../couplelink/inputcode.dart';
@@ -69,8 +68,7 @@ class MyProfile extends StatelessWidget {
   }
 
   void updateProfilePicture() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    userProfile.value = jsonDecode(cache.getString("user_profile")!);
+    userProfile.value = jsonDecode(cache.read("user_profile"));
     profilePicture.value = "";
     profilePicture.value = userProfile["profile_picture"]["image"];
   }
