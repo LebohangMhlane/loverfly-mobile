@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/custombutton.dart';
 import '../../utils/pageutils.dart';
@@ -41,14 +41,13 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
 
     // get the users profile from local storage:
     try {
-      SharedPreferences.getInstance().then((value) {
-        userProfile.value = jsonDecode(value.getString('user_profile')!);
-        couple.value = jsonDecode(value.getString('user_couple')!);
-        // find partner one:
-        couple.value["partner_one"]["username"] == userProfile.value["username"]
-            ? partnerOne = userProfile.value
-            : partnerOne = couple.value["partner_one"];
-      });
+      var cache = GetStorage();
+      userProfile.value = jsonDecode(cache.read('user_profile')!);
+      couple.value = jsonDecode(cache.read('user_couple')!);
+      // find partner one:
+      couple.value["partner_one"]["username"] == userProfile.value["username"]
+          ? partnerOne = userProfile.value
+          : partnerOne = couple.value["partner_one"];
     } catch (e) {
       return;
     }
@@ -102,11 +101,11 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
 
   Future<bool> updateCoupleData() async {
     try {
-      var cache = await SharedPreferences.getInstance();
-      var couple = cache.getString("user_couple");
+      var cache = GetStorage();
+      var couple = cache.read("user_couple");
       Map jsonCouple = jsonDecode(couple!);
       jsonCouple["has_posts"] = true;
-      cache.setString("user_couple", jsonEncode(jsonCouple));
+      cache.write("user_couple", jsonEncode(jsonCouple));
       return true;
     } catch (error) {
       handleError(error);

@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../../environmentconfig/envconfig.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map> generateLinkCode() async {
   var code = {};
   try {
-    var db = await SharedPreferences.getInstance();
+    var cache = GetStorage();
     var url = Uri.parse(EnvConfig().baseUrl + '/generate-code/');
     var response = await http.get(
       url,
-      headers: {'Authorization': 'TOKEN ' + db.getString('token')!.toString()},
+      headers: {'Authorization': 'TOKEN ' + cache.read('token')!.toString()},
     );
     code = jsonDecode(response.body);
     return code;
@@ -22,11 +22,11 @@ Future<Map> generateLinkCode() async {
 Future<Map> inputLinkCode(code) async {
   Map finalresponse = {};
   try {
-    var db = await SharedPreferences.getInstance();
+    var cache = GetStorage();
     var url = Uri.parse(EnvConfig().baseUrl + '/input-code/' + code + '/');
     var response = await http.get(
       url,
-      headers: {'Authorization': 'TOKEN ' + db.getString('token')!.toString()},
+      headers: {'Authorization': 'TOKEN ' + cache.read('token')!.toString()},
     );
     finalresponse = jsonDecode(response.body);
     return finalresponse;

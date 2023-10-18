@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
         // testing page:
         GetPage(name: '/testPage', page: () => MyWidget()),
       ],
-      initialRoute: '/splashscreen',
+      initialRoute: '/signupscreen',
     );
   }
 }

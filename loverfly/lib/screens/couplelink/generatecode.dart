@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/customappbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/custombutton.dart';
 import 'api/codescreensapi.dart';
 
@@ -48,13 +48,12 @@ class GenerateCodeScreen extends StatelessWidget {
             height: 50.0,
           ),
           CustomButton(
-            onpressedfunction: () {
+            onpressedfunction: () async {
               try {
-                SharedPreferences.getInstance().then((db) {
-                  generateLinkCode().then((codemap) {
-                    db.setString("generated_code", codemap["code"]);
-                    code.value = codemap["code"];
-                  });
+                var cache = GetStorage();
+                await generateLinkCode().then((Map generatedCode) {
+                  cache.write("generated_code", generatedCode["code"]);
+                  code.value = generatedCode["code"];
                 });
               } catch (e) {
                 message.value = e.toString();

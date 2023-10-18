@@ -60,7 +60,9 @@ class MyProfile extends StatelessWidget {
         });
       }
       // set the profile picture:
-      profilePicture.value = userProfile["profile_picture"]["image"];
+      profilePicture.value = userProfile["profile_picture"] != null
+          ? userProfile["profile_picture"]["image"]
+          : "";
       pageReady.value = true;
     } catch (e) {
       print("something went wrong while loading this page");

@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> getCouplePosts(coupleid) async {
   Map responseMap = {};
   // get cache:
-  var db = await SharedPreferences.getInstance();
+  var cache = GetStorage();
   try {
     var url = Uri.parse(
         EnvConfig().baseUrl + '/get-couple-posts/' + coupleid.toString() + '/');
-    var response = await http.get(url,
-        headers: {'Authorization': 'TOKEN ' + db.getString('token')!});
+    var response = await http
+        .get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
     if (response.statusCode == 200) {
       responseMap = jsonDecode(response.body);
     } else {
@@ -37,12 +37,12 @@ Future<Map> getCouplePosts(coupleid) async {
 
 Future<bool> checkIfAdmired(coupleid) async {
   Map responseMap = {};
-  var db = await SharedPreferences.getInstance();
+  var cache = GetStorage();
   try {
     var url = Uri.parse(
         EnvConfig().baseUrl + '/check-if-admired/' + coupleid.toString() + '/');
-    var response = await http.get(url,
-        headers: {'Authorization': 'TOKEN ' + db.getString('token')!});
+    var response = await http
+        .get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
     if (response.statusCode == 200) {
       responseMap = jsonDecode(response.body);
       return responseMap["admired"];

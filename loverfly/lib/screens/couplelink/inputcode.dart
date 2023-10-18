@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/customappbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/custombutton.dart';
 import 'api/codescreensapi.dart';
 
@@ -17,25 +17,24 @@ class InputCodeScreen extends StatelessWidget {
     if (_textEditingController.text.length == 5 && !linking.value) {
       linking.value = true;
       try {
-        await SharedPreferences.getInstance().then((cache) {
-          String code = _textEditingController.text;
-          if (cache.containsKey("generatedcode") &&
-              cache.get("generatedcode") == code) {
-            message.value =
-                "You cannot be in a relationship with yourself... Well, technically speaking...";
-            linking.value = false;
-          } else {
-            inputLinkCode(code).then((serverResponse) {
-              if (serverResponse.containsKey("error")) {
-                message.value = serverResponse["error"];
-                linking.value = false;
-              } else {
-                message.value = serverResponse["success"];
-                linking.value = false;
-              }
-            });
-          }
-        });
+        var cache = GetStorage();
+        String code = _textEditingController.text;
+        if (cache.hasData("generatedcode") &&
+            cache.read("generatedcode") == code) {
+          message.value =
+              "You cannot be in a relationship with yourself... Well, technically speaking...";
+          linking.value = false;
+        } else {
+          inputLinkCode(code).then((serverResponse) {
+            if (serverResponse.containsKey("error")) {
+              message.value = serverResponse["error"];
+              linking.value = false;
+            } else {
+              message.value = serverResponse["success"];
+              linking.value = false;
+            }
+          });
+        }
       } catch (e) {
         message.value = e.toString();
         linking.value = false;

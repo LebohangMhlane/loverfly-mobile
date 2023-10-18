@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> createAPost(caption, imageFile) async {
   var url = Uri.parse(EnvConfig().baseUrl + '/create-a-post/');
-  var db = await SharedPreferences.getInstance();
+  var cache = GetStorage();
   try {
     var request = http.MultipartRequest(
       'POST',
@@ -16,7 +16,7 @@ Future<Map> createAPost(caption, imageFile) async {
       imageFile.path,
     );
     request.headers["Authorization"] =
-        "TOKEN " + db.getString('token')!.toString();
+        "TOKEN " + cache.read('token')!.toString();
     request.files.add(multipartFile);
     request.fields["caption"] = caption;
     var response = await request.send();

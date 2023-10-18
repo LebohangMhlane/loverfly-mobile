@@ -1,19 +1,18 @@
 import 'dart:convert';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../environmentconfig/envconfig.dart';
 
 Future<Map> getComments(postId, nextPageLink) async {
   try {
-    var db = await SharedPreferences.getInstance();
+    var cache = GetStorage();
     Uri url = Uri.parse(
         EnvConfig().baseUrl + '/get-comments/' + postId.toString() + '/');
     var apiResponse = await http.get(
       url,
       headers: {
-        'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
+        'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
       },
     );
     Map response = jsonDecode(apiResponse.body);
@@ -25,12 +24,12 @@ Future<Map> getComments(postId, nextPageLink) async {
 
 Future<Map> getCommentsWithPagination(postId, nextPageLink) async {
   try {
-    var db = await SharedPreferences.getInstance();
+    var db = GetStorage();
     Uri url = Uri.parse(nextPageLink);
     var apiResponse = await http.get(
       url,
       headers: {
-        'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
+        'Authorization': 'TOKEN ' + db.read('token')!.toString(),
       },
     );
     Map response = jsonDecode(apiResponse.body);
@@ -42,11 +41,11 @@ Future<Map> getCommentsWithPagination(postId, nextPageLink) async {
 
 Future<Map> postComment(postId, commentData) async {
   try {
-    var db = await SharedPreferences.getInstance();
+    var cache = GetStorage();
     var url = Uri.parse(
         EnvConfig().baseUrl + '/post-comment/' + postId.toString() + '/');
     var apiResponse = await http.post(url, headers: {
-      'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
+      'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     }, body: {
       "comment": commentData["comment"]
     });
@@ -59,10 +58,10 @@ Future<Map> postComment(postId, commentData) async {
 
 Future<Map> likeComment(commentId, commentLiked) async {
   try {
-    var db = await SharedPreferences.getInstance();
+    var cache = GetStorage();
     var url = Uri.parse(EnvConfig().baseUrl + '/like-comment/');
     var apiResponse = await http.post(url, headers: {
-      'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
+      'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     }, body: {
       "comment_id": commentId.toString(),
       "comment_liked": commentLiked.toString()
@@ -76,11 +75,11 @@ Future<Map> likeComment(commentId, commentLiked) async {
 
 Future<Map> deleteCommentService(commentId) async {
   try {
-    var db = await SharedPreferences.getInstance();
+    var cache = GetStorage();
     var url = Uri.parse(
         EnvConfig().baseUrl + '/delete-comment/' + commentId.toString() + '/');
     var apiResponse = await http.post(url, headers: {
-      'Authorization': 'TOKEN ' + db.getString('token')!.toString(),
+      'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     });
     return jsonDecode(apiResponse.body);
   } catch (error) {
