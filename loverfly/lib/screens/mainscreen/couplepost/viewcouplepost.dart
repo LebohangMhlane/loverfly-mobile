@@ -90,7 +90,7 @@ class CouplePost extends StatelessWidget {
                                   () => LargerPreviewScreen(
                                         imageurl: couple["partner_one"]
                                                 ["profile_picture"]["image"] ??
-                                            "",
+                                            "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png",
                                         myImage: false,
                                         resetPage: () {},
                                         postId: 000,

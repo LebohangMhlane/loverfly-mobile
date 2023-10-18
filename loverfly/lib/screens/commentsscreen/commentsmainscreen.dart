@@ -170,6 +170,7 @@ class _CommentScreenState extends State<CommentScreen> {
                         ),
                       )),
 
+                  // couple usernames:
                   SizedBox(
                     width: 170.0,
                     child: Center(

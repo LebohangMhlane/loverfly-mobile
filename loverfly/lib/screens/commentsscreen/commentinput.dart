@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../components/custombutton.dart';
 import '../../utils/pageutils.dart';
 
@@ -67,6 +68,14 @@ class _CommentInputState extends State<CommentInput> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0),
                 child: TextField(
+                  onChanged: (value) {
+                    if (commentInputController.text.length >= 50) {
+                      setState(() {
+                        value = value.substring(0, value.length - 1);
+                        commentInputController.text = value;
+                      });
+                    }
+                  },
                   controller: commentInputController,
                   style: const TextStyle(fontWeight: FontWeight.w300),
                   decoration: const InputDecoration(

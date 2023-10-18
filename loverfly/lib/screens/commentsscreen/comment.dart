@@ -39,12 +39,23 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
   }
 
   void preparePageData() {
-    isLiked.value = widget.commentData["comment_liked"];
+    // prep the data:
+    bool isliked = widget.commentData["comment_liked"];
+    String username = widget.commentData["comment"]["owner"]["username"];
+    Map ownerProfilePicture =
+        widget.commentData["comment"]["owner"]["profile_picture"] ??
+            {
+              "image":
+                  "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"
+            };
+    String comment = decodeComment(widget.commentData["comment"]["comment"]);
+
+    // set the data and trigger the page update:
+    isLiked.value = isliked;
     pageData.value = {
-      "ownerUsername": widget.commentData["comment"]["owner"]["username"],
-      "ownerProfilePicture": widget.commentData["comment"]["owner"]
-          ["profile_picture"]["image"],
-      "comment": decodeComment(widget.commentData["comment"]["comment"])
+      "ownerUsername": username,
+      "ownerProfilePicture": ownerProfilePicture,
+      "comment": comment,
     };
     commentLikes.value = widget.commentData["comment"]["comment_likes"];
   }
@@ -124,8 +135,11 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                       padding: const EdgeInsets.all(1.0),
                       child: CircleAvatar(
                         radius: 10.0,
-                        backgroundImage: pageData["ownerProfilePicture"] != null
-                            ? NetworkImage(pageData["ownerProfilePicture"])
+                        backgroundImage: pageData["ownerProfilePicture"]
+                                    ["image"] !=
+                                null
+                            ? NetworkImage(
+                                pageData["ownerProfilePicture"]["image"])
                             : const NetworkImage(
                                 "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                       )),
