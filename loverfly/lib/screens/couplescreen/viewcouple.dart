@@ -31,15 +31,13 @@ class CoupleProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // prepare page data
     preparepagedata();
 
     return WillPopScope(
-        onWillPop: () {
-          return Future.value(true).whenComplete(() {
-            Get.back();
-            rebuildPageFunction(true);
-          });
+        onWillPop: () async {
+          Get.back();
+          rebuildPageFunction(true, context);
+          return true;
         },
         child: Scaffold(
             appBar: customAppBar(context, ""),
