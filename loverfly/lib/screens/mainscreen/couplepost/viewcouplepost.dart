@@ -367,7 +367,7 @@ class CouplePost extends StatelessWidget {
                                   Transform(
                                       child: Image.asset(
                                         'assets/placeholders/logo.jpeg',
-                                        width: 17.0,
+                                        width: 20.0,
                                       ),
                                       alignment: Alignment.center,
                                       transform: Matrix4.rotationZ(6.0),
