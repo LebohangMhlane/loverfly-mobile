@@ -89,12 +89,16 @@ class CoupleCard extends StatelessWidget {
                             height: 100.0,
                             child: CircleAvatar(
                               backgroundImage: coupleData["couple"]
-                                              ['partner_one']["profile_picture"]
-                                          ["image"] !=
+                                          ['partner_one']["profile_picture"] !=
                                       null
-                                  ? NetworkImage(coupleData["couple"]
-                                          ['partner_one']["profile_picture"]
-                                      ["image"])
+                                  ? coupleData["couple"]['partner_one']
+                                              ["profile_picture"]["image"] !=
+                                          ""
+                                      ? NetworkImage(coupleData["couple"]
+                                              ['partner_one']["profile_picture"]
+                                          ["image"])
+                                      : const NetworkImage(
+                                          "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
                                   : const NetworkImage(
                                       "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                               radius: 25.0,
@@ -170,12 +174,16 @@ class CoupleCard extends StatelessWidget {
                             height: 100.0,
                             child: CircleAvatar(
                               backgroundImage: coupleData["couple"]
-                                              ['partner_two']["profile_picture"]
-                                          ["image"] !=
+                                          ['partner_two']["profile_picture"] !=
                                       null
-                                  ? NetworkImage(coupleData["couple"]
-                                          ['partner_two']["profile_picture"]
-                                      ["image"])
+                                  ? coupleData["couple"]['partner_two']
+                                              ["profile_picture"]["image"] !=
+                                          ""
+                                      ? NetworkImage(coupleData["couple"]
+                                              ['partner_two']["profile_picture"]
+                                          ["image"])
+                                      : const NetworkImage(
+                                          "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
                                   : const NetworkImage(
                                       "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                               radius: 25.0,

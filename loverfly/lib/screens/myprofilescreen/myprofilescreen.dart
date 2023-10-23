@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/viewcoupleexplorer.dart';
 import 'package:loverfly/screens/editprofilepicturescreen/editprofilepicturescreen.dart';
-import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
+import 'package:loverfly/screens/listviewscreens/listadmirers/listadmirersscreen.dart';
 import '../../utils/pageutils.dart';
 import '../couplelink/generatecode.dart';
 import '../couplelink/inputcode.dart';
@@ -835,7 +835,7 @@ class MyProfile extends StatelessWidget {
                                   : Expanded(
                                       child: TextButton(
                                         onPressed: () {
-                                          Get.to(() => ListViewScreen(
+                                          Get.to(() => ListAdmirersScreen(
                                               listType: "Admirers"));
                                         },
                                         child: Container(

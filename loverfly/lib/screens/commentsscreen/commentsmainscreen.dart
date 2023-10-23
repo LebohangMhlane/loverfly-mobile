@@ -90,7 +90,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
                                           imageurl: widget.couple["partner_one"]
-                                                  ["profile_picture"] ??
+                                                      ["profile_picture"]
+                                                  ["image"] ??
                                               "",
                                           myImage: false,
                                           resetPage: () {},
@@ -133,7 +134,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
                                           imageurl: widget.couple["partner_two"]
-                                              ["profile_picture"],
+                                              ["profile_picture"]["image"],
                                           myImage: false,
                                           postId: 000,
                                           resetPage: () {},

@@ -77,20 +77,23 @@ class TrendingCouples extends StatelessWidget {
                                                   height: 50.0,
                                                   child: CircleAvatar(
                                                     backgroundImage: trendingCouples[index]
-                                                                            ["couple"]
-                                                                        ["partner_one"]
-                                                                    ["profile_picture"]
-                                                                ["image"] ==
-                                                            null
-                                                        ? const NetworkImage(
-                                                            'https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg')
-                                                        : NetworkImage(trendingCouples[index]
                                                                         ["couple"]
-                                                                    [
-                                                                    'partner_one']
+                                                                    ["partner_one"]
                                                                 [
-                                                                "profile_picture"]
-                                                            ["image"]),
+                                                                "profile_picture"] !=
+                                                            null
+                                                        ? trendingCouples[index]
+                                                                            ["couple"]["partner_one"]
+                                                                        ["profile_picture"]
+                                                                    ["image"] ==
+                                                                ""
+                                                            ? const NetworkImage(
+                                                                'https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg')
+                                                            : NetworkImage(trendingCouples[index]
+                                                                        ["couple"]
+                                                                    ['partner_one']
+                                                                ["profile_picture"]["image"])
+                                                        : const NetworkImage('https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg'),
                                                     radius: 40.0,
                                                   ),
                                                 ),
@@ -116,20 +119,23 @@ class TrendingCouples extends StatelessWidget {
                                                   height: 50.0,
                                                   child: CircleAvatar(
                                                     backgroundImage: trendingCouples[index]
-                                                                            ["couple"]
-                                                                        ['partner_two']
-                                                                    ["profile_picture"]
-                                                                ["image"] ==
-                                                            null
-                                                        ? const NetworkImage(
-                                                            'https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg')
-                                                        : NetworkImage(trendingCouples[index]
                                                                         ["couple"]
-                                                                    [
-                                                                    'partner_two']
+                                                                    ['partner_two']
                                                                 [
-                                                                "profile_picture"]
-                                                            ["image"]),
+                                                                "profile_picture"] !=
+                                                            null
+                                                        ? trendingCouples[index]
+                                                                            ["couple"]['partner_two']
+                                                                        ["profile_picture"]
+                                                                    ["image"] ==
+                                                                ""
+                                                            ? const NetworkImage(
+                                                                'https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg')
+                                                            : NetworkImage(trendingCouples[index]
+                                                                        ["couple"]
+                                                                    ['partner_two']
+                                                                ["profile_picture"]["image"])
+                                                        : const NetworkImage('https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg'),
                                                     radius: 25.0,
                                                   ),
                                                 ),

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:loverfly/components/customappbar.dart';
-import 'package:loverfly/screens/listviewscreens/admirerlistitem.dart';
 import 'package:loverfly/screens/listviewscreens/api/listviewscreenapi.dart';
+import 'package:loverfly/screens/listviewscreens/listadmiredcouple/admiredcouplelistitem.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
-class ListViewScreen extends StatelessWidget {
-  ListViewScreen({Key? key, required this.listType}) : super(key: key);
+class ListAdmiredCouplesScreen extends StatelessWidget {
+  ListAdmiredCouplesScreen({Key? key, required this.listType})
+      : super(key: key);
 
   final String listType;
   final RxList admirers = RxList([]);
@@ -66,7 +67,7 @@ class ListViewScreen extends StatelessWidget {
                       if (index + 1 == admirers.length) {
                         addMoreAdmirers();
                       }
-                      return AdmirerListItem(
+                      return AdmiredCoupleListItem(
                         admirerData: admirers[index],
                       );
                     }),

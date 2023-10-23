@@ -10,7 +10,7 @@ import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/createapostscreen/createapost.dart';
 import 'package:loverfly/screens/editprofilepicturescreen/editprofilepicturescreen.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
-import 'package:loverfly/screens/listviewscreens/listviewscreen.dart';
+import 'package:loverfly/screens/listviewscreens/listadmirers/listadmirersscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
             page: () => const CommentScreen(postId: 000, couple: {})),
         GetPage(
             name: '/listview',
-            page: () => ListViewScreen(
+            page: () => ListAdmirersScreen(
                   listType: "None",
                 )),
         GetPage(

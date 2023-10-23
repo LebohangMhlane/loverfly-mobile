@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/components/custombutton.dart';
@@ -23,8 +22,8 @@ class LargerPreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // trigger the rebuild or the picture won't update when changed:
     imageurlstring.value = imageurl;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 0, 0, 0),
       body: Column(
@@ -107,8 +106,8 @@ class LargerPreviewScreen extends StatelessWidget {
                                           image: DecorationImage(
                                         fit: BoxFit.contain,
                                         alignment: FractionalOffset.center,
-                                        image: CachedNetworkImageProvider(
-                                            imageurlstring.value),
+                                        image:
+                                            NetworkImage(imageurlstring.value),
                                       )),
                                     )
                                   : const Center(
