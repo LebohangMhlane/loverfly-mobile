@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/custombutton.dart';
 
 import '../../utils/pageutils.dart';
@@ -11,13 +10,9 @@ import 'api/commentsapi.dart';
 
 class Comment extends StatefulWidget {
   final Map commentData;
-  final Function removeDeletedComment;
   final int commentIndex;
   const Comment(
-      {Key? key,
-      required this.commentData,
-      required this.removeDeletedComment,
-      required this.commentIndex})
+      {Key? key, required this.commentData, required this.commentIndex})
       : super(key: key);
 
   @override

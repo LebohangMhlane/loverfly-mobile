@@ -57,17 +57,6 @@ class _CommentScreenState extends State<CommentScreen> {
     setState(() {});
   }
 
-  void removeDeletedComment(commentIndex) async {
-    if (comments.isNotEmpty) {
-      var apiResponse = await getComments(widget.postId, "");
-      if (apiResponse["api_response"] == "Success") {
-        comments = apiResponse["comments"];
-        nextPageLink = apiResponse["next_page_link"] ?? "";
-      }
-      setState(() {});
-    }
-  }
-
   Future<bool> checkIfMyComment(comment) async {
     var cache = GetStorage();
     Map myProfile = jsonDecode(cache.read("user_profile"));
@@ -241,13 +230,18 @@ class _CommentScreenState extends State<CommentScreen> {
                                     height: 60.0,
                                     child: CircleAvatar(
                                       backgroundImage: widget
-                                                          .couple["partner_one"]
-                                                      ["profile_picture"]
-                                                  ["image"] !=
+                                                      .couple["partner_one"]
+                                                  ["profile_picture"] !=
                                               null
-                                          ? NetworkImage(
-                                              widget.couple["partner_one"]
+                                          ? widget.couple["partner_one"]
+                                                          ["profile_picture"]
+                                                      ["image"] !=
+                                                  ""
+                                              ? NetworkImage(widget
+                                                      .couple["partner_one"]
                                                   ["profile_picture"]["image"])
+                                              : const NetworkImage(
+                                                  "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
                                           : const NetworkImage(
                                               "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
@@ -283,13 +277,18 @@ class _CommentScreenState extends State<CommentScreen> {
                                     height: 60.0,
                                     child: CircleAvatar(
                                       backgroundImage: widget
-                                                          .couple["partner_two"]
-                                                      ["profile_picture"]
-                                                  ["image"] !=
+                                                      .couple["partner_two"]
+                                                  ["profile_picture"] !=
                                               null
-                                          ? NetworkImage(
-                                              widget.couple["partner_two"]
+                                          ? widget.couple["partner_two"]
+                                                          ["profile_picture"]
+                                                      ["image"] !=
+                                                  ""
+                                              ? NetworkImage(widget
+                                                      .couple["partner_two"]
                                                   ["profile_picture"]["image"])
+                                              : const NetworkImage(
+                                                  "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
                                           : const NetworkImage(
                                               "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
@@ -406,7 +405,6 @@ class _CommentScreenState extends State<CommentScreen> {
                               child: Comment(
                                 commentIndex: index,
                                 commentData: comments[index],
-                                removeDeletedComment: removeDeletedComment,
                               ),
                             );
                           },
