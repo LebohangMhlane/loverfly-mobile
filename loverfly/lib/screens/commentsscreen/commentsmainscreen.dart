@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/customappbar.dart';
+import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/commentsscreen/commentinput.dart';
+import 'package:loverfly/utils/pageutils.dart';
 
 import '../largerpreviewscreen/largerpreviewscreen.dart';
 import 'api/commentsapi.dart';
@@ -23,10 +28,11 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
-  final RxList comments = RxList([]);
+  List comments = [];
   final RxBool preventRebuildProcess = RxBool(false);
-  final RxBool pageLoading = RxBool(true);
+  bool pageLoading = true;
   String nextPageLink = "";
+  bool deletingComment = false;
 
   void preparePageData() async {
     if (!preventRebuildProcess.value) {
@@ -35,8 +41,10 @@ class _CommentScreenState extends State<CommentScreen> {
         comments.addAll(apiResponse["comments"]);
         nextPageLink = apiResponse["next_page_link"] ?? "";
       }
-      pageLoading.value = false;
-      preventRebuildProcess.value = true;
+      setState(() {
+        pageLoading = false;
+        preventRebuildProcess.value = true;
+      });
     }
   }
 
@@ -49,9 +57,132 @@ class _CommentScreenState extends State<CommentScreen> {
     setState(() {});
   }
 
-  void removeDeletedComment(comment) {
+  void removeDeletedComment(commentIndex) async {
     if (comments.isNotEmpty) {
-      comments.remove(comment);
+      var apiResponse = await getComments(widget.postId, "");
+      if (apiResponse["api_response"] == "Success") {
+        comments = apiResponse["comments"];
+        nextPageLink = apiResponse["next_page_link"] ?? "";
+      }
+      setState(() {});
+    }
+  }
+
+  Future<bool> checkIfMyComment(comment) async {
+    var cache = GetStorage();
+    Map myProfile = jsonDecode(cache.read("user_profile"));
+    if (myProfile["username"] == comment["comment"]["owner"]["username"]) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> deleteComment(commentId) async {
+    if (deletingComment == false) {
+      deletingComment = true;
+      Map apiResponse = await deleteCommentService(commentId);
+      if (apiResponse["api_response"] == "success") {
+        SnackBars().displaySnackBar("Comment Deleted!", () {
+          setState(() {});
+        }, context);
+        deletingComment = false;
+        return true;
+      } else {
+        SnackBars().displaySnackBar(
+            "Something went wrong. We'll fix it soon!", () {}, context);
+        deletingComment = false;
+        return false;
+      }
+    } else {
+      SnackBars().displaySnackBar(
+          "Please wait for the delete process to complete.", () {}, context);
+    }
+    return false;
+  }
+
+  Future<bool> confirmDelete() async {
+    bool deleteComment = await showDialog(
+      context: context,
+      builder: (context) => Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 300.0,
+              padding: const EdgeInsets.all(20.0),
+              margin: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 80.0),
+                    child: Text(
+                      "Delete Comment?",
+                      style: TextStyle(color: Colors.purple),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 18.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(
+                          borderradius: 10.0,
+                          buttoncolor: Colors.purple,
+                          buttonlabel: "Yes",
+                          leftpadding: 20.0,
+                          rightpadding: 20.0,
+                          onpressedfunction: () =>
+                              Navigator.of(context).pop(true),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        CustomButton(
+                          borderradius: 10.0,
+                          buttoncolor: Colors.purple,
+                          buttonlabel: "No",
+                          leftpadding: 20.0,
+                          rightpadding: 20.0,
+                          onpressedfunction: () =>
+                              Navigator.of(context).pop(false),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    return deleteComment;
+  }
+
+  void addMoreComments(index) {
+    if (index + 1 == comments.length) {
+      if (nextPageLink != "") {
+        getCommentsWithPagination(widget.postId, nextPageLink)
+            .then((Map apiResponse) {
+          if (apiResponse["api_response"] == "Success") {
+            if (apiResponse["comments"].length > 0) {
+              setState(() {
+                comments.addAll(apiResponse["comments"]);
+                apiResponse["next_page_link"] == null
+                    ? nextPageLink = ""
+                    : nextPageLink = apiResponse["next_page_link"];
+              });
+            }
+          }
+        });
+      }
     }
   }
 
@@ -238,55 +369,55 @@ class _CommentScreenState extends State<CommentScreen> {
             // comment list:
             Expanded(
               flex: 6,
-              child: Obx(
-                () => pageLoading.value
-                    ? const Padding(
-                        padding: EdgeInsets.only(top: 50.0),
-                        child: Text(
-                          "Fetching comments...",
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                        ),
-                      )
-                    : comments.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: comments.length,
-                            itemBuilder: (context, index) {
-                              if (index + 1 == comments.length) {
-                                if (nextPageLink != "") {
-                                  getCommentsWithPagination(
-                                          widget.postId, nextPageLink)
-                                      .then((Map apiResponse) {
-                                    if (apiResponse["api_response"] ==
-                                        "Success") {
-                                      if (apiResponse["comments"].length > 0) {
-                                        setState(() {
-                                          comments
-                                              .addAll(apiResponse["comments"]);
-                                          apiResponse["next_page_link"] == null
-                                              ? nextPageLink = ""
-                                              : nextPageLink =
-                                                  apiResponse["next_page_link"];
-                                        });
-                                      }
-                                    }
+              child: pageLoading
+                  ? const Padding(
+                      padding: EdgeInsets.only(top: 50.0),
+                      child: Text(
+                        "Fetching comments...",
+                        style: TextStyle(fontWeight: FontWeight.w300),
+                      ),
+                    )
+                  : comments.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: comments.length,
+                          itemBuilder: (context, index) {
+                            addMoreComments(index);
+                            return Dismissible(
+                              crossAxisEndOffset: 2.0,
+                              confirmDismiss: (dismissDirection) async {
+                                bool isMyComment =
+                                    await checkIfMyComment(comments[index]);
+                                if (isMyComment) {
+                                  bool delete = await confirmDelete();
+                                  return delete;
+                                }
+                                return false;
+                              },
+                              key: GlobalKey(),
+                              onDismissed: (direction) async {
+                                bool deleted = await deleteComment(
+                                    comments[index]["comment"]["id"]);
+                                if (deleted) {
+                                  setState(() {
+                                    comments.removeAt(index);
                                   });
                                 }
-                              }
-                              return Comment(
+                              },
+                              child: Comment(
+                                commentIndex: index,
                                 commentData: comments[index],
-                                removeDeletedCommentFunction:
-                                    removeDeletedComment,
-                              );
-                            },
-                          )
-                        : const Padding(
-                            padding: EdgeInsets.only(top: 50.0),
-                            child: Text(
-                              "There are no comments",
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                            ),
+                                removeDeletedComment: removeDeletedComment,
+                              ),
+                            );
+                          },
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.only(top: 50.0),
+                          child: Text(
+                            "There are no comments",
+                            style: TextStyle(fontWeight: FontWeight.w300),
                           ),
-              ),
+                        ),
             ),
 
             // COMMENTS INPUT FIELD
