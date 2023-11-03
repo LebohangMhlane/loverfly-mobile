@@ -436,7 +436,7 @@ class CouplePost extends StatelessWidget {
                             child: const Text(
                               "Like",
                               style: TextStyle(
-                                  fontSize: 11.0,
+                                  fontSize: 12.0,
                                   fontWeight: FontWeight.w300,
                                   color: Colors.black),
                             ),

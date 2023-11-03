@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
+  final double width;
   final Color? buttoncolor;
   final Color textcolor;
   final Color splashcolor;
@@ -24,6 +25,7 @@ class CustomButton extends StatelessWidget {
 
   CustomButton({
     Key? key,
+    this.width = 150.0,
     this.borderwidth = 0.0,
     this.bordercolor = Colors.transparent,
     this.borderstyle,
@@ -47,6 +49,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       height: height,
       margin: EdgeInsets.only(left: leftmargin, right: rightmargin),
       child: TextButton(
@@ -78,18 +81,22 @@ class CustomButton extends StatelessWidget {
                       ],
                     ),
                   )
-                : Container(
+                : SizedBox(
+                    child: Padding(
                     padding:
                         EdgeInsets.only(left: leftpadding, right: rightpadding),
-                    alignment: Alignment.center,
-                    child: Text(
-                      buttonlabel,
-                      style: TextStyle(
-                        color: textcolor,
-                        fontSize: textfontsize,
-                        fontWeight: fontWeight,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        buttonlabel,
+                        style: TextStyle(
+                          color: textcolor,
+                          fontSize: textfontsize,
+                          fontWeight: fontWeight,
+                        ),
                       ),
-                    ))
+                    ),
+                  ))
             : Center(
                 child: customchild,
               ),
