@@ -7,11 +7,11 @@ import '../../../environmentconfig/envconfig.dart';
 
 // requests and returns a list of followers from the server:
 Future<Map> getAdmirersFromServer(nextPageLink) async {
+  var cache = GetStorage();
   var url = Uri.parse(EnvConfig().baseUrl + '/get-all-admirers/');
   if (nextPageLink != "") {
     url = Uri.parse(nextPageLink);
   }
-  var cache = GetStorage();
   try {
     var response = await http.get(
       url,
@@ -21,7 +21,10 @@ Future<Map> getAdmirersFromServer(nextPageLink) async {
       Map responseData = jsonDecode(response.body);
       return responseData;
     } else {
-      return {"error": "failed to get admirers"};
+      return {
+        "error": "failed to get admirers",
+        "error_message": "server error"
+      };
     }
   } on SocketException {
     return {"error": "No connection made"};

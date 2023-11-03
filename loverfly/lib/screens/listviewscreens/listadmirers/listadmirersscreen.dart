@@ -7,9 +7,10 @@ import 'package:loverfly/screens/listviewscreens/listadmirers/admirerlistitem.da
 import 'package:loverfly/utils/pageutils.dart';
 
 class ListAdmirersScreen extends StatelessWidget {
-  ListAdmirersScreen({Key? key, required this.listType}) : super(key: key);
+  ListAdmirersScreen({
+    Key? key,
+  }) : super(key: key);
 
-  final String listType;
   final RxList admirers = RxList([]);
   final RxString nextPageLink = RxString("");
 
@@ -35,7 +36,7 @@ class ListAdmirersScreen extends StatelessWidget {
     }
   }
 
-  // add more admires through pagination:
+  // pagination:
   void addMoreAdmirers() {
     if (nextPageLink.value != "") {
       getAdmirersFromServer(nextPageLink.value).then((Map response) {
@@ -52,7 +53,7 @@ class ListAdmirersScreen extends StatelessWidget {
     preparePageData(context);
 
     return Scaffold(
-      appBar: customAppBar(context, listType),
+      appBar: customAppBar(context, ''),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Column(

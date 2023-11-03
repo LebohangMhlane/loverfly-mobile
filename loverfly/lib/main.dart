@@ -87,11 +87,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/comments',
             page: () => const CommentScreen(postId: 000, couple: {})),
-        GetPage(
-            name: '/listview',
-            page: () => ListAdmirersScreen(
-                  listType: "None",
-                )),
+        GetPage(name: '/listview', page: () => ListAdmirersScreen()),
         GetPage(
             name: '/editprofilepicturescreen',
             page: () => EditProfilePictureScreen(

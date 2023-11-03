@@ -835,8 +835,7 @@ class MyProfile extends StatelessWidget {
                                   : Expanded(
                                       child: TextButton(
                                         onPressed: () {
-                                          Get.to(() => ListAdmirersScreen(
-                                              listType: "Admirers"));
+                                          Get.to(() => ListAdmirersScreen());
                                         },
                                         child: Container(
                                             child: Column(children: [
