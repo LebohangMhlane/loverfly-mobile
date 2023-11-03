@@ -140,11 +140,10 @@ class MainScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomButton(
+                              width: 120.0,
                               borderradius: 10.0,
                               buttoncolor: Colors.purple,
                               buttonlabel: "Yes",
-                              leftpadding: 20.0,
-                              rightpadding: 20.0,
                               onpressedfunction: () =>
                                   Navigator.of(context).pop(true),
                             ),
@@ -152,11 +151,10 @@ class MainScreen extends StatelessWidget {
                               width: 20.0,
                             ),
                             CustomButton(
+                              width: 120.0,
                               borderradius: 10.0,
                               buttoncolor: Colors.purple,
                               buttonlabel: "No",
-                              leftpadding: 20.0,
-                              rightpadding: 20.0,
                               onpressedfunction: () =>
                                   Navigator.of(context).pop(false),
                             ),

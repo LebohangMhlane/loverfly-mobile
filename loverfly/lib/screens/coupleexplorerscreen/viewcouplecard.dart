@@ -24,7 +24,6 @@ class CoupleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     preparepagedata();
-
     return Container(
       color: Colors.white,
       child: Column(
@@ -206,6 +205,7 @@ class CoupleCard extends StatelessWidget {
                   child: Center(
                     child: Obx(() {
                       return CustomButton(
+                          width: MediaQuery.of(context).size.width,
                           buttoncolor: Colors.purple,
                           buttonlabel: 'Admire',
                           icon: Icon(Icons.star,

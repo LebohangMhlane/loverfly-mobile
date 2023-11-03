@@ -122,6 +122,7 @@ class _CommentScreenState extends State<CommentScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomButton(
+                          width: 120.0,
                           borderradius: 10.0,
                           buttoncolor: Colors.purple,
                           buttonlabel: "Yes",
@@ -134,6 +135,7 @@ class _CommentScreenState extends State<CommentScreen> {
                           width: 20.0,
                         ),
                         CustomButton(
+                          width: 120.0,
                           borderradius: 10.0,
                           buttoncolor: Colors.purple,
                           buttonlabel: "No",
