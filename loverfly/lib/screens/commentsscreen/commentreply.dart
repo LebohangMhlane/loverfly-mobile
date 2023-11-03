@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:loverfly/screens/commentsscreen/api/commentsapi.dart';
 
 // TODO: fix the immutable issue later:
 // ignore: must_be_immutable
@@ -24,7 +25,11 @@ class CommentReplyScreen extends StatelessWidget {
     getCommentReplies();
   }
 
-  void getCommentReplies() async {}
+  void getCommentReplies() async {
+    Map commentReplies =
+        await getCommentRepliesFromServer(commentData["comment"]["id"]);
+    print(commentReplies);
+  }
 
   // TODO: move this function to a file so it can be accessed globally. It is being used more than once:
   String decodeComment(String comment) {

@@ -56,6 +56,28 @@ Future<Map> postComment(postId, commentData) async {
   }
 }
 
+Future<Map> getCommentRepliesFromServer(commentId) async {
+  try {
+    var cache = GetStorage();
+    var url = Uri.parse(EnvConfig().baseUrl +
+        '/get-comment-replies/' +
+        commentId.toString() +
+        "/");
+    var apiResponse = await http.get(
+      url,
+      headers: {
+        'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
+      },
+    ).timeout(const Duration(seconds: 10));
+    Map response = jsonDecode(apiResponse.body);
+    return response;
+  } catch (error) {
+    return {
+      "error": error.toString(),
+    };
+  }
+}
+
 Future<Map> likeComment(commentId, commentLiked) async {
   try {
     var cache = GetStorage();

@@ -150,6 +150,7 @@ class _EditProfilePictureScreenState extends State<EditProfilePictureScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: CustomButton(
+                      width: 200.0,
                       borderradius: 10.0,
                       leftpadding: 20.0,
                       rightpadding: 20.0,
