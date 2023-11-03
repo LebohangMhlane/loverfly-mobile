@@ -29,10 +29,59 @@ class CoupleProfileScreen extends StatelessWidget {
       required this.rebuildPageFunction})
       : super(key: key);
 
+  void preparepagedata() async {
+    if (!pageLoaded.value) {
+      // convert date values:
+      relationshipstartdate.value =
+          DateFunctions().convertdate(couple["started_dating"]);
+      nextanniversarydate.value =
+          DateFunctions().convertdate(couple["next_anniversary"]);
+
+      // set counts:
+      anniversarycount.value =
+          DateFunctions().determineanniversarycount(couple["anniversaries"]);
+      numberOfAdmirers.value = couple["admirers"];
+
+      // get couple posts:
+      await getCouplePosts(couple["id"]).then((apiResponse) {
+        if (apiResponse["api_response"] != "failed") {
+          posts.value = apiResponse["couple_posts"];
+        }
+        pageLoaded.value = true;
+      });
+    }
+  }
+
+  void admireCouple(context) async {
+    try {
+      // make a request to the api:
+      Map response = await admire(couple["id"], isAdmired);
+      // if something goes wrong, notify the user:
+      if (response.containsKey("error_info")) {
+        SnackBars().displaySnackBar(
+            "Something went wrong. We will fix it soon!", () => null, context);
+      } else {
+        // else, update the admired value:
+        isAdmired.value = response["admired"];
+        // update the fan count based on the returned value:
+        if (isAdmired.value == false) {
+          if (numberOfAdmirers.value != 0) {
+            numberOfAdmirers.value--;
+          }
+        } else {
+          numberOfAdmirers.value++;
+        }
+      }
+    } catch (e) {
+      // if something goes wrong with the logic above, notify the user:
+      SnackBars().displaySnackBar(
+          "Something went wrong. We will fix it soon!", () => null, context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     preparepagedata();
-
     return WillPopScope(
         onWillPop: () async {
           Get.back();
@@ -93,7 +142,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                                 bottomLeft:
                                                     Radius.circular(40.0))),
                                         padding: const EdgeInsets.only(
-                                            left: 20.0,
+                                            left: 65.0,
                                             top: 10.0,
                                             bottom: 10.0),
                                         child: Stack(
@@ -508,55 +557,5 @@ class CoupleProfileScreen extends StatelessWidget {
                 ),
               ),
             )));
-  }
-
-  void preparepagedata() async {
-    if (!pageLoaded.value) {
-      // convert date values:
-      relationshipstartdate.value =
-          DateFunctions().convertdate(couple["started_dating"]);
-      nextanniversarydate.value =
-          DateFunctions().convertdate(couple["next_anniversary"]);
-
-      // set counts:
-      anniversarycount.value =
-          DateFunctions().determineanniversarycount(couple["anniversaries"]);
-      numberOfAdmirers.value = couple["admirers"];
-
-      // get couple posts:
-      await getCouplePosts(couple["id"]).then((apiResponse) {
-        if (apiResponse["api_response"] != "failed") {
-          posts.value = apiResponse["couple_posts"];
-        }
-        pageLoaded.value = true;
-      });
-    }
-  }
-
-  void admireCouple(context) async {
-    try {
-      // make a request to the api:
-      Map response = await admire(couple["id"], isAdmired);
-      // if something goes wrong, notify the user:
-      if (response.containsKey("error_info")) {
-        SnackBars().displaySnackBar(
-            "Something went wrong. We will fix it soon!", () => null, context);
-      } else {
-        // else, update the admired value:
-        isAdmired.value = response["admired"];
-        // update the fan count based on the returned value:
-        if (isAdmired.value == false) {
-          if (numberOfAdmirers.value != 0) {
-            numberOfAdmirers.value--;
-          }
-        } else {
-          numberOfAdmirers.value++;
-        }
-      }
-    } catch (e) {
-      // if something goes wrong with the logic above, notify the user:
-      SnackBars().displaySnackBar(
-          "Something went wrong. We will fix it soon!", () => null, context);
-    }
   }
 }
