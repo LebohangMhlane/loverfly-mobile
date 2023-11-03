@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/screens/commentsscreen/commentreply.dart';
 
 import '../../utils/pageutils.dart';
 import 'api/commentsapi.dart';
@@ -177,74 +178,72 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                                             likeUnlikeComment();
                                           },
                                           child: SizedBox(
-                                            child: SizedBox(
-                                              child: Row(
-                                                children: [
-                                                  AnimatedSwitcher(
-                                                    duration: const Duration(
-                                                        milliseconds: 200),
-                                                    transitionBuilder: ((child,
-                                                            animation) =>
-                                                        FadeTransition(
-                                                          opacity: animation,
-                                                          child: child,
-                                                        )),
-                                                    child: SizedBox(
-                                                      width: 20.0,
-                                                      key: ValueKey<bool>(
-                                                          isLiked.value),
-                                                      child: isLiked.value
-                                                          ? Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(1.0),
-                                                              child: Transform(
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/placeholders/logo.jpeg',
-                                                                  width: 15.0,
-                                                                ),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                transform: Matrix4
-                                                                    .rotationZ(
-                                                                        6.0),
+                                            child: Row(
+                                              children: [
+                                                AnimatedSwitcher(
+                                                  duration: const Duration(
+                                                      milliseconds: 200),
+                                                  transitionBuilder:
+                                                      ((child, animation) =>
+                                                          FadeTransition(
+                                                            opacity: animation,
+                                                            child: child,
+                                                          )),
+                                                  child: SizedBox(
+                                                    width: 20.0,
+                                                    key: ValueKey<bool>(
+                                                        isLiked.value),
+                                                    child: isLiked.value
+                                                        ? Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(1.0),
+                                                            child: Transform(
+                                                              child:
+                                                                  Image.asset(
+                                                                'assets/placeholders/logo.jpeg',
+                                                                width: 15.0,
                                                               ),
-                                                            )
-                                                          : SvgPicture.asset(
-                                                              'assets/svg/heart.svg',
                                                               alignment:
                                                                   Alignment
                                                                       .center,
-                                                              colorFilter:
-                                                                  const ColorFilter
-                                                                      .mode(
-                                                                      Color.fromRGBO(
-                                                                          158,
-                                                                          158,
-                                                                          158,
-                                                                          1),
-                                                                      BlendMode
-                                                                          .srcIn),
-                                                              width: 20.0,
+                                                              transform: Matrix4
+                                                                  .rotationZ(
+                                                                      6.0),
                                                             ),
-                                                    ),
+                                                          )
+                                                        : SvgPicture.asset(
+                                                            'assets/svg/heart.svg',
+                                                            alignment: Alignment
+                                                                .center,
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                    .mode(
+                                                                    Color
+                                                                        .fromRGBO(
+                                                                            158,
+                                                                            158,
+                                                                            158,
+                                                                            1),
+                                                                    BlendMode
+                                                                        .srcIn),
+                                                            width: 20.0,
+                                                          ),
                                                   ),
-                                                  const SizedBox(
-                                                    width: 4.0,
-                                                  ),
-                                                  Obx(
-                                                    () => Text(
-                                                        commentLikes.value
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                            fontSize: 12.0,
-                                                            color:
-                                                                Colors.purple)),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 4.0,
+                                                ),
+                                                Obx(
+                                                  () => Text(
+                                                      commentLikes.value
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                          fontSize: 12.0,
+                                                          color:
+                                                              Colors.purple)),
+                                                ),
+                                              ],
                                             ),
                                           )),
                                     ),
@@ -255,7 +254,14 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                                           style: TextButton.styleFrom(
                                             padding: const EdgeInsets.all(0.0),
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Get.to(
+                                                () => CommentReplyScreen(
+                                                      commentData:
+                                                          widget.commentData,
+                                                    ),
+                                                opaque: false);
+                                          },
                                           child: const SizedBox(
                                             child: Icon(
                                               Icons.chat,
