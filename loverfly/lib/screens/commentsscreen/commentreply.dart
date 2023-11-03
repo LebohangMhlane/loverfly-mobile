@@ -15,13 +15,16 @@ class CommentReplyScreen extends StatelessWidget {
   String comment = "";
   final RxList commentReplies = RxList([{}]);
 
-  void preparePageData() {
+  void preparePageData() async {
     profilePicture = commentData["comment"]["owner"]["profile_picture"] != null
         ? commentData["comment"]["owner"]["profile_picture"]["image"]
         : "";
     username = commentData["comment"]["owner"]["username"];
     comment = comment = decodeComment(commentData["comment"]["comment"]);
+    getCommentReplies();
   }
+
+  void getCommentReplies() async {}
 
   // TODO: move this function to a file so it can be accessed globally. It is being used more than once:
   String decodeComment(String comment) {
