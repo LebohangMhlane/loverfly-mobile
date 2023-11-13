@@ -21,6 +21,8 @@ class CoupleProfileScreen extends StatelessWidget {
   final RxInt numOfAdmiredCouples = RxInt(0);
   final RxList posts = RxList([]);
   final RxBool pageLoaded = RxBool(false);
+  String partnerOneProfilePicture = "";
+  String partnerTwoProfilePicture = "";
 
   CoupleProfileScreen(
       {Key? key,
@@ -49,6 +51,16 @@ class CoupleProfileScreen extends StatelessWidget {
         }
         pageLoaded.value = true;
       });
+
+      // set profile pictures:
+      partnerOneProfilePicture = couple["partner_one"]["profile_picture"] !=
+              null
+          ? couple["partner_one"]["profile_picture"]["image"]
+          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
+      partnerTwoProfilePicture = couple["partner_two"]["profile_picture"] !=
+              null
+          ? couple["partner_two"]["profile_picture"]["image"]
+          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
     }
   }
 
@@ -153,12 +165,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                               child: GestureDetector(
                                                 onTap: () => Get.to(
                                                     () => LargerPreviewScreen(
-                                                          imageurl: couple[
-                                                                          "partner_one"]
-                                                                      [
-                                                                      "profile_picture"]
-                                                                  ["image"] ??
-                                                              "",
+                                                          imageurl:
+                                                              partnerOneProfilePicture,
                                                           myImage: false,
                                                           resetPage: () {},
                                                           postId: 000,
@@ -179,19 +187,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                                     width: 70.0,
                                                     height: 70.0,
                                                     child: CircleAvatar(
-                                                      backgroundImage: couple[
-                                                                          "partner_one"]
-                                                                      [
-                                                                      "profile_picture"]
-                                                                  ["image"] !=
-                                                              null
-                                                          ? NetworkImage(couple[
-                                                                      "partner_one"]
-                                                                  [
-                                                                  "profile_picture"]
-                                                              ["image"])
-                                                          : const NetworkImage(
-                                                              "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
+                                                      backgroundImage: NetworkImage(
+                                                          partnerOneProfilePicture),
                                                       radius: 25.0,
                                                     ),
                                                   ),
@@ -205,12 +202,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                               child: GestureDetector(
                                                 onTap: () => Get.to(
                                                     () => LargerPreviewScreen(
-                                                          imageurl: couple[
-                                                                          "partner_two"]
-                                                                      [
-                                                                      "profile_picture"]
-                                                                  ["image"] ??
-                                                              "",
+                                                          imageurl:
+                                                              partnerTwoProfilePicture,
                                                           myImage: false,
                                                           postId: 000,
                                                           resetPage: () {},
@@ -231,19 +224,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                                     width: 65.0,
                                                     height: 65.0,
                                                     child: CircleAvatar(
-                                                      backgroundImage: couple[
-                                                                          "partner_two"]
-                                                                      [
-                                                                      "profile_picture"]
-                                                                  ["image"] !=
-                                                              null
-                                                          ? NetworkImage(couple[
-                                                                      "partner_two"]
-                                                                  [
-                                                                  "profile_picture"]
-                                                              ["image"])
-                                                          : const NetworkImage(
-                                                              "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
+                                                      backgroundImage: NetworkImage(
+                                                          partnerTwoProfilePicture),
                                                       radius: 25.0,
                                                     ),
                                                   ),

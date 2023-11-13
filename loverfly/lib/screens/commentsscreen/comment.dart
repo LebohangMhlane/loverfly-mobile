@@ -21,15 +21,14 @@ class Comment extends StatefulWidget {
 
 class _CommentState extends State<Comment> with TickerProviderStateMixin {
   bool deletingComment = false;
-  final RxBool isLiked = RxBool(false);
+  bool isLiked = false;
   final RxInt commentLikes = RxInt(0);
   final RxBool showOptions = RxBool(false);
   bool isMyComment = false;
-  final RxMap pageData = RxMap({
-    "ownerUsername": "",
-    "ownerProfilePicture": null,
-    "comment": "",
-  });
+  String ownerProfilePicture = "";
+  String username = "";
+  String comment = "";
+  bool isCommentReply = false;
 
   @override
   void initState() {
@@ -38,24 +37,29 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
   }
 
   void preparePageData() {
-    bool isliked = widget.commentData["comment_liked"];
-    String username = widget.commentData["comment"]["owner"]["username"];
-    Map ownerProfilePicture =
-        widget.commentData["comment"]["owner"]["profile_picture"] ??
-            {
-              "image":
-                  "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"
-            };
-    String comment = decodeComment(widget.commentData["comment"]["comment"]);
-
-    // set the data and trigger the page update:
-    isLiked.value = isliked;
-    pageData.value = {
-      "ownerUsername": username,
-      "ownerProfilePicture": ownerProfilePicture,
-      "comment": comment,
-    };
-    commentLikes.value = widget.commentData["comment"]["comment_likes"];
+    isLiked = widget.commentData["comment_liked"];
+    if (widget.commentData.containsKey("comment")) {
+      username = widget.commentData["comment"]["owner"]["username"];
+      ownerProfilePicture = widget.commentData["comment"]["owner"]
+                  ["profile_picture"] !=
+              null
+          ? widget.commentData["comment"]["owner"]["profile_picture"]["image"]
+          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
+      comment = decodeComment(widget.commentData["comment"]["comment"]);
+      commentLikes.value = widget.commentData["comment"]["comment_likes"];
+    } else {
+      isCommentReply = true;
+      username = widget.commentData["comment_reply"]["replier"]["username"];
+      ownerProfilePicture = widget.commentData["comment_reply"]["replier"]
+                  ["profile_picture"] !=
+              null
+          ? widget.commentData["comment_reply"]["replier"]["profile_picture"]
+              ["image"]
+          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
+      comment =
+          decodeComment(widget.commentData["comment_reply"]["comment_reply"]);
+      commentLikes.value = widget.commentData["comment_reply_likes"];
+    }
   }
 
   // EMOJIIIIISSS!!!!!!
@@ -67,11 +71,11 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
 
   void likeUnlikeComment() async {
     Map apiResponse =
-        await likeComment(widget.commentData["comment"]["id"], isLiked.value);
+        await likeComment(widget.commentData["comment"]["id"], isLiked);
     if (apiResponse["api_response"] == "success") {
-      isLiked.value = apiResponse["comment_liked"];
+      isLiked = apiResponse["comment_liked"];
       widget.commentData["comment_liked"] = apiResponse["comment_liked"];
-      isLiked.value
+      isLiked
           ? commentLikes.value++
           : commentLikes.value != 0
               ? commentLikes.value--
@@ -83,6 +87,8 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
           context);
     }
   }
+
+  void likeUnlikeCommentReply() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +110,7 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(1.0),
                   child: CircleAvatar(
                     radius: 10.0,
-                    backgroundImage: pageData["ownerProfilePicture"]["image"] !=
-                            null
-                        ? NetworkImage(pageData["ownerProfilePicture"]["image"])
-                        : const NetworkImage(
-                            "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
+                    backgroundImage: NetworkImage(ownerProfilePicture),
                   )),
             ),
           ),
@@ -126,12 +128,15 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                         // username:
                         Container(
                           height: 20.0,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10.0),
                                 bottomLeft: Radius.circular(10.0)),
                             gradient: LinearGradient(
-                              colors: [Colors.purple, Colors.white],
+                              colors: [
+                                !isCommentReply ? Colors.purple : Colors.blue,
+                                Colors.white
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -141,7 +146,7 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                           ),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            pageData["ownerUsername"],
+                            username,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w300,
                                 color: Colors.white),
@@ -155,7 +160,7 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                                 const EdgeInsets.only(left: 5.0, right: 8.0),
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              pageData["comment"],
+                              comment,
                               style:
                                   const TextStyle(fontWeight: FontWeight.w300),
                             ),
@@ -165,112 +170,137 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                         !isMyComment
                             ? Expanded(
                                 child: SizedBox(
-                                  child: Row(children: [
-                                    // like comment button:
-                                    SizedBox(
-                                      width: 50.0,
-                                      child: TextButton(
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0),
-                                          ),
-                                          onPressed: () {
-                                            likeUnlikeComment();
-                                          },
-                                          child: SizedBox(
-                                            child: Row(
-                                              children: [
-                                                AnimatedSwitcher(
-                                                  duration: const Duration(
-                                                      milliseconds: 200),
-                                                  transitionBuilder:
-                                                      ((child, animation) =>
-                                                          FadeTransition(
-                                                            opacity: animation,
-                                                            child: child,
-                                                          )),
-                                                  child: SizedBox(
-                                                    width: 20.0,
-                                                    key: ValueKey<bool>(
-                                                        isLiked.value),
-                                                    child: isLiked.value
-                                                        ? Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(1.0),
-                                                            child: Transform(
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/placeholders/logo.jpeg',
-                                                                width: 15.0,
-                                                              ),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              transform: Matrix4
-                                                                  .rotationZ(
-                                                                      6.0),
-                                                            ),
-                                                          )
-                                                        : SvgPicture.asset(
-                                                            'assets/svg/heart.svg',
-                                                            alignment: Alignment
-                                                                .center,
-                                                            colorFilter:
-                                                                const ColorFilter
-                                                                    .mode(
-                                                                    Color
-                                                                        .fromRGBO(
-                                                                            158,
-                                                                            158,
-                                                                            158,
-                                                                            1),
-                                                                    BlendMode
-                                                                        .srcIn),
-                                                            width: 20.0,
-                                                          ),
+                                  child: Padding(
+                                    padding: isCommentReply
+                                        ? const EdgeInsets.only(right: 30.0)
+                                        : const EdgeInsets.only(right: 12.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          // like comment button:
+                                          SizedBox(
+                                            width: 40.0,
+                                            child: TextButton(
+                                                style: TextButton.styleFrom(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 3.0),
+                                                ),
+                                                onPressed: () {
+                                                  !isCommentReply
+                                                      ? likeUnlikeComment()
+                                                      : likeUnlikeCommentReply();
+                                                },
+                                                child: SizedBox(
+                                                  child: Row(
+                                                    children: [
+                                                      AnimatedSwitcher(
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    200),
+                                                        transitionBuilder:
+                                                            ((child,
+                                                                    animation) =>
+                                                                FadeTransition(
+                                                                  opacity:
+                                                                      animation,
+                                                                  child: child,
+                                                                )),
+                                                        child: SizedBox(
+                                                          width: 21.0,
+                                                          key: ValueKey<bool>(
+                                                              isLiked),
+                                                          child: isLiked
+                                                              ? Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          1.0),
+                                                                  child:
+                                                                      Transform(
+                                                                    child: Image
+                                                                        .asset(
+                                                                      'assets/placeholders/logo.jpeg',
+                                                                      width:
+                                                                          18.0,
+                                                                    ),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    transform: Matrix4
+                                                                        .rotationZ(
+                                                                            6.0),
+                                                                  ),
+                                                                )
+                                                              : SvgPicture
+                                                                  .asset(
+                                                                  'assets/svg/heart.svg',
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
+                                                                      Color.fromRGBO(
+                                                                          158,
+                                                                          158,
+                                                                          158,
+                                                                          1),
+                                                                      BlendMode
+                                                                          .srcIn),
+                                                                  width: 20.0,
+                                                                ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 4.0,
+                                                      ),
+                                                      Text(
+                                                          commentLikes.value
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  color: Colors
+                                                                      .purple)),
+                                                    ],
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 4.0,
-                                                ),
-                                                Obx(
-                                                  () => Text(
-                                                      commentLikes.value
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 12.0,
-                                                          color:
-                                                              Colors.purple)),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                    ),
-                                    // reply to comment:
-                                    SizedBox(
-                                      width: 50.0,
-                                      child: TextButton(
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.all(0.0),
+                                                )),
                                           ),
-                                          onPressed: () {
-                                            Get.to(
-                                                () => CommentReplyScreen(
-                                                      commentData:
-                                                          widget.commentData,
-                                                    ),
-                                                opaque: false);
-                                          },
-                                          child: const SizedBox(
-                                            child: Icon(
-                                              Icons.chat,
-                                              size: 15.0,
-                                              color: Colors.purple,
-                                            ),
-                                          )),
-                                    )
-                                  ]),
+                                          // reply to comment:
+                                          !isCommentReply
+                                              ? SizedBox(
+                                                  width: 40.0,
+                                                  child: TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(0.0),
+                                                      ),
+                                                      onPressed: () {
+                                                        Get.to(
+                                                            () =>
+                                                                CommentReplyScreen(
+                                                                  commentData:
+                                                                      widget
+                                                                          .commentData,
+                                                                ),
+                                                            opaque: false);
+                                                      },
+                                                      child: const SizedBox(
+                                                        child: Icon(
+                                                          Icons.chat,
+                                                          size: 18.0,
+                                                          color: Colors.purple,
+                                                        ),
+                                                      )),
+                                                )
+                                              : const SizedBox()
+                                        ]),
+                                  ),
                                 ),
                               )
                             : const SizedBox(),

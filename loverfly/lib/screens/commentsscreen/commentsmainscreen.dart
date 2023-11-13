@@ -33,6 +33,8 @@ class _CommentScreenState extends State<CommentScreen> {
   bool pageLoading = true;
   String nextPageLink = "";
   bool deletingComment = false;
+  String partnerOneProfilePicture = "";
+  String partnerTwoProfilePicture = "";
 
   void preparePageData() async {
     if (!preventRebuildProcess.value) {
@@ -41,6 +43,16 @@ class _CommentScreenState extends State<CommentScreen> {
         comments.addAll(apiResponse["comments"]);
         nextPageLink = apiResponse["next_page_link"] ?? "";
       }
+      partnerOneProfilePicture = widget.couple["partner_one"]
+                  ["profile_picture"] !=
+              null
+          ? widget.couple["partner_one"]["profile_picture"]["image"]
+          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
+      partnerTwoProfilePicture = widget.couple["partner_two"]
+                  ["profile_picture"] !=
+              null
+          ? widget.couple["partner_two"]["profile_picture"]["image"]
+          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
       setState(() {
         pageLoading = false;
         preventRebuildProcess.value = true;
@@ -211,10 +223,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               child: GestureDetector(
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
-                                          imageurl: widget.couple["partner_one"]
-                                                      ["profile_picture"]
-                                                  ["image"] ??
-                                              "",
+                                          imageurl: partnerOneProfilePicture,
                                           myImage: false,
                                           resetPage: () {},
                                           postId: 000,
@@ -260,8 +269,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               child: GestureDetector(
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
-                                          imageurl: widget.couple["partner_two"]
-                                              ["profile_picture"]["image"],
+                                          imageurl: partnerTwoProfilePicture,
                                           myImage: false,
                                           postId: 000,
                                           resetPage: () {},
@@ -422,7 +430,10 @@ class _CommentScreenState extends State<CommentScreen> {
 
             // COMMENTS INPUT FIELD
             CommentInput(
-                postCommentFunction: postAComment, postId: widget.postId),
+              postCommentFunction: postAComment,
+              postId: widget.postId,
+              isReplying: false,
+            ),
           ],
         ),
       ),

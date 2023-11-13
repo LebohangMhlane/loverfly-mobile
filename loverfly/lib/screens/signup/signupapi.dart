@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:http/http.dart' as http;
 
-Future<bool> signUp() async {
+Future<Map> signUp() async {
   try {
     var cache = GetStorage();
     if (cache.hasData("username") &&
@@ -17,14 +19,18 @@ Future<bool> signUp() async {
         body: {"username": username, "email": email, "password": password},
       ).timeout(const Duration(seconds: 10));
       if (response.statusCode == 201) {
-        return true;
+        return {"status": true};
       } else {
-        return false;
+        Map body = jsonDecode(response.body);
+        if (body.containsKey("error")) {
+          return {"status": false, "error": body["error_msg"]};
+        }
       }
     } else {
-      return false;
+      return {"status": false, "error": "Missing credentials."};
     }
   } catch (e) {
-    return false;
+    return {"status": false, "error": "A logic error has occured."};
   }
+  return {"status": false, "error": "Sign up failed."};
 }

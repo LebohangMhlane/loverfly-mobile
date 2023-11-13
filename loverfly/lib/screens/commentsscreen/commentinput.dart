@@ -6,9 +6,13 @@ import '../../utils/pageutils.dart';
 class CommentInput extends StatefulWidget {
   final int postId;
   final Function postCommentFunction;
+  final bool isReplying;
 
   const CommentInput(
-      {Key? key, required this.postCommentFunction, required this.postId})
+      {Key? key,
+      required this.postCommentFunction,
+      required this.postId,
+      required this.isReplying})
       : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class _CommentInputState extends State<CommentInput> {
     if (!postingComment.value && comment != "") {
       postingComment.value = true;
       var commentData = {
-        "post_id": widget.postId,
+        "comment_id": widget.postId.toString(),
         "comment": comment,
       };
       await widget.postCommentFunction(widget.postId, commentData);
@@ -77,9 +81,11 @@ class _CommentInputState extends State<CommentInput> {
                   },
                   controller: commentInputController,
                   style: const TextStyle(fontWeight: FontWeight.w300),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Type your comment here:"),
+                      hintText: !widget.isReplying
+                          ? "Type your comment here:"
+                          : "Type your reply here:"),
                 ),
               ),
             ),

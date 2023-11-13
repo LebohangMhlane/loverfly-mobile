@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
@@ -23,14 +24,6 @@ class UsernameCreateScreen extends StatelessWidget {
   // TODO: Isolate the save to shared preferences function and make it reuseable:
 
   Future<bool> isProfanityFound(String username) async {
-    try {
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> isUsernameTaken(String username) async {
     try {
       return false;
     } catch (e) {
@@ -70,23 +63,22 @@ class UsernameCreateScreen extends StatelessWidget {
   }
 
   void processUsername(String username, context) async {
+    Map accountCreated = {};
     if (username != "") {
       profanityFound.value = await isProfanityFound(username);
-      usernameTaken.value = await isUsernameTaken(username);
       if (!profanityFound.value && !usernameTaken.value) {
         bool savedToCache = await saveToCache(username);
         if (savedToCache) {
-          bool accountCreated = await signUp();
-          accountCreated
+          accountCreated = await signUp();
+          accountCreated["status"]
               ? SnackBars().displaySnackBar("All done. Signing you in!", () {
                   getTokenAndNavigate(context);
                 }, context)
-              : SnackBars().displaySnackBar(
-                  "Sign up failed. We're looking into it.", () {}, context);
+              : SnackBars()
+                  .displaySnackBar(accountCreated["error"], () {}, context);
           completingSignUp.value = false;
         } else {
-          SnackBars().displaySnackBar(
-              "Something went wrong. We're looking into it.", () {}, context);
+          SnackBars().displaySnackBar(accountCreated["error"], () {}, context);
           completingSignUp.value = false;
         }
       } else {
@@ -143,7 +135,7 @@ class UsernameCreateScreen extends StatelessWidget {
                   height: 10.0,
                 ),
 
-                // email address field:
+                // username field:
                 Obx(
                   () => Padding(
                     padding: const EdgeInsets.only(left: 50.0, right: 50.0),
@@ -172,6 +164,10 @@ class UsernameCreateScreen extends StatelessWidget {
                                             156, 39, 176, 1)),
                                     borderRadius: BorderRadius.circular(10.0)),
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.deny(
+                                        RegExp(r'\s')),
+                                  ],
                                   style: const TextStyle(fontSize: 13.0),
                                   onTap: () {},
                                   onChanged: (value) {},
