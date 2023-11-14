@@ -238,7 +238,9 @@ class MyProfile extends StatelessWidget {
                               Expanded(
                                 flex: 1,
                                 child: TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 500));
                                     Get.to(() => CoupleExplorerScreen());
                                   },
                                   child: const Column(

@@ -280,15 +280,20 @@ class _CommentState extends State<Comment> with TickerProviderStateMixin {
                                                             const EdgeInsets
                                                                 .all(0.0),
                                                       ),
-                                                      onPressed: () {
-                                                        Get.to(
-                                                            () =>
-                                                                CommentReplyScreen(
-                                                                  commentData:
-                                                                      widget
-                                                                          .commentData,
-                                                                ),
-                                                            opaque: false);
+                                                      onPressed: () async {
+                                                        await Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        500))
+                                                            .then((value) =>
+                                                                Get.to(
+                                                                    () =>
+                                                                        CommentReplyScreen(
+                                                                          commentData:
+                                                                              widget.commentData,
+                                                                        ),
+                                                                    opaque:
+                                                                        false));
                                                       },
                                                       child: const SizedBox(
                                                         child: Icon(
