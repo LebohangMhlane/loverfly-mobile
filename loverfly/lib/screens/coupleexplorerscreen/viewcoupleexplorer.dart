@@ -15,6 +15,21 @@ class CoupleExplorerScreen extends StatelessWidget {
   final Rx<List> couples = Rx([]);
   final RxBool pageLoading = RxBool(true);
 
+  void preparePageData(bool comingFromCoupleProfile) async {
+    await getAllCouples().then((coupleList) {
+      couples.value = coupleList["couples"];
+    });
+
+    var apiResponse = await getTrendingCouples();
+    if (apiResponse.isNotEmpty && !apiResponse.containsKey("error_info")) {
+      trendingCouplesList.value = apiResponse["trending_couples"];
+    }
+
+    pageLoading.value = false;
+  }
+
+  void updateCoupleAdmiredState(bool newState) {}
+
   @override
   Widget build(BuildContext context) {
     preparePageData(true);
@@ -79,19 +94,4 @@ class CoupleExplorerScreen extends StatelessWidget {
       ),
     );
   }
-
-  void preparePageData(bool comingFromCoupleProfile) async {
-    await getAllCouples().then((coupleList) {
-      couples.value = coupleList["couples"];
-    });
-
-    var apiResponse = await getTrendingCouples();
-    if (apiResponse.isNotEmpty && !apiResponse.containsKey("error_info")) {
-      trendingCouplesList.value = apiResponse["trending_couples"];
-    }
-
-    pageLoading.value = false;
-  }
-
-  void updateCoupleAdmiredState(bool newState) {}
 }

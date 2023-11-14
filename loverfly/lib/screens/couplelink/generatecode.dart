@@ -52,7 +52,7 @@ class GenerateCodeScreen extends StatelessWidget {
               try {
                 var cache = GetStorage();
                 await generateLinkCode().then((Map generatedCode) {
-                  cache.write("generated_code", generatedCode["code"]);
+                  cache.write("generatedCode", generatedCode["code"]);
                   code.value = generatedCode["code"];
                 });
               } catch (e) {

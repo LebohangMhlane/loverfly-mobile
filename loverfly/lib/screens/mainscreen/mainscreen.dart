@@ -29,6 +29,8 @@ class MainScreen extends StatelessWidget {
   final RxBool showExitModal = RxBool(false);
   final cache = GetStorage();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   void preparePageData(comingFromCouplePage, context) async {
     if (!pageLoaded.value || comingFromCouplePage == true) {
       try {
@@ -58,6 +60,14 @@ class MainScreen extends StatelessWidget {
     }
   }
 
+  void updateCommentCountMain(bool increment, int postIndex) {
+    increment
+        ? posts.value[postIndex]["comments_count"] =
+            posts.value[postIndex]["comments_count"] + 1
+        : posts.value[postIndex]["comments_count"] =
+            posts.value[postIndex]["comments_count"] - 1;
+  }
+
   void preparePostsForFeed() async {
     pageData["pagination_link"] = null;
     await getPostsForFeed(null).then((Map response) {
@@ -80,7 +90,11 @@ class MainScreen extends StatelessWidget {
       await getPostsForFeed(paginationLink).then((Map response) {
         if (!response.containsKey("error")) {
           posts.update((val) {
-            val!.addAll(response["posts"]);
+            if (response["posts"].length == 0) {
+              pageData["pagination_link"] = "";
+            } else {
+              val!.addAll(response["posts"]);
+            }
           });
         } else {
           SnackBars().displaySnackBar(
@@ -171,6 +185,7 @@ class MainScreen extends StatelessWidget {
         return exitApp;
       },
       child: Scaffold(
+          key: _scaffoldKey,
           drawer: SizedBox(
             width: 250.0,
 
@@ -351,6 +366,9 @@ class MainScreen extends StatelessWidget {
 
                                                       // couple post:
                                                       return CouplePost(
+                                                        postIndex: index,
+                                                        updateCommentCountMain:
+                                                            updateCommentCountMain,
                                                         postdata:
                                                             posts.value[index],
                                                         rebuildPageFunction:
@@ -360,6 +378,7 @@ class MainScreen extends StatelessWidget {
 
                                     // user profile page:
                                     MyProfile(
+                                      scaffoldKey: _scaffoldKey,
                                       reloadPosts: preparePostsForFeed,
                                     ),
                                   ],

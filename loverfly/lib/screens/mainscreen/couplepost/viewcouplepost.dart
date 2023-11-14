@@ -11,11 +11,25 @@ import 'package:loverfly/userinteractions/like/likeapi.dart';
 import '../../commentsscreen/commentsmainscreen.dart';
 import '../../couplescreen/viewcouple.dart';
 
-class CouplePost extends StatelessWidget {
+class CouplePost extends StatefulWidget {
   final Map postdata;
   final Function rebuildPageFunction;
-  CouplePost({required this.postdata, required this.rebuildPageFunction});
+  final Function updateCommentCountMain;
+  final int postIndex;
+  const CouplePost({
+    required this.postdata,
+    required this.rebuildPageFunction,
+    required this.updateCommentCountMain,
+    required this.postIndex,
+  });
 
+  @override
+  State<CouplePost> createState() => _CouplePostState();
+}
+
+// TODO: remove getx setup in stateful widgets:
+
+class _CouplePostState extends State<CouplePost> {
   // prepare the data
   final RxMap post = RxMap({});
 
@@ -31,11 +45,14 @@ class CouplePost extends StatelessWidget {
 
   final RxInt likecount = RxInt(0);
 
+  final RxInt commentCount = RxInt(0);
+
   final RxDouble imageHeight = RxDouble(0.0);
 
   final RxBool pageLoaded = RxBool(false);
 
   String partnerOneProfilePicture = "";
+
   String partnerTwoProfilePicture = "";
 
   // gets the image from aws s3 storage bucket:
@@ -47,13 +64,14 @@ class CouplePost extends StatelessWidget {
 
   void preparePageData() {
     if (!pageLoaded.value) {
-      post.value = postdata["post"];
-      couple.value = postdata["couple"];
-      isliked.value = postdata["isLiked"];
-      isAdmired.value = postdata["isAdmired"];
+      post.value = widget.postdata["post"];
+      couple.value = widget.postdata["couple"];
+      isliked.value = widget.postdata["isLiked"];
+      isAdmired.value = widget.postdata["isAdmired"];
       postdate.value = DateFunctions().convertdate(post["time_posted"]);
       admirers.value = couple["admirers"];
       likecount.value = post["likes"];
+      commentCount.value = widget.postdata["comments_count"];
       imageHeight.value = 0.0;
       pageLoaded.value = true;
       partnerOneProfilePicture = couple["partner_one"]["profile_picture"] !=
@@ -67,9 +85,24 @@ class CouplePost extends StatelessWidget {
     }
   }
 
+  // TODO: remember to remove getx:
+  void updateCommentCount(bool increment) {
+    widget.updateCommentCountMain(increment, widget.postIndex);
+    setState(() {
+      increment
+          ? commentCount.value = commentCount.value + 1
+          : commentCount.value = commentCount.value - 1;
+    });
+  }
+
+  @override
+  void initState() {
+    preparePageData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    preparePageData();
     return Container(
         child: Column(children: [
       // profile picture and admirers section:
@@ -77,8 +110,8 @@ class CouplePost extends StatelessWidget {
         onTap: () {
           Get.to(() => CoupleProfileScreen(
                 couple: couple,
-                isAdmired: RxBool(postdata["isAdmired"]),
-                rebuildPageFunction: rebuildPageFunction,
+                isAdmired: RxBool(widget.postdata["isAdmired"]),
+                rebuildPageFunction: widget.rebuildPageFunction,
               ));
         },
         child: SizedBox(
@@ -321,23 +354,23 @@ class CouplePost extends StatelessWidget {
         height: 80.0,
         child: Row(children: [
           // admire couple button:
-          !postdata["is_my_post"]
+          !widget.postdata["is_my_post"]
               ? Container(
                   width: 130.0,
                   child: TextButton(
                     onPressed: () async {
-                      await admire(couple["id"], postdata["isAdmired"])
+                      await admire(couple["id"], widget.postdata["isAdmired"])
                           .then((response) {
-                        postdata["isAdmired"] = response["admired"];
+                        widget.postdata["isAdmired"] = response["admired"];
                         isAdmired.value = response["admired"];
                         if (response["admired"] == false) {
                           if (admirers.value != 0) {
                             admirers.value--;
-                            postdata["couple"]["admirers"]--;
+                            widget.postdata["couple"]["admirers"]--;
                           }
                         } else {
                           admirers.value++;
-                          postdata["couple"]["admirers"]++;
+                          widget.postdata["couple"]["admirers"]++;
                         }
                       });
                     },
@@ -395,19 +428,19 @@ class CouplePost extends StatelessWidget {
           ),
 
           // like button
-          !postdata["is_my_post"]
+          !widget.postdata["is_my_post"]
               ? Expanded(
                   child: TextButton(
                     onPressed: () {
                       likePost(post["id"], isliked.value).then((value) {
-                        postdata["isliked"] = value;
+                        widget.postdata["isliked"] = value;
                         isliked.value = value;
                         if (value == false) {
                           likecount.value != 0 ? likecount.value-- : null;
-                          postdata["post"]["likes"]--;
+                          widget.postdata["post"]["likes"]--;
                         } else {
                           likecount.value++;
-                          postdata["post"]["likes"]++;
+                          widget.postdata["post"]["likes"]++;
                         }
                       });
                     },
@@ -469,19 +502,35 @@ class CouplePost extends StatelessWidget {
           // comment button:
           Expanded(
             child: TextButton(
-              onPressed: () {
-                Get.to(() => CommentScreen(
-                      postId: post["id"],
-                      couple: couple,
-                    ));
+              onPressed: () async {
+                await Future.delayed(const Duration(milliseconds: 500))
+                    .then((value) {
+                  print(value);
+                  Get.to(() => CommentScreen(
+                        updateCommentCount: updateCommentCount,
+                        postId: post["id"],
+                        couple: couple,
+                      ));
+                });
               },
-              child: const Center(
-                child: SizedBox(
-                  child: Icon(
-                    Icons.comment,
-                    color: Colors.purple,
-                    size: 20.0,
-                  ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5.0),
+                      child: Icon(
+                        Icons.comment,
+                        color: Colors.purple[800],
+                        size: 20.0,
+                      ),
+                    ),
+                    Text(
+                      commentCount.value.toString(),
+                      style:
+                          const TextStyle(fontSize: 11.0, color: Colors.black),
+                    ),
+                  ],
                 ),
               ),
             ),

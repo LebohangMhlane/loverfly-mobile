@@ -19,8 +19,8 @@ class InputCodeScreen extends StatelessWidget {
       try {
         var cache = GetStorage();
         String code = _textEditingController.text;
-        if (cache.hasData("generatedcode") &&
-            cache.read("generatedcode") == code) {
+        if (cache.hasData("generatedCode") &&
+            cache.read("generatedCode") == code) {
           message.value =
               "You cannot be in a relationship with yourself... Well, technically speaking...";
           linking.value = false;

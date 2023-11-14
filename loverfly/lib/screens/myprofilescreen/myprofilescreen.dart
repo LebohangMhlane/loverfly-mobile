@@ -24,10 +24,12 @@ class MyProfile extends StatelessWidget {
   final RxBool pageReady = RxBool(false);
   final RxString profilePicture = RxString("");
   final cache = GetStorage();
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   MyProfile({
     Key? key,
     required this.reloadPosts,
+    required this.scaffoldKey,
   });
 
   final pageData = Rx<Map>({
@@ -325,6 +327,29 @@ class MyProfile extends StatelessWidget {
                                                             Colors.grey,
                                                             BlendMode.srcIn),
                                                   )
+                                          ],
+                                        ),
+                                      ]),
+                                ),
+                              ),
+
+                              // EDITIONAL OPTIONS BUTTON:
+                              Expanded(
+                                flex: 1,
+                                child: TextButton(
+                                  onPressed: () {
+                                    scaffoldKey.currentState?.openDrawer();
+                                  },
+                                  child: const Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Icon(
+                                              Icons.menu,
+                                              color: Colors.deepPurple,
+                                            ),
                                           ],
                                         ),
                                       ]),

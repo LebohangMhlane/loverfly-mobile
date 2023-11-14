@@ -9,20 +9,10 @@ import '../../utils/utils.dart';
 import '../largerpreviewscreen/largerpreviewscreen.dart';
 import 'api/couplescreenapi.dart';
 
-class CoupleProfileScreen extends StatelessWidget {
+class CoupleProfileScreen extends StatefulWidget {
   final Map couple;
-  final RxMap coupledata = RxMap({});
   final RxBool isAdmired;
   final Function rebuildPageFunction;
-  final RxMap relationshipstartdate = RxMap({});
-  final RxMap nextanniversarydate = RxMap({});
-  final RxString anniversarycount = RxString("0");
-  final RxInt numberOfAdmirers = RxInt(0);
-  final RxInt numOfAdmiredCouples = RxInt(0);
-  final RxList posts = RxList([]);
-  final RxBool pageLoaded = RxBool(false);
-  String partnerOneProfilePicture = "";
-  String partnerTwoProfilePicture = "";
 
   CoupleProfileScreen(
       {Key? key,
@@ -31,21 +21,52 @@ class CoupleProfileScreen extends StatelessWidget {
       required this.rebuildPageFunction})
       : super(key: key);
 
+  @override
+  State<CoupleProfileScreen> createState() => _CoupleProfileScreenState();
+}
+
+class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
+  final RxMap coupledata = RxMap({});
+
+  final RxMap relationshipstartdate = RxMap({});
+
+  final RxMap nextanniversarydate = RxMap({});
+
+  final RxString anniversarycount = RxString("0");
+
+  final RxInt numberOfAdmirers = RxInt(0);
+
+  final RxInt numOfAdmiredCouples = RxInt(0);
+
+  final RxList posts = RxList([]);
+
+  final RxBool pageLoaded = RxBool(false);
+
+  String partnerOneProfilePicture = "";
+
+  String partnerTwoProfilePicture = "";
+
+  @override
+  void initState() {
+    preparepagedata();
+    super.initState();
+  }
+
   void preparepagedata() async {
     if (!pageLoaded.value) {
       // convert date values:
       relationshipstartdate.value =
-          DateFunctions().convertdate(couple["started_dating"]);
+          DateFunctions().convertdate(widget.couple["started_dating"]);
       nextanniversarydate.value =
-          DateFunctions().convertdate(couple["next_anniversary"]);
+          DateFunctions().convertdate(widget.couple["next_anniversary"]);
 
       // set counts:
-      anniversarycount.value =
-          DateFunctions().determineanniversarycount(couple["anniversaries"]);
-      numberOfAdmirers.value = couple["admirers"];
+      anniversarycount.value = DateFunctions()
+          .determineanniversarycount(widget.couple["anniversaries"]);
+      numberOfAdmirers.value = widget.couple["admirers"];
 
       // get couple posts:
-      await getCouplePosts(couple["id"]).then((apiResponse) {
+      await getCouplePosts(widget.couple["id"]).then((apiResponse) {
         if (apiResponse["api_response"] != "failed") {
           posts.value = apiResponse["couple_posts"];
         }
@@ -53,30 +74,29 @@ class CoupleProfileScreen extends StatelessWidget {
       });
 
       // set profile pictures:
-      partnerOneProfilePicture = couple["partner_one"]["profile_picture"] !=
+      partnerOneProfilePicture = widget.couple["partner_one"]
+                  ["profile_picture"] !=
               null
-          ? couple["partner_one"]["profile_picture"]["image"]
+          ? widget.couple["partner_one"]["profile_picture"]["image"]
           : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
-      partnerTwoProfilePicture = couple["partner_two"]["profile_picture"] !=
+      partnerTwoProfilePicture = widget.couple["partner_two"]
+                  ["profile_picture"] !=
               null
-          ? couple["partner_two"]["profile_picture"]["image"]
+          ? widget.couple["partner_two"]["profile_picture"]["image"]
           : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
+      setState(() {});
     }
   }
 
   void admireCouple(context) async {
     try {
-      // make a request to the api:
-      Map response = await admire(couple["id"], isAdmired);
-      // if something goes wrong, notify the user:
+      Map response = await admire(widget.couple["id"], widget.isAdmired);
       if (response.containsKey("error_info")) {
         SnackBars().displaySnackBar(
             "Something went wrong. We will fix it soon!", () => null, context);
       } else {
-        // else, update the admired value:
-        isAdmired.value = response["admired"];
-        // update the fan count based on the returned value:
-        if (isAdmired.value == false) {
+        widget.isAdmired.value = response["admired"];
+        if (widget.isAdmired.value == false) {
           if (numberOfAdmirers.value != 0) {
             numberOfAdmirers.value--;
           }
@@ -85,7 +105,6 @@ class CoupleProfileScreen extends StatelessWidget {
         }
       }
     } catch (e) {
-      // if something goes wrong with the logic above, notify the user:
       SnackBars().displaySnackBar(
           "Something went wrong. We will fix it soon!", () => null, context);
     }
@@ -93,11 +112,10 @@ class CoupleProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    preparepagedata();
     return WillPopScope(
         onWillPop: () async {
           Get.back();
-          rebuildPageFunction(true, context);
+          widget.rebuildPageFunction(true, context);
           return true;
         },
         child: Scaffold(
@@ -133,7 +151,8 @@ class CoupleProfileScreen extends StatelessWidget {
                                         padding: const EdgeInsets.only(
                                             top: 5.0, bottom: 5.0),
                                         child: Text(
-                                            couple["relationship_status"],
+                                            widget
+                                                .couple["relationship_status"],
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w300))),
                                   ],
@@ -251,9 +270,9 @@ class CoupleProfileScreen extends StatelessWidget {
                             bottom: 15.0,
                           ),
                           child: Text(
-                            couple["partner_one"]["username"] +
+                            widget.couple["partner_one"]["username"] +
                                 " & " +
-                                couple["partner_two"]["username"],
+                                widget.couple["partner_two"]["username"],
                             textAlign: TextAlign.right,
                             style: const TextStyle(
                                 letterSpacing: 1.0,
@@ -283,7 +302,7 @@ class CoupleProfileScreen extends StatelessWidget {
                                             () => Container(
                                               padding: const EdgeInsets.only(
                                                   left: 4.0),
-                                              child: isAdmired.value
+                                              child: widget.isAdmired.value
                                                   ?
                                                   // Admire heart icon
                                                   Transform(

@@ -60,6 +60,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/myprofilescreen',
             page: () => MyProfile(
+                  scaffoldKey: GlobalKey(),
                   reloadPosts: () {},
                 )),
         GetPage(
@@ -86,7 +87,11 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/inputcodescreen', page: () => InputCodeScreen()),
         GetPage(
             name: '/comments',
-            page: () => const CommentScreen(postId: 000, couple: {})),
+            page: () => CommentScreen(
+                  postId: 000,
+                  couple: const {},
+                  updateCommentCount: () {},
+                )),
         GetPage(name: '/listview', page: () => ListAdmirersScreen()),
         GetPage(
             name: '/editprofilepicturescreen',

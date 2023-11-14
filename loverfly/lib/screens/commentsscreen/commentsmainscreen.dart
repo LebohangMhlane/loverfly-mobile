@@ -16,11 +16,13 @@ import 'comment.dart';
 class CommentScreen extends StatefulWidget {
   final int postId;
   final Map couple;
+  final Function updateCommentCount;
 
   const CommentScreen({
     Key? key,
     required this.postId,
     required this.couple,
+    required this.updateCommentCount,
   }) : super(key: key);
 
   @override
@@ -66,6 +68,7 @@ class _CommentScreenState extends State<CommentScreen> {
         ? comments
             .add({"comment_liked": false, "comment": apiResponse["comment"]})
         : null;
+    widget.updateCommentCount(true);
     setState(() {});
   }
 
@@ -83,9 +86,10 @@ class _CommentScreenState extends State<CommentScreen> {
       deletingComment = true;
       Map apiResponse = await deleteCommentService(commentId);
       if (apiResponse["api_response"] == "success") {
-        SnackBars().displaySnackBar("Comment Deleted!", () {
-          setState(() {});
-        }, context);
+        setState(() {
+          SnackBars().displaySnackBar("Comment Deleted!", () {}, context);
+        });
+        widget.updateCommentCount(false);
         deletingComment = false;
         return true;
       } else {
