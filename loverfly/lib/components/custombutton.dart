@@ -101,6 +101,7 @@ class CustomButton extends StatelessWidget {
                 child: customchild,
               ),
         style: TextButton.styleFrom(
+          elevation: 2.0,
           side: BorderSide(
               width: borderwidth, color: bordercolor, style: BorderStyle.solid),
           foregroundColor: splashcolor,

@@ -15,6 +15,7 @@ class GenerateCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: customAppBar(context, "Link partner"),
       body: Column(
         children: [
@@ -59,6 +60,9 @@ class GenerateCodeScreen extends StatelessWidget {
                 message.value = e.toString();
               }
             },
+            borderradius: 20.0,
+            buttoncolor: Colors.white,
+            textcolor: Colors.purple,
             buttonlabel: "Generate Code",
             leftmargin: 20.0,
             rightmargin: 20.0,

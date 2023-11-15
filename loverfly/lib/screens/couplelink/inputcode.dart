@@ -45,6 +45,7 @@ class InputCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: customAppBar(context, "Link partner"),
       body: SingleChildScrollView(
         child: Column(
@@ -109,7 +110,10 @@ class InputCodeScreen extends StatelessWidget {
                 onpressedfunction: () {
                   linkCouple();
                 },
-                buttonlabel: linking.value ? "LoveLinking" : "LoveLink",
+                buttoncolor: Colors.white,
+                textcolor: Colors.purple,
+                borderradius: 20.0,
+                buttonlabel: linking.value ? "Linking" : "Link",
                 leftmargin: 20.0,
                 rightmargin: 20.0,
               ),
