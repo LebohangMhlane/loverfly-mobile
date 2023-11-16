@@ -14,7 +14,7 @@ class CoupleProfileScreen extends StatefulWidget {
   final RxBool isAdmired;
   final Function rebuildPageFunction;
 
-  CoupleProfileScreen(
+  const CoupleProfileScreen(
       {Key? key,
       required this.couple,
       required this.isAdmired,
