@@ -13,13 +13,12 @@ class ListAdmirersScreen extends StatelessWidget {
 
   final RxList admirers = RxList([]);
   final RxString nextPageLink = RxString("");
+  final RxBool loadingAdmirers = RxBool(true);
 
-  // build the page:
-  void preparePageData(context) {
+  void preparePageData(context) async {
     getAllAdmirers(context);
   }
 
-  // get the admirers from the server:
   void getAllAdmirers(context) async {
     try {
       await getAdmirersFromServer("").then((Map response) {
@@ -28,7 +27,11 @@ class ListAdmirersScreen extends StatelessWidget {
           response["next_page_link"] != null
               ? nextPageLink.value = response["next_page_link"]
               : nextPageLink.value = "";
-        } else {}
+          loadingAdmirers.value = false;
+        } else {
+          loadingAdmirers.value = false;
+          throw Exception();
+        }
       });
     } catch (e) {
       SnackBars().displaySnackBar(
@@ -36,8 +39,7 @@ class ListAdmirersScreen extends StatelessWidget {
     }
   }
 
-  // pagination:
-  void addMoreAdmirers() {
+  void addMorePaginatedAdmirers() {
     if (nextPageLink.value != "") {
       getAdmirersFromServer(nextPageLink.value).then((Map response) {
         admirers.addAll(response["admirers"]);
@@ -51,30 +53,50 @@ class ListAdmirersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     preparePageData(context);
-
     return Scaffold(
       appBar: customAppBar(context, ''),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: [
-            // list container:
-            Obx(
-              () => Expanded(
-                child: ListView.builder(
-                    itemCount: admirers.length,
-                    itemBuilder: (context, index) {
-                      if (index + 1 == admirers.length) {
-                        addMoreAdmirers();
-                      }
-                      return AdmirerListItem(
-                        admirerData: admirers[index],
-                      );
-                    }),
+      body: Obx(
+        () => !loadingAdmirers.value
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: admirers.isNotEmpty
+                    ? Column(
+                        children: [
+                          // list container:
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: admirers.length,
+                                itemBuilder: (context, index) {
+                                  if (index + 1 == admirers.length) {
+                                    addMorePaginatedAdmirers();
+                                  }
+                                  return AdmirerListItem(
+                                    admirerData: admirers[index],
+                                  );
+                                }),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(
+                        child: Center(
+                          child: Text(
+                            "Your relationship currently has no admirers.",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.purple),
+                          ),
+                        ),
+                      ),
+              )
+            : const Center(
+                child: SizedBox(
+                    width: 20.0,
+                    height: 20.0,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.0,
+                      color: Colors.purple,
+                    )),
               ),
-            )
-          ],
-        ),
       ),
     );
   }

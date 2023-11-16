@@ -25,6 +25,7 @@ class MyProfile extends StatelessWidget {
   final RxString profilePicture = RxString("");
   final cache = GetStorage();
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final RxString partnerProfilePicture = RxString("");
 
   MyProfile({
     Key? key,
@@ -43,32 +44,50 @@ class MyProfile extends StatelessWidget {
     try {
       // set the page to loading state:
       pageReady.value = false;
-      // set the couple and user_profile data:
-      cache.hasData("user_couple")
-          ? couple.value = jsonDecode(cache.read("user_couple")!)
-          : couple.value = {};
-      cache.hasData("user_profile")
-          ? userProfile.value = jsonDecode(cache.read("user_profile")!)
-          : userProfile.value = {};
-      // set the couples posts if they exist:
-      if (couple.isNotEmpty) {
-        await getCouplePosts(couple["id"]).then((listOfPosts) {
-          pageData.update((map) {
-            map!["posts"] = listOfPosts["couple_posts"];
-            listOfPosts["couple_posts"].length == 0
-                ? couple["has_posts"] = false
-                : couple["has_posts"] = true;
-          });
-        });
-      }
-      // set the profile picture:
-      profilePicture.value = userProfile["profile_picture"] != null
-          ? userProfile["profile_picture"]["image"]
-          : "";
+
+      setCoupleAndUserProfile();
+
+      loadMyMemories();
+
+      setProfilePictures();
+
       pageReady.value = true;
     } catch (e) {
       print("something went wrong while loading this page");
     }
+  }
+
+  void setCoupleAndUserProfile() {
+    cache.hasData("user_couple")
+        ? couple.value = jsonDecode(cache.read("user_couple")!)
+        : couple.value = {};
+    cache.hasData("user_profile")
+        ? userProfile.value = jsonDecode(cache.read("user_profile")!)
+        : userProfile.value = {};
+  }
+
+  void loadMyMemories() async {
+    if (couple.isNotEmpty) {
+      await getCouplePosts(couple["id"]).then((listOfPosts) {
+        pageData.update((map) {
+          map!["posts"] = listOfPosts["couple_posts"];
+          listOfPosts["couple_posts"].length == 0
+              ? couple["has_posts"] = false
+              : couple["has_posts"] = true;
+        });
+      });
+    }
+  }
+
+  void setProfilePictures() {
+    profilePicture.value = userProfile["profile_picture"] != null
+        ? userProfile["profile_picture"]["image"]
+        : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
+    partnerProfilePicture.value = userProfile["my_partner"]
+                ["profile_picture"] !=
+            null
+        ? userProfile["my_partner"]["profile_picture"]["image"]
+        : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
   }
 
   void updateProfilePicture() async {
@@ -131,23 +150,31 @@ class MyProfile extends StatelessWidget {
                                 child: Container(
                                   alignment: Alignment.center,
                                   child: Stack(children: [
-                                    Container(
-                                        width: 95.0,
-                                        height: 95.0,
-                                        decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(100.0)),
-                                            color: Colors.purpleAccent),
-                                        padding: const EdgeInsets.all(1.0),
-                                        child: CircleAvatar(
-                                            radius: 40.0,
-                                            backgroundImage: profilePicture
-                                                        .value !=
-                                                    ""
-                                                ? NetworkImage(
-                                                    profilePicture.value)
-                                                : const NetworkImage(
-                                                    "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"))),
+                                    GestureDetector(
+                                      onTap: () => Get.to(() =>
+                                          LargerPreviewScreen(
+                                              imageurl: profilePicture.value,
+                                              myImage: false,
+                                              resetPage: () {},
+                                              postId: 000)),
+                                      child: Container(
+                                          width: 95.0,
+                                          height: 95.0,
+                                          decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(100.0)),
+                                              color: Colors.purpleAccent),
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: CircleAvatar(
+                                              radius: 40.0,
+                                              backgroundImage: profilePicture
+                                                          .value !=
+                                                      ""
+                                                  ? NetworkImage(
+                                                      profilePicture.value)
+                                                  : const NetworkImage(
+                                                      "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg"))),
+                                    ),
                                     Positioned(
                                       bottom: 7.0,
                                       left: 70.0,
@@ -479,38 +506,41 @@ class MyProfile extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             // PARTNER PROFILE PICTURE
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => LargerPreviewScreen(
+                                                    imageurl:
+                                                        partnerProfilePicture
+                                                            .value,
+                                                    myImage: false,
+                                                    resetPage: () {},
+                                                    postId: 000));
+                                              },
                                               child: Container(
-                                                alignment: Alignment.center,
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
                                                 child: Container(
-                                                    width: 70.0,
-                                                    height: 70.0,
-                                                    decoration: const BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    100.0)),
-                                                        color: Colors.purple),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            1.0),
-                                                    child: CircleAvatar(
-                                                      radius: 50.0,
-                                                      backgroundImage: userProfile[
-                                                                          "my_partner"]
-                                                                      ['profile_picture']
-                                                                  ["image"] !=
-                                                              null
-                                                          ? NetworkImage(userProfile[
-                                                                      "my_partner"]
-                                                                  [
-                                                                  'profile_picture']
-                                                              ["image"])
-                                                          : const NetworkImage(
-                                                              "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
-                                                    )),
+                                                  alignment: Alignment.center,
+                                                  child: Container(
+                                                      width: 70.0,
+                                                      height: 70.0,
+                                                      decoration: const BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      100.0)),
+                                                          color: Colors.purple),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              1.0),
+                                                      child: CircleAvatar(
+                                                        radius: 50.0,
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                                partnerProfilePicture
+                                                                    .value),
+                                                      )),
+                                                ),
                                               ),
                                             ),
 
@@ -861,7 +891,9 @@ class MyProfile extends StatelessWidget {
                                   ? Container()
                                   : Expanded(
                                       child: TextButton(
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 500));
                                           Get.to(() => ListAdmirersScreen());
                                         },
                                         child: Container(

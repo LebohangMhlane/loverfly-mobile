@@ -293,6 +293,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                               Expanded(
                                   child: Center(
                                       child: CustomButton(
+                                          elevation: 0.0,
                                           splashcolor: Colors.blue,
                                           buttoncolor: Colors.white,
                                           buttonlabel: 'Admire',
