@@ -34,46 +34,46 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
   bool isPartnerOne = false;
   RxBool savingpost = RxBool(false);
   RxBool error = RxBool(false);
+  String dayOfWeek = "";
+  String date = "";
 
   @override
   void initState() {
-    super.initState();
-
-    // get the users profile from local storage:
-    try {
-      var cache = GetStorage();
-      userProfile.value = jsonDecode(cache.read('user_profile')!);
-      couple.value = jsonDecode(cache.read('user_couple')!);
-      // find partner one:
-      couple.value["partner_one"]["username"] == userProfile.value["username"]
-          ? partnerOne = userProfile.value
-          : partnerOne = couple.value["partner_one"];
-    } catch (e) {
+    try {} catch (e) {
+      setMainPartner();
+      formatDates();
       return;
     }
+    super.initState();
+  }
+
+  void setMainPartner() {
+    var cache = GetStorage();
+    userProfile.value = jsonDecode(cache.read('user_profile')!);
+    couple.value = jsonDecode(cache.read('user_couple')!);
+    couple.value["partner_one"]["username"] == userProfile.value["username"]
+        ? partnerOne = userProfile.value
+        : partnerOne = couple.value["partner_one"];
   }
 
   void createMemory() async {
-    // ensure the user cannot press the button multiple times while everything is still taking place
-    if (savingpost.value == true) {
-      return;
+    try {
+      // prevent button spamming:
+      if (savingpost.value == true) {
+        return;
+      }
+      savingpost.value = true;
+      File imageFile = File(selectedimage!.path);
+      var caption = captioncontroller.value.text != ''
+          ? captioncontroller.value.text
+          : partnerOne["username"] + ' + ' + userProfile.value['username'];
+      var postUploaded =
+          await uploadPostToServerDatabase(context, caption, imageFile);
+      var coupleDataUpdated = await updateCoupleData();
+      validateAndNotifyUser(context, coupleDataUpdated, postUploaded);
+    } catch (e) {
+      SnackBars().displaySnackBar("Something went wrong.", () => null, context);
     }
-    savingpost.value = true;
-    // save the image and postdata data to mysql
-    File imageFile = File(selectedimage!.path);
-
-    // prepare the caption:
-    var caption = captioncontroller.value.text != ''
-        ? captioncontroller.value.text
-        : partnerOne["username"] + ' + ' + userProfile.value['username'];
-    // save the post data to mysql:
-    var postUploadedToServerDatabase =
-        await uploadPostToServerDatabase(context, caption, imageFile);
-    var coupleDataUpdated = await updateCoupleData();
-
-    // verify all went well and notify the user:
-    validateProcessAndNotifyUser(
-        context, coupleDataUpdated, postUploadedToServerDatabase);
   }
 
   Future<bool> uploadPostToServerDatabase(context, caption, imageFile) async {
@@ -113,7 +113,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     }
   }
 
-  void validateProcessAndNotifyUser(
+  void validateAndNotifyUser(
       context, coupleDataUpdated, postUploadedToServerDatabase) {
     if (coupleDataUpdated && postUploadedToServerDatabase) {
       SnackBars().displaySnackBar("Memory Shared Successfully", () {}, context);
@@ -136,11 +136,13 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     savingpost.value = false;
   }
 
+  formatDates() {
+    dayOfWeek = DateFormat('EEEE').format(DateTime.now());
+    date = DateFormat('dd/MM/yy').format(DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
-    // format the date:
-    var dayofweek = DateFormat('EEEE').format(DateTime.now());
-    var date = DateFormat('dd/MM/yy').format(DateTime.now());
     return WillPopScope(
       onWillPop: () => Future(() {
         Get.off(() => MainScreen(
@@ -282,7 +284,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      dayofweek + ' - ' + date,
+                                      dayOfWeek + ' - ' + date,
                                       style: const TextStyle(
                                           color: Colors.white, fontSize: 12.0),
                                     ),

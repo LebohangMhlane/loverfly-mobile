@@ -553,7 +553,6 @@ class MyProfile extends StatelessWidget {
                                                       userProfile["my_partner"]
                                                           ['username'],
                                                       style: const TextStyle(
-                                                          letterSpacing: 2.0,
                                                           fontWeight: FontWeight
                                                               .w300))),
                                             ),
@@ -714,10 +713,12 @@ class MyProfile extends StatelessWidget {
                                                         child: Text(
                                                             couple["admirers"]
                                                                 .toString(),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w300)),
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                            )),
                                                       ),
                                                     )
                                                   ],
@@ -733,7 +734,9 @@ class MyProfile extends StatelessWidget {
                                                   'Together Since',
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.w500)),
+                                                          FontWeight.w500,
+                                                      color: Colors
+                                                          .deepPurpleAccent)),
                                             ),
                                             Container(
                                               padding:
@@ -752,7 +755,9 @@ class MyProfile extends StatelessWidget {
                                                   'Next Anniversary',
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.w500)),
+                                                          FontWeight.w500,
+                                                      color: Colors
+                                                          .deepPurpleAccent)),
                                             ),
                                             Container(
                                               padding:
@@ -905,7 +910,7 @@ class MyProfile extends StatelessWidget {
                                               'Admirers',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w300,
-                                                color: Colors.black,
+                                                color: Colors.deepPurpleAccent,
                                               ),
                                             ),
                                           ),
@@ -944,7 +949,7 @@ class MyProfile extends StatelessWidget {
                                         'Admired Couples',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w300,
-                                          color: Colors.purple,
+                                          color: Colors.deepPurpleAccent,
                                         ),
                                       ),
                                     ),

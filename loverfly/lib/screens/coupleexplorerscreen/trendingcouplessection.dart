@@ -40,7 +40,8 @@ class TrendingCouples extends StatelessWidget {
                   // list of trending couples:
                   Expanded(
                     child: Container(
-                        padding: const EdgeInsets.only(top: 10.0, bottom: 5.0),
+                        padding: const EdgeInsets.only(
+                            top: 10.0, bottom: 5.0, right: 10.0, left: 10.0),
                         child: Obx(
                           () => ListView.builder(
                               scrollDirection: Axis.horizontal,
