@@ -506,11 +506,11 @@ class _CouplePostState extends State<CouplePost> {
                 await Future.delayed(const Duration(milliseconds: 500))
                     .then((value) {
                   print(value);
-                  Get.to(() => CommentScreen(
-                        updateCommentCount: updateCommentCount,
-                        postId: post["id"],
-                        couple: couple,
-                      ));
+                  // Get.to(() => CommentScreen(
+                  //       updateCommentCount: updateCommentCount,
+                  //       postId: post["id"],
+                  //       couple: couple,
+                  //     ));
                   Navigator.of(context).pushNamed("/commentScreen");
                 });
               },

@@ -4,107 +4,104 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
-import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
+import 'package:loverfly/screens/mainscreen/mainscreenprovider.dart';
 import 'package:loverfly/utils/pageutils.dart';
+import 'package:provider/provider.dart';
 import '../coupleexplorerscreen/viewcoupleexplorer.dart';
 import '../myprofilescreen/myprofilescreen.dart';
 import 'api/mainscreenapi.dart';
 
-class MainScreen extends StatelessWidget {
-  MainScreen({key, required this.desiredPageIndex}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({key, required this.desiredPageIndex}) : super(key: key);
 
-  final Rx<List> posts = Rx<List>([]);
-  final Rx<bool> postsFound = Rx<bool>(false);
-  final Rx<bool> pageLoading = Rx<bool>(true);
-  final RxBool pageLoaded = RxBool(false);
   final int desiredPageIndex;
-  final RxInt initialPageIndex = RxInt(0);
-  final RxMap pageData = RxMap({
-    "pagination_link": null,
-    "couple": {},
-  });
-  final RxBool showExitModal = RxBool(false);
-  final cache = GetStorage();
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  GetStorage cache = GetStorage();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late MainScreenProvider mainPageProviderRead;
+  late MainScreenProvider mainPageProviderWatch;
 
   void preparePageData(comingFromCouplePage, context) async {
-    if (!pageLoaded.value || comingFromCouplePage == true) {
-      try {
-        await AuthenticationAPI()
-            .getUserProfileAndCoupleData(cache.read("token"), context)
-            .then((Map response) async {
-          if (!response.keys.contains("error")) {
-            var userProfile = response["user_profile"];
-            var couple = response["couple"];
-
-            // update local storage with new data:
-            cache.write("user_profile", jsonEncode(userProfile));
-            cache.write("user_couple", jsonEncode(couple));
-
-            // update pagedata with new data:
-            pageData["user_profile"] = userProfile;
-            pageData["couple"] = couple;
-          }
-          preparePostsForFeed();
-        });
-      } catch (e) {
-        SnackBars().displaySnackBar(
-            "Something went wrong while loading this page.",
-            () => null,
-            context);
+    try {
+      var auth = AuthenticationAPI();
+      var response =
+          await auth.getUserProfileAndCoupleData(cache.read("token"), context);
+      if (response.keys.contains("error")) {
+        throw Exception(response["error"]);
+      } else {
+        var userProfile = response["user_profile"];
+        var couple = response["couple"];
+        cache.write("user_profile", jsonEncode(userProfile));
+        cache.write("user_couple", jsonEncode(couple));
       }
+      preparePostsForFeed();
+    } catch (e) {
+      SnackBars().displaySnackBar(
+          "Something went wrong while loading this page.", () => null, context);
     }
   }
 
   void updateCommentCountMain(bool increment, int postIndex) {
-    increment
-        ? posts.value[postIndex]["comments_count"] =
-            posts.value[postIndex]["comments_count"] + 1
-        : posts.value[postIndex]["comments_count"] =
-            posts.value[postIndex]["comments_count"] - 1;
+    // increment
+    //     ? posts.value[postIndex]["comments_count"] =
+    //         posts.value[postIndex]["comments_count"] + 1
+    //     : posts.value[postIndex]["comments_count"] =
+    //         posts.value[postIndex]["comments_count"] - 1;
   }
 
   void preparePostsForFeed() async {
-    pageData["pagination_link"] = null;
-    await getPostsForFeed(null).then((Map response) {
+    try {
+      var response = await getPostsForFeed(null);
+      mainPageProviderRead.updateValue("paginationLink", "");
       if (response["posts"] != null) {
-        posts.value = response["posts"];
-        response["pagination_link"] != null
-            ? pageData["pagination_link"] = response["pagination_link"]
-            : pageData["pagination_link"] = "";
+        mainPageProviderRead.updateValue("posts", response["posts"]);
+        var link = response["pagination_link"];
+        link != null
+            ? mainPageProviderRead.updateValue("paginationLink", link)
+            : mainPageProviderRead.updateValue("paginationLink", "");
       } else {
-        posts.value = [];
+        mainPageProviderRead.updateValue("posts", []);
       }
-      posts.value.isEmpty ? postsFound.value = false : postsFound.value = true;
-      pageLoaded.value = true;
-    }).whenComplete(() => pageLoading.value = false);
+      mainPageProviderWatch.mainScreenData["posts"].isEmpty
+          ? mainPageProviderRead.updateValue("postsFound", false)
+          : mainPageProviderRead.updateValue("postsFound", true);
+      mainPageProviderRead.updateValue("loadingPage", false);
+    } catch (e) {
+      SnackBars().displaySnackBar(
+          "Something went wrong loading this page", () => null, context);
+    }
   }
 
   void addMorePosts(context) async {
-    var paginationLink = pageData["pagination_link"];
-    if (paginationLink != "") {
-      await getPostsForFeed(paginationLink).then((Map response) {
-        if (!response.containsKey("error")) {
-          posts.update((val) {
-            if (response["posts"].length == 0) {
-              pageData["pagination_link"] = "";
-            } else {
-              val!.addAll(response["posts"]);
-            }
-          });
-        } else {
-          SnackBars().displaySnackBar(
-              "There was an error adding more posts", () => null, context);
-        }
-        response["pagination_link"] != null
-            ? pageData["pagination_link"] = response["pagination_link"]
-            : pageData["pagination_link"] = null;
-      });
-    }
+    // var paginationLink = pageData["pagination_link"];
+    // if (paginationLink != "") {
+    //   await getPostsForFeed(paginationLink).then((Map response) {
+    //     if (!response.containsKey("error")) {
+    //       posts.update((val) {
+    //         if (response["posts"].length == 0) {
+    //           pageData["pagination_link"] = "";
+    //         } else {
+    //           val!.addAll(response["posts"]);
+    //         }
+    //       });
+    //     } else {
+    //       SnackBars().displaySnackBar(
+    //           "There was an error adding more posts", () => null, context);
+    //     }
+    //     response["pagination_link"] != null
+    //         ? pageData["pagination_link"] = response["pagination_link"]
+    //         : pageData["pagination_link"] = null;
+    //   });
+    // }
   }
 
   void logOut(context) async {
@@ -118,8 +115,15 @@ class MainScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     preparePageData(false, context);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    mainPageProviderRead = context.read<MainScreenProvider>();
+    mainPageProviderWatch = context.watch<MainScreenProvider>();
     return WillPopScope(
       onWillPop: () async {
         bool exitApp = await showDialog(
@@ -235,156 +239,145 @@ class MainScreen extends StatelessWidget {
           appBar: customAppBar(context, ''),
           body: Stack(children: [
             // main page:
-            Obx(
-              () => DefaultTabController(
-                  initialIndex: desiredPageIndex,
-                  length: 2,
-                  child: Column(
-                      verticalDirection: VerticalDirection.up,
-                      children: [
-                        // tab bar switch buttons:
-                        Container(
-                          height: 40.0,
-                          color: Colors.black,
-                          child: const TabBar(
-                            indicatorColor: Colors.purple,
-                            tabs: [
-                              // home feed button
-                              Tab(text: 'Couples'),
-                              // my profile button
-                              Tab(
-                                child: Icon(Icons.person),
-                              ),
-                            ],
-                          ),
+            DefaultTabController(
+                initialIndex: widget.desiredPageIndex,
+                length: 2,
+                child:
+                    Column(verticalDirection: VerticalDirection.up, children: [
+                  // tab bar switch buttons:
+                  Container(
+                    height: 40.0,
+                    color: Colors.black,
+                    child: const TabBar(
+                      indicatorColor: Colors.purple,
+                      tabs: [
+                        // home feed button
+                        Tab(text: 'Couples'),
+                        // my profile button
+                        Tab(
+                          child: Icon(Icons.person),
                         ),
+                      ],
+                    ),
+                  ),
 
-                        // tab screens:
-                        Expanded(
-                            child: Container(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                child: TabBarView(
-                                  children: [
-                                    // couple posts page:
-                                    Container(
-                                        child: pageLoading.value
-                                            ?
-
-                                            // loading indicator:
-                                            const Center(
-                                                child: SizedBox(
-                                                  width: 20.0,
-                                                  height: 20.0,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    strokeWidth: 1.0,
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    color: Colors.purpleAccent,
+                  // tab screens:
+                  Expanded(
+                      child: Container(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          child: TabBarView(
+                            children: [
+                              // couple posts page:
+                              Container(
+                                  child: context
+                                          .watch<MainScreenProvider>()
+                                          .mainScreenData["loadingPage"]
+                                      ?
+                                      // loading indicator:
+                                      const Center(
+                                          child: SizedBox(
+                                            width: 20.0,
+                                            height: 20.0,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 1.0,
+                                              backgroundColor: Colors.white,
+                                              color: Colors.purpleAccent,
+                                            ),
+                                          ),
+                                        )
+                                      : mainPageProviderWatch.mainScreenData[
+                                                  "postsFound"] ==
+                                              false
+                                          ? Column(
+                                              children: [
+                                                const SizedBox(height: 100.0),
+                                                // welcome to loverfly text
+                                                const Center(
+                                                    child: Text(
+                                                  'Welcome to LoverFly!',
+                                                  style: TextStyle(
+                                                      color: Colors.purple),
+                                                )),
+                                                const SizedBox(height: 50.0),
+                                                // descriptive text
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 30.0,
+                                                          right: 30.0),
+                                                  child: const Text(
+                                                    "It looks like you're not following any couples. Start by exploring some below",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.purple,
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.w300),
                                                   ),
                                                 ),
-                                              )
-                                            : postsFound.value == false
-                                                ? Column(
-                                                    children: [
-                                                      const SizedBox(
-                                                          height: 100.0),
-                                                      // welcome to loverfly text
-                                                      const Center(
-                                                          child: Text(
-                                                        'Welcome to LoverFly!',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.purple),
-                                                      )),
-                                                      const SizedBox(
-                                                          height: 50.0),
-                                                      // descriptive text
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 30.0,
-                                                                right: 30.0),
-                                                        child: const Text(
-                                                          "It looks like you're not following any couples. Start by exploring some below",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.purple,
-                                                              fontSize: 12.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 50.0),
-                                                      // couple explorer navigation button
-                                                      Container(
-                                                        width: 170.0,
-                                                        height: 60.0,
-                                                        color: Colors.white,
-                                                        child: CustomButton(
-                                                          buttonlabel:
-                                                              'Couple Explorer',
-                                                          borderradius: 20.0,
-                                                          buttoncolor:
-                                                              Colors.purple,
-                                                          onpressedfunction:
-                                                              () {
-                                                            Get.to(() =>
-                                                                CoupleExplorerScreen());
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                :
+                                                const SizedBox(height: 50.0),
+                                                // couple explorer navigation button
+                                                Container(
+                                                  width: 170.0,
+                                                  height: 60.0,
+                                                  color: Colors.white,
+                                                  child: CustomButton(
+                                                    buttonlabel:
+                                                        'Couple Explorer',
+                                                    borderradius: 20.0,
+                                                    buttoncolor: Colors.purple,
+                                                    onpressedfunction: () {
+                                                      Get.to(() =>
+                                                          CoupleExplorerScreen());
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          :
 
-                                                // couple post page view:
-                                                ListView.builder(
-                                                    itemCount:
-                                                        posts.value.length,
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      // trigger pagination when at the end of the list:
-                                                      if (index + 1 ==
-                                                          posts.value.length) {
-                                                        if (pageData[
-                                                                    "pagination_link"] !=
-                                                                "" ||
-                                                            pageData[
-                                                                    "pagination_link"] !=
-                                                                null) {
-                                                          addMorePosts(context);
-                                                        }
-                                                      }
+                                          // couple post page view:
+                                          ListView.builder(
+                                              itemCount: mainPageProviderWatch
+                                                  .mainScreenData["posts"]
+                                                  .length,
+                                              scrollDirection: Axis.vertical,
+                                              itemBuilder: (context, index) {
+                                                // trigger pagination when at the end of the list:
+                                                if (index + 1 ==
+                                                    mainPageProviderWatch
+                                                        .mainScreenData["posts"]
+                                                        .length) {
+                                                  if (mainPageProviderWatch
+                                                              .mainScreenData[
+                                                          "paginationLink"] !=
+                                                      "") {
+                                                    addMorePosts(context);
+                                                  }
+                                                }
 
-                                                      // couple post:
-                                                      return CouplePost(
-                                                        postIndex: index,
-                                                        updateCommentCountMain:
-                                                            updateCommentCountMain,
-                                                        postdata:
-                                                            posts.value[index],
-                                                        rebuildPageFunction:
-                                                            preparePageData,
-                                                      );
-                                                    })),
+                                                // couple post:
+                                                return CouplePost(
+                                                  postIndex: index,
+                                                  updateCommentCountMain:
+                                                      updateCommentCountMain,
+                                                  postdata:
+                                                      mainPageProviderWatch
+                                                              .mainScreenData[
+                                                          "posts"][index],
+                                                  rebuildPageFunction:
+                                                      preparePageData,
+                                                );
+                                              })),
 
-                                    // user profile page:
-                                    MyProfile(
-                                      scaffoldKey: _scaffoldKey,
-                                      reloadPosts: preparePostsForFeed,
-                                    ),
-                                  ],
-                                ))),
-                      ])),
-            ),
+                              // user profile page:
+                              MyProfile(
+                                scaffoldKey: _scaffoldKey,
+                                reloadPosts: preparePostsForFeed,
+                              ),
+                            ],
+                          ))),
+                ])),
           ])),
     );
   }
