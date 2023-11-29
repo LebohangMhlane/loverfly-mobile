@@ -1,12 +1,12 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
+import 'package:loverfly/screens/mainscreen/mainscreenprovider.dart';
+import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +15,9 @@ import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
   // initialize GetStorage:
   await GetStorage.init();
-  AuthenticationAPI();
 
   // change status bar color to transparent:
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -38,7 +36,11 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => SignInScreenProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MainScreenProvider(),
+        ),
+        ChangeNotifierProvider(create: (context) => UserProfileProvider()),
       ],
       child: MaterialApp(
         title: 'LoverFly',
@@ -47,7 +49,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: {
-          "/mainScreen": (context) => MainScreen(desiredPageIndex: 0),
+          "/mainScreen": (context) => MainScreen(
+                desiredPageIndex: 0,
+              ),
           "/splashScreen": (context) => const SplashScreen(),
           "/signInScreen": (context) => SignInScreen(),
           "/signUpScreen": (context) => SignUpScreen(),
@@ -67,7 +71,6 @@ class MyApp extends StatelessWidget {
         //   GetPage(
         //       name: '/mainscreen',
         //       page: () => MainScreen(
-        //             desiredPageIndex: 0,
         //           )),
         //   GetPage(
         //       name: '/myprofilescreen',
