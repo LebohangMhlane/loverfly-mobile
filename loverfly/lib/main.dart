@@ -50,6 +50,12 @@ class MyApp extends StatelessWidget {
         "/mainScreen": (context) => MainScreen(desiredPageIndex: 0),
         "/splashScreen": (context) => const SplashScreen(),
         "/signInScreen": (context) => SignInScreen(),
+        "/coupleExplorerScreen": (context) => CoupleExplorerScreen(),
+        "/viewCoupleScreen": (context) => CoupleProfileScreen(
+              couple: const {},
+              isAdmired: RxBool(false),
+              rebuildPageFunction: () {},
+            ),
       },
       // routes: [
       //   GetPage(name: '/signupscreen', page: () => SignUpScreen()),

@@ -108,11 +108,11 @@ class _CouplePostState extends State<CouplePost> {
       // profile picture and admirers section:
       GestureDetector(
         onTap: () {
-          Get.to(() => CoupleProfileScreen(
-                couple: couple,
-                isAdmired: RxBool(widget.postdata["isAdmired"]),
-                rebuildPageFunction: widget.rebuildPageFunction,
-              ));
+          Navigator.of(context).pushNamed("/viewCoupleScreen", arguments: {
+            "couple": widget.postdata["couple"],
+            "isAdmired": RxBool(widget.postdata["isAdmired"]),
+            "rebuildPageFunction": widget.rebuildPageFunction,
+          });
         },
         child: SizedBox(
           height: 100.0,

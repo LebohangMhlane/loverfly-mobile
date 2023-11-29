@@ -205,7 +205,7 @@ class MainScreen extends StatelessWidget {
                       textfontsize: 12.0,
                       buttoncolor: Colors.purple,
                       onpressedfunction: () {
-                        Get.to(() => CoupleExplorerScreen());
+                        Navigator.of(context).pushNamed("/coupleExplorer");
                       },
                     ),
                   ),

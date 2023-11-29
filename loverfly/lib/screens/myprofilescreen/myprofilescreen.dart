@@ -268,7 +268,8 @@ class MyProfile extends StatelessWidget {
                                   onPressed: () async {
                                     await Future.delayed(
                                         const Duration(milliseconds: 500));
-                                    Get.to(() => CoupleExplorerScreen());
+                                    Navigator.of(context)
+                                        .pushNamed("/coupleExplorerScreen");
                                   },
                                   child: const Column(
                                       mainAxisAlignment:
