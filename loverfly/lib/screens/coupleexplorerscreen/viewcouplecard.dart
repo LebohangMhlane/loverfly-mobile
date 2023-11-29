@@ -125,7 +125,7 @@ class CoupleCard extends StatelessWidget {
                           ),
 
                           const SizedBox(
-                            height: 5.0,
+                            height: 4.0,
                           ),
 
                           // heart icon
@@ -139,7 +139,7 @@ class CoupleCard extends StatelessWidget {
                           ),
 
                           const SizedBox(
-                            height: 5.0,
+                            height: 0.0,
                           ),
 
                           // follower count
