@@ -24,7 +24,8 @@ class SignInScreen extends StatelessWidget {
             .getAndCacheAPIToken(username: username, password: password);
         if (tokenResponse.containsKey("token") &&
             tokenResponse["token"] != "") {
-          Get.offAll(() => MainScreen(desiredPageIndex: 0));
+          // Get.offAll(() => MainScreen(desiredPageIndex: 0));
+          Navigator.of(context).pushReplacementNamed("/mainScreen");
         } else {
           signInResponse.value = tokenResponse["error_info"];
           signingIn.value = false;

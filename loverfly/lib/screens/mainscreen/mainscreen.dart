@@ -110,7 +110,7 @@ class MainScreen extends StatelessWidget {
   void logOut(context) async {
     try {
       cache.erase();
-      Get.offAll(() => SignInScreen());
+      Navigator.of(context).pushReplacementNamed("/signInScreen");
     } catch (e) {
       SnackBars().displaySnackBar(
           "There was an error logging out.", () => null, context);

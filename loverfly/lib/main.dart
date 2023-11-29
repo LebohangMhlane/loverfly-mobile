@@ -40,70 +40,74 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'LoverFly',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      getPages: [
-        GetPage(name: '/signupscreen', page: () => SignUpScreen()),
-        GetPage(
-            name: '/usernamecreatescreen', page: () => UsernameCreateScreen()),
-        GetPage(name: '/splashscreen', page: () => const SplashScreen()),
-        GetPage(name: '/signinscreen', page: () => SignInScreen()),
-        GetPage(
-            name: '/mainscreen',
-            page: () => MainScreen(
-                  desiredPageIndex: 0,
-                )),
-        GetPage(
-            name: '/myprofilescreen',
-            page: () => MyProfile(
-                  scaffoldKey: GlobalKey(),
-                  reloadPosts: () {},
-                )),
-        GetPage(
-            name: '/coupleprofilescreen',
-            page: () => CoupleProfileScreen(
-                  couple: const {},
-                  isAdmired: RxBool(false),
-                  rebuildPageFunction: () {},
-                )),
-        GetPage(
-            name: '/coupleexplorerscreen', page: () => CoupleExplorerScreen()),
-        GetPage(
-            name: '/createapostscreen',
-            page: () => CreateAPostScreen(resetPageFunction: () {})),
-        GetPage(name: '/generatecodescreen', page: () => GenerateCodeScreen()),
-        GetPage(
-            name: '/largerpreviewscreen',
-            page: () => LargerPreviewScreen(
-                  imageurl: "",
-                  myImage: false,
-                  postId: 000,
-                  resetPage: () {},
-                )),
-        GetPage(name: '/inputcodescreen', page: () => InputCodeScreen()),
-        GetPage(
-            name: '/comments',
-            page: () => CommentScreen(
-                  postId: 000,
-                  couple: const {},
-                  updateCommentCount: () {},
-                )),
-        GetPage(name: '/listview', page: () => ListAdmirersScreen()),
-        GetPage(
-            name: '/editprofilepicturescreen',
-            page: () => EditProfilePictureScreen(
-                  currentProfilePicture: "",
-                  reloadProfilePage: () {},
-                )),
+      routes: {
+        "/mainScreen": (context) => MainScreen(desiredPageIndex: 0),
+        "/splashScreen": (context) => const SplashScreen(),
+        "/signInScreen": (context) => SignInScreen(),
+      },
+      // routes: [
+      //   GetPage(name: '/signupscreen', page: () => SignUpScreen()),
+      //   GetPage(
+      //       name: '/usernamecreatescreen', page: () => UsernameCreateScreen()),
+      //   GetPage(name: '/splashscreen', page: () => const SplashScreen()),
+      //   GetPage(name: '/signinscreen', page: () => SignInScreen()),
+      //   GetPage(
+      //       name: '/mainscreen',
+      //       page: () => MainScreen(
+      //             desiredPageIndex: 0,
+      //           )),
+      //   GetPage(
+      //       name: '/myprofilescreen',
+      //       page: () => MyProfile(
+      //             scaffoldKey: GlobalKey(),
+      //             reloadPosts: () {},
+      //           )),
+      //   GetPage(
+      //       name: '/coupleprofilescreen',
+      //       page: () => CoupleProfileScreen(
+      //             couple: const {},
+      //             isAdmired: RxBool(false),
+      //             rebuildPageFunction: () {},
+      //           )),
+      //   GetPage(
+      //       name: '/coupleexplorerscreen', page: () => CoupleExplorerScreen()),
+      //   GetPage(
+      //       name: '/createapostscreen',
+      //       page: () => CreateAPostScreen(resetPageFunction: () {})),
+      //   GetPage(name: '/generatecodescreen', page: () => GenerateCodeScreen()),
+      //   GetPage(
+      //       name: '/largerpreviewscreen',
+      //       page: () => LargerPreviewScreen(
+      //             imageurl: "",
+      //             myImage: false,
+      //             postId: 000,
+      //             resetPage: () {},
+      //           )),
+      //   GetPage(name: '/inputcodescreen', page: () => InputCodeScreen()),
+      //   GetPage(
+      //       name: '/comments',
+      //       page: () => CommentScreen(
+      //             postId: 000,
+      //             couple: const {},
+      //             updateCommentCount: () {},
+      //           )),
+      //   GetPage(name: '/listview', page: () => ListAdmirersScreen()),
+      //   GetPage(
+      //       name: '/editprofilepicturescreen',
+      //       page: () => EditProfilePictureScreen(
+      //             currentProfilePicture: "",
+      //             reloadProfilePage: () {},
+      //           )),
 
-        // testing page:
-        GetPage(name: '/testPage', page: () => MyWidget()),
-      ],
-      initialRoute: '/splashscreen',
+      //   // testing page:
+      //   GetPage(name: '/testPage', page: () => MyWidget()),
+      initialRoute: '/splashScreen',
     );
   }
 }
