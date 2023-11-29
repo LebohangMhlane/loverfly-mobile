@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/mainscreen/mainscreen.dart';
-import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/utils/pageutils.dart';
+import 'package:provider/provider.dart';
 import 'authenticationapi.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -16,23 +16,25 @@ class SignInScreen extends StatelessWidget {
   final RxBool signingIn = RxBool(false);
 
   void processFormData(context) async {
+    final auth = AuthenticationAPI();
     try {
       String username = _usernameTextController.text.trim();
       String password = _passwordTextController.text.trim();
       if (username != "" && password != "") {
-        var tokenResponse = await AuthenticationAPI()
-            .getAndCacheAPIToken(username: username, password: password);
+        var tokenResponse = await auth.getAndCacheAPIToken(
+            username: username, password: password);
         if (tokenResponse.containsKey("token") &&
             tokenResponse["token"] != "") {
-          // Get.offAll(() => MainScreen(desiredPageIndex: 0));
           Navigator.of(context).pushReplacementNamed("/mainScreen");
         } else {
-          signInResponse.value = tokenResponse["error_info"];
+          context
+              .read<SignInScreenProvider>()
+              .updateSignInResponse(tokenResponse["error_info"]);
           signingIn.value = false;
         }
       }
     } catch (e) {
-      signingIn.value = false;
+      context.read<SignInScreenProvider>().updateSignInStatus(false);
       SnackBars().displaySnackBar(
           "Something went wrong. We're looking into it!", () => null, context);
     }
@@ -133,7 +135,9 @@ class SignInScreen extends StatelessWidget {
                 child: TextFormField(
                   style: const TextStyle(fontSize: 13.0),
                   onChanged: (value) {
-                    signInResponse.value = "";
+                    context
+                        .read<SignInScreenProvider>()
+                        .updateSignInResponse("");
                   },
                   controller: _usernameTextController,
                   decoration: const InputDecoration(
@@ -175,7 +179,9 @@ class SignInScreen extends StatelessWidget {
                   obscureText: true,
                   style: const TextStyle(fontSize: 13.0),
                   onChanged: (value) {
-                    signInResponse.value = "";
+                    context
+                        .read<SignInScreenProvider>()
+                        .updateSignInResponse("");
                   },
                   controller: _passwordTextController,
                   decoration: const InputDecoration(
@@ -185,54 +191,56 @@ class SignInScreen extends StatelessWidget {
                 )),
 
             // sign in error:
-            Obx(
-              () => signInResponse.value == ""
-                  ? const SizedBox(
-                      height: 20.0,
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(
-                          top: 15.0, left: 30.0, right: 30.0, bottom: 15.0),
-                      child: Center(
-                          child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 12.0),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: signInResponse.value,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w300)),
-                            ]),
-                      )),
-                    ),
-            ),
+            context.watch<SignInScreenProvider>().signInResponse == ""
+                ? const SizedBox(
+                    height: 20.0,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.only(
+                        top: 15.0, left: 30.0, right: 30.0, bottom: 15.0),
+                    child: Center(
+                        child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          style: const TextStyle(
+                              color: Colors.red, fontSize: 12.0),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: context
+                                    .watch<SignInScreenProvider>()
+                                    .signInResponse,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w300)),
+                          ]),
+                    )),
+                  ),
 
             // log in button:
-            Obx(
-              () => CustomButton(
-                buttonlabel: signingIn.value ? "Signing in..." : "Sign in",
-                fontWeight: FontWeight.w300,
-                buttoncolor: Colors.purple,
-                borderradius: 10.0,
-                leftmargin: 60.0,
-                rightmargin: 60.0,
-                onpressedfunction: () {
-                  FocusScope.of(context).unfocus();
-                  if (_usernameTextController.text != "" &&
-                      _passwordTextController.text != "") {
-                    signingIn.value = true;
-                    processFormData(context);
-                  }
-                },
-              ),
+            CustomButton(
+              buttonlabel: context.watch<SignInScreenProvider>().signingIn
+                  ? "Signing in..."
+                  : "Sign in",
+              fontWeight: FontWeight.w300,
+              buttoncolor: Colors.purple,
+              borderradius: 10.0,
+              leftmargin: 60.0,
+              rightmargin: 60.0,
+              onpressedfunction: () {
+                FocusScope.of(context).unfocus();
+                if (_usernameTextController.text != "" &&
+                    _passwordTextController.text != "") {
+                  context
+                      .read<SignInScreenProvider>()
+                      .updateSigningInStatus(true);
+                  processFormData(context);
+                }
+              },
             ),
 
             // register description text:
             GestureDetector(
               onTap: () {
-                Get.to(() => SignUpScreen());
+                Navigator.of(context).pushNamed("/signUpScreen");
               },
               child: Padding(
                 padding: const EdgeInsets.only(

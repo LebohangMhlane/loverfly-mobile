@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
+import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
 import 'package:loverfly/utils/pageutils.dart';
+import 'package:provider/provider.dart';
 import '../coupleexplorerscreen/viewcoupleexplorer.dart';
 import '../myprofilescreen/myprofilescreen.dart';
 import 'api/mainscreenapi.dart';
@@ -104,16 +106,6 @@ class MainScreen extends StatelessWidget {
             ? pageData["pagination_link"] = response["pagination_link"]
             : pageData["pagination_link"] = null;
       });
-    }
-  }
-
-  void logOut(context) async {
-    try {
-      cache.erase();
-      Navigator.of(context).pushReplacementNamed("/signInScreen");
-    } catch (e) {
-      SnackBars().displaySnackBar(
-          "There was an error logging out.", () => null, context);
     }
   }
 
@@ -224,7 +216,19 @@ class MainScreen extends StatelessWidget {
                       buttonlabel: "Log Out",
                       textfontsize: 12.0,
                       onpressedfunction: () {
-                        logOut(context);
+                        try {
+                          cache.erase();
+                          context
+                              .read<SignInScreenProvider>()
+                              .updateSigningInStatus(false);
+                          Navigator.of(context)
+                              .pushReplacementNamed("/signInScreen");
+                        } catch (e) {
+                          SnackBars().displaySnackBar(
+                              "There was an error logging out.",
+                              () => null,
+                              context);
+                        }
                       },
                     ),
                   )

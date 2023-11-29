@@ -511,6 +511,7 @@ class _CouplePostState extends State<CouplePost> {
                         postId: post["id"],
                         couple: couple,
                       ));
+                  Navigator.of(context).pushNamed("/commentScreen");
                 });
               },
               child: Center(
