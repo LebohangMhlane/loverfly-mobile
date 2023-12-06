@@ -51,7 +51,7 @@ class UsernameCreateScreen extends StatelessWidget {
             .getAndCacheAPIToken(username: username, password: password);
         if (tokenResponse.containsKey("token") &&
             tokenResponse["token"] != "") {
-          Get.offAll(() => MainScreen(
+          Get.offAll(() => const MainScreen(
                 desiredPageIndex: 0,
               ));
         }

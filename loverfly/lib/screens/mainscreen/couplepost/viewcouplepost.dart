@@ -8,8 +8,6 @@ import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/utils/utils.dart';
 import 'package:loverfly/userinteractions/admire/admireapi.dart';
 import 'package:loverfly/userinteractions/like/likeapi.dart';
-import '../../commentsscreen/commentsmainscreen.dart';
-import '../../couplescreen/viewcouple.dart';
 
 class CouplePost extends StatefulWidget {
   final Map postdata;
