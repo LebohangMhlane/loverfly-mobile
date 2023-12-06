@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
+import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainscreenprovider.dart';
@@ -10,7 +11,7 @@ import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
 import 'package:provider/provider.dart';
-import 'screens/coupleexplorerscreen/viewcoupleexplorer.dart';
+import 'screens/coupleexplorerscreen/coupleexplorerpage.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
           create: (context) => MainScreenProvider(),
         ),
         ChangeNotifierProvider(create: (context) => UserProfileProvider()),
+        ChangeNotifierProvider(
+          create: (context) => CoupleExplorerPageProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'LoverFly',
@@ -62,61 +66,6 @@ class MyApp extends StatelessWidget {
                 rebuildPageFunction: () {},
               ),
         },
-        // routes: [
-        //   GetPage(name: '/signupscreen', page: () => SignUpScreen()),
-        //   GetPage(
-        //       name: '/usernamecreatescreen', page: () => UsernameCreateScreen()),
-        //   GetPage(name: '/splashscreen', page: () => const SplashScreen()),
-        //   GetPage(name: '/signinscreen', page: () => SignInScreen()),
-        //   GetPage(
-        //       name: '/mainscreen',
-        //       page: () => MainScreen(
-        //           )),
-        //   GetPage(
-        //       name: '/myprofilescreen',
-        //       page: () => MyProfile(
-        //             scaffoldKey: GlobalKey(),
-        //             reloadPosts: () {},
-        //           )),
-        //   GetPage(
-        //       name: '/coupleprofilescreen',
-        //       page: () => CoupleProfileScreen(
-        //             couple: const {},
-        //             isAdmired: RxBool(false),
-        //             rebuildPageFunction: () {},
-        //           )),
-        //   GetPage(
-        //       name: '/coupleexplorerscreen', page: () => CoupleExplorerScreen()),
-        //   GetPage(
-        //       name: '/createapostscreen',
-        //       page: () => CreateAPostScreen(resetPageFunction: () {})),
-        //   GetPage(name: '/generatecodescreen', page: () => GenerateCodeScreen()),
-        //   GetPage(
-        //       name: '/largerpreviewscreen',
-        //       page: () => LargerPreviewScreen(
-        //             imageurl: "",
-        //             myImage: false,
-        //             postId: 000,
-        //             resetPage: () {},
-        //           )),
-        //   GetPage(name: '/inputcodescreen', page: () => InputCodeScreen()),
-        //   GetPage(
-        //       name: '/comments',
-        //       page: () => CommentScreen(
-        //             postId: 000,
-        //             couple: const {},
-        //             updateCommentCount: () {},
-        //           )),
-        //   GetPage(name: '/listview', page: () => ListAdmirersScreen()),
-        //   GetPage(
-        //       name: '/editprofilepicturescreen',
-        //       page: () => EditProfilePictureScreen(
-        //             currentProfilePicture: "",
-        //             reloadProfilePage: () {},
-        //           )),
-
-        //   // testing page:
-        //   GetPage(name: '/testPage', page: () => MyWidget()),
         initialRoute: '/splashScreen',
       ),
     );

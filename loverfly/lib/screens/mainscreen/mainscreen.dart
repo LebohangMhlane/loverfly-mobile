@@ -10,7 +10,7 @@ import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
 import 'package:loverfly/screens/mainscreen/mainscreenprovider.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:provider/provider.dart';
-import '../coupleexplorerscreen/viewcoupleexplorer.dart';
+import '../coupleexplorerscreen/coupleexplorerpage.dart';
 import '../myprofilescreen/myprofilescreen.dart';
 import 'api/mainscreenapi.dart';
 

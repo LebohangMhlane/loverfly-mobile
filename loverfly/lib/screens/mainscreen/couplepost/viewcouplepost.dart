@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/utils/utils.dart';
-import 'package:loverfly/userinteractions/favourite/favouriteapi.dart';
+import 'package:loverfly/userinteractions/admire/admireapi.dart';
 import 'package:loverfly/userinteractions/like/likeapi.dart';
 import '../../commentsscreen/commentsmainscreen.dart';
 import '../../couplescreen/viewcouple.dart';
