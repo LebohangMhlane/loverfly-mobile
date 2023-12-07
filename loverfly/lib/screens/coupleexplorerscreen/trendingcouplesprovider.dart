@@ -4,6 +4,7 @@ import 'package:loverfly/screens/coupleexplorerscreen/api/coupleexplorerapi.dart
 class TrendingCouplePageProvider extends ChangeNotifier {
   List trendingCouples = [];
   List trendingCoupleProviders = [];
+  bool initializationError = false;
 
   TrendingCouplePageProvider() {
     initializeProvider();
@@ -27,6 +28,8 @@ class TrendingCouplePageProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
+      initializationError = true;
+      notifyListeners();
       return;
     }
   }

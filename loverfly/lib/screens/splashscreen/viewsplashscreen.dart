@@ -21,8 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3)).whenComplete(() {
       if (cache.hasData("token") && cache.read("token") != "") {
         if (cache.hasData("user_profile") && cache.read("user_profile") != "") {
-          Navigator.of(context)
-              .pushReplacementNamed("/mainScreen", arguments: {});
+          Navigator.of(context).pushReplacementNamed("/mainPage", arguments: {});
         }
       } else {
         Navigator.of(context).pushReplacementNamed("/signInScreen");

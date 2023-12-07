@@ -9,15 +9,16 @@ Future<Map> getPostsForFeed(nextLink) async {
   var cache = GetStorage();
   // determine if we are triggering pagination:
   Uri url;
-  if (nextLink != null) {
+  if (nextLink != null && nextLink != "") {
     url = Uri.parse(nextLink);
   } else {
     url = Uri.parse(EnvConfig().baseUrl + '/get-posts-for-feed/');
   }
   // make the request:
   try {
-    var response = await http
-        .get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
+    var response = await http.get(url, headers: {
+      'Authorization': 'TOKEN ' + cache.read('token')!
+    });
     if (response.statusCode == 200) {
       apiResponse = jsonDecode(response.body);
     } else {

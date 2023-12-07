@@ -12,7 +12,7 @@ class TrendingCouples extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => TrendingCouplePageProvider(),
       child: Consumer<TrendingCouplePageProvider>(
-        builder: (context, provider, child) => SizedBox(
+        builder: (context, trendingCouplePageProvider, child) => SizedBox(
         height: 100.0,
         child: Column(
           children: [
@@ -36,17 +36,21 @@ class TrendingCouples extends StatelessWidget {
         
             // list of trending couples:
             Expanded(
-              child: Padding(
+              child: Padding( 
                 padding: const EdgeInsets.only(top: 10.0, bottom: 5.0, right: 10.0, left: 10.0),
                 child: SizedBox(
-                  child: ListView.builder(
+                  child: trendingCouplePageProvider.initializationError ?
+                  const Center(child: Text("Failed to load trending couples",
+                  style: TextStyle(color: Colors.purple, fontWeight: FontWeight.w300, fontSize: 12.5),
+                  ),) :
+                  ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: provider.trendingCoupleProviders.length,
+                  itemCount: trendingCouplePageProvider.trendingCoupleProviders.length,
                   itemBuilder: (context, index) {
                     return ChangeNotifierProvider<TrendingCoupleProvider>.value(
-                      value: provider.trendingCoupleProviders[index],
+                      value: trendingCouplePageProvider.trendingCoupleProviders[index],
                       child: Consumer<TrendingCoupleProvider>(
-                        builder: (context, trendingListItemProvider, child) => GestureDetector(
+                        builder: (context, trendingCoupleProvider, child) => GestureDetector(
                             onTap: () {},
                             child: SizedBox(
                                 width: 110.0,
@@ -66,15 +70,14 @@ class TrendingCouples extends StatelessWidget {
                                                         Radius.circular(
                                                             100.0)),
                                                 color: Colors.purple),
-                                            padding:
-                                                const EdgeInsets.all(1.0),
+                                            padding: const EdgeInsets.all(1.0),
                                             width: 50.0,
                                             height: 50.0,
                                             child: CircleAvatar(
                                               backgroundImage:
-                                              trendingListItemProvider.partnerOneProfilePic == "" ?
+                                              trendingCoupleProvider.partnerOneProfilePic == "" ?
                                               const NetworkImage("https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg") :
-                                              NetworkImage(trendingListItemProvider.partnerOneProfilePic),
+                                              NetworkImage(trendingCoupleProvider.partnerOneProfilePic),
                                               radius: 40.0,
                                             ),
                                           ),
@@ -100,9 +103,9 @@ class TrendingCouples extends StatelessWidget {
                                             height: 50.0,
                                             child: CircleAvatar(
                                               backgroundImage: 
-                                              trendingListItemProvider.partnerOneProfilePic == "" ?
+                                              trendingCoupleProvider.partnerOneProfilePic == "" ?
                                               const NetworkImage("https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg") :
-                                              NetworkImage(trendingListItemProvider.partnerTwoProfilePic),
+                                              NetworkImage(trendingCoupleProvider.partnerTwoProfilePic),
                                               radius: 25.0,
                                             ),
                                           ),

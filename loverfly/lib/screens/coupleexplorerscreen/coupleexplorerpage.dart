@@ -12,7 +12,7 @@ class CoupleExplorerScreen extends StatelessWidget {
   }) : super(key: key);
 
   final Rx<List> trendingCouplesList = Rx([]);
-  final bool canPop = false;
+  final bool canPop = true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +38,18 @@ class CoupleExplorerScreen extends StatelessWidget {
           Column(
             children: [
             const TrendingCouples(),
+            provider.initializationError ? 
+            const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50.0),
+                  child: Text("An error has occurred. Sorry for the inconvenience.",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 12.0,
+                        color: Colors.purple),
+                  ),
+                ),
+              ) :
             provider.coupleCardProviders.isEmpty ? 
             const Center(
                 child: Padding(

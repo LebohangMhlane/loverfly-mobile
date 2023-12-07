@@ -5,8 +5,8 @@ import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
-import 'package:loverfly/screens/mainscreen/mainscreen.dart';
-import 'package:loverfly/screens/mainscreen/mainscreenprovider.dart';
+import 'package:loverfly/screens/mainscreen/mainpage.dart';
+import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
 import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SignInScreenProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => MainScreenProvider(),
+          create: (context) => MainPageProvider(),
         ),
         ChangeNotifierProvider(create: (context) => UserProfileProvider()),
         ChangeNotifierProvider(
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: {
-          "/mainScreen": (context) => const MainScreen(
+          "/mainPage": (context) => const MainPage(
                 desiredPageIndex: 0,
               ),
           "/splashScreen": (context) => const SplashScreen(),

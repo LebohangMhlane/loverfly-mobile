@@ -7,6 +7,7 @@ class CoupleExplorerPageProvider extends ChangeNotifier {
   List trendingCoupleList = [];
   List coupleCardProviders = [];
   bool pageLoading = true;
+  bool initializationError = false;
 
   CoupleExplorerPageProvider(){
     initalizeProvider();
@@ -20,32 +21,30 @@ class CoupleExplorerPageProvider extends ChangeNotifier {
       pageLoading = false;
       notifyListeners();
     } catch (e){
-      // TODO: give more details to these errors later:
+      pageLoading = false;
+      initializationError = true;
+      notifyListeners();
       return;
     }
   }
 
   void createProvidersForCouples(coupleList){
-    try{
-      for (int i = 0; i < coupleList.length; i++) {
-        Map couple = coupleList[i]["couple"];
-        coupleCardProviders.add(CoupleCardProvider(
-          coupleId: couple["id"],
-          isAdmired: coupleList[i]["isAdmired"],
-          partnerOneUsername: couple["partner_one"]["username"],
-          partnerTwoUsername: couple["partner_two"]["username"],
-          partnerOneProfilePic: couple["partner_one"]["profile_picture"] != null ? 
-          couple["partner_one"]["profile_picture"]["image"] != "" ? 
-          couple["partner_one"]["profile_picture"]["image"] : "" : "",
-          partnerTwoProfilePic: coupleList[i]["couple"]["partner_two"]["profile_picture"] != null ? 
-          couple["partner_two"]["profile_picture"]["image"] != "" ? 
-          couple["partner_two"]["profile_picture"]["image"] : "" : "",
-          admirersCount: couple["admirers"]
-          )
-        );
-      }
-    } catch (e) {
-      return;
+    for (int i = 0; i < coupleList.length; i++) {
+      Map couple = coupleList[i]["couple"];
+      coupleCardProviders.add(CoupleCardProvider(
+        coupleId: couple["id"],
+        isAdmired: coupleList[i]["isAdmired"],
+        partnerOneUsername: couple["partner_one"]["username"],
+        partnerTwoUsername: couple["partner_two"]["username"],
+        partnerOneProfilePic: couple["partner_one"]["profile_picture"] != null ? 
+        couple["partner_one"]["profile_picture"]["image"] != "" ? 
+        couple["partner_one"]["profile_picture"]["image"] : "" : "",
+        partnerTwoProfilePic: coupleList[i]["couple"]["partner_two"]["profile_picture"] != null ? 
+        couple["partner_two"]["profile_picture"]["image"] != "" ? 
+        couple["partner_two"]["profile_picture"]["image"] : "" : "",
+        admirersCount: couple["admirers"]
+        )
+      );
     }
   }
 
