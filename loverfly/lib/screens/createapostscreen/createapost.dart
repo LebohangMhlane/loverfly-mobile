@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:loverfly/screens/mainscreen/mainpage.dart';
 
 import '../../components/custombutton.dart';
 import '../../utils/pageutils.dart';
-import '../mainscreen/mainscreen.dart';
 import 'api/createapostscreenapi.dart';
 
 class CreateAPostScreen extends StatefulWidget {
@@ -118,7 +118,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     if (coupleDataUpdated && postUploadedToServerDatabase) {
       SnackBars().displaySnackBar("Memory Shared Successfully", () {}, context);
       savingpost.value = false;
-      Get.offAll(() => const MainScreen(
+      Get.offAll(() => const MainPage(
             desiredPageIndex: 0,
           ));
     }
@@ -145,7 +145,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => Future(() {
-        Get.off(() => const MainScreen(
+        Get.off(() => const MainPage(
               desiredPageIndex: 0,
             ));
         return true;
