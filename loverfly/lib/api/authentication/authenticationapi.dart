@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:loverfly/utils/pageutils.dart';
 import '../../environmentconfig/envconfig.dart';
 
 class AuthenticationAPI {
@@ -49,27 +48,23 @@ class AuthenticationAPI {
   }
 
   // gets and returns a user profile and couple data from the database:
-  Future<Map> getUserProfileAndCoupleData(token, context) async {
+  Future<Map> getUserProfileAndCoupleData(token) async {
     Map userProfileAndCoupleData = {};
-    var url =
-        Uri.parse(EnvConfig().baseUrl + '/get-user-profile-and-couple-data/');
+    var url = Uri.parse(EnvConfig().baseUrl + '/get-user-profile-and-couple-data/');
     try {
       var response = await http.post(
         url,
         headers: {'Authorization': 'TOKEN ' + token.toString()},
       );
-
       if (response.statusCode == 200) {
         userProfileAndCoupleData = jsonDecode(response.body);
       } else {
-        userProfileAndCoupleData = {'error': true};
+        userProfileAndCoupleData = {};
       }
     } on SocketException {
-      SnackBars()
-          .displaySnackBar("Failed to connect to server", () => null, context);
+      return {};
     } catch (e) {
-      SnackBars().displaySnackBar(
-          "Something went wrong. We're looking into it.", () => null, context);
+      return {};
     }
     return userProfileAndCoupleData;
   }

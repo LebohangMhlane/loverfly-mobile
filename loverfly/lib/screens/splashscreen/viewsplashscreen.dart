@@ -13,8 +13,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    super.initState();
     runappchecks();
+    super.initState();
   }
 
   void runappchecks() async {
@@ -22,6 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
       if (cache.hasData("token") && cache.read("token") != "") {
         if (cache.hasData("user_profile") && cache.read("user_profile") != "") {
           Navigator.of(context).pushReplacementNamed("/mainPage", arguments: {});
+        } else {
+          cache.erase();
+          Navigator.of(context).pushReplacementNamed("/signInScreen");
         }
       } else {
         Navigator.of(context).pushReplacementNamed("/signInScreen");

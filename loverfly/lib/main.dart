@@ -53,9 +53,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         routes: {
-          "/mainPage": (context) => const MainPage(
-                desiredPageIndex: 0,
-              ),
+          "/mainPage": (context) => const MainPage(),
           "/splashScreen": (context) => const SplashScreen(),
           "/signInScreen": (context) => SignInScreen(),
           "/signUpScreen": (context) => SignUpScreen(),

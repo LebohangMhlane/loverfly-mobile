@@ -118,9 +118,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     if (coupleDataUpdated && postUploadedToServerDatabase) {
       SnackBars().displaySnackBar("Memory Shared Successfully", () {}, context);
       savingpost.value = false;
-      Get.offAll(() => const MainPage(
-            desiredPageIndex: 0,
-          ));
+      Get.offAll(() => const MainPage());
     }
   }
 
@@ -145,9 +143,7 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => Future(() {
-        Get.off(() => const MainPage(
-              desiredPageIndex: 0,
-            ));
+        Get.off(() => const MainPage());
         return true;
       }),
       child: Builder(

@@ -6,13 +6,10 @@ import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> getCouplePosts(coupleid) async {
   Map responseMap = {};
-  // get cache:
   var cache = GetStorage();
   try {
-    var url = Uri.parse(
-        EnvConfig().baseUrl + '/get-couple-posts/' + coupleid.toString() + '/');
-    var response = await http
-        .get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
+    var url = Uri.parse(EnvConfig().baseUrl + '/get-couple-posts/' + coupleid.toString() + '/');
+    var response = await http.get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
     if (response.statusCode == 200) {
       responseMap = jsonDecode(response.body);
     } else {

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:loverfly/screens/mainscreen/api/mainscreenapi.dart';
 
 class MainPageProvider extends ChangeNotifier {
-  Map mainScreenData = {
+  Map mainPageData = {
     "posts": [],
     "postsFound": false,
     "pageIndex": 0,
     "paginationLink": "",
     "couple": {},
     "showExitModal": false,
-    "loadingPage": true
+    "loadingPage": true,
   };
 
   bool initializationError = false;
@@ -34,24 +34,21 @@ class MainPageProvider extends ChangeNotifier {
   void createProvidersForPosts(posts) {
     for (int i = 0; i < posts.length; i++) {
       Map post = posts[i];
-      postProviders.add(
-        PostProvider(
-          post: post["post"],
-          coupleAdmired: post["isAdmired"],
-          isLiked: post["isLiked"],
-          couple: post["couple"],
-          commentCount: post["comments_count"],
-          isMyPost: post["is_my_post"],
-        )
-      );
+      postProviders.add(PostProvider(
+        post: post["post"],
+        coupleAdmired: post["isAdmired"],
+        isLiked: post["isLiked"],
+        couple: post["couple"],
+        commentCount: post["comments_count"],
+        isMyPost: post["is_my_post"],
+      ));
     }
   }
 
-  void updateValue(String key, dynamic value) {
-    mainScreenData[key] = value;
+  void updateAValue(String key, dynamic value) {
+    mainPageData[key] = value;
     notifyListeners();
   }
-
 }
 
 class PostProvider extends ChangeNotifier {
@@ -62,14 +59,13 @@ class PostProvider extends ChangeNotifier {
   Map post = {};
   Map couple = {};
 
-  PostProvider(
-      {
-      required this.post,
-      required this.isLiked,
-      required this.coupleAdmired,
-      required this.commentCount,
-      required this.isMyPost,
-      required this.couple,
-      });
-      
+  PostProvider({
+    required this.post,
+    required this.isLiked,
+    required this.coupleAdmired,
+    required this.commentCount,
+    required this.isMyPost,
+    required this.couple,
+  });
 }
+
