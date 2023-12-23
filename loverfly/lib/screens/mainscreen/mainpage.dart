@@ -353,12 +353,12 @@ class _MainPageState extends State<MainPage> {
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
 
-              // trigger pagination when at the end of the list:
-              if (index + 1 == mainPageProviderWatch.mainPageData["posts"].length) {
-                if (mainPageProviderWatch.mainPageData["paginationLink"] != "") {
-                  addMorePosts(context);
+                // trigger pagination when at the end of the list:
+                if (index + 1 == mainPageProviderWatch.mainPageData["posts"].length) {
+                  if (mainPageProviderWatch.mainPageData["paginationLink"] != "") {
+                    addMorePosts(context);
+                  }
                 }
-              }
 
               // couple post:
               return CouplePost(

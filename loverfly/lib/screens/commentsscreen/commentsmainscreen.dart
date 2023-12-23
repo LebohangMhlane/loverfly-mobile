@@ -229,7 +229,6 @@ class _CommentScreenState extends State<CommentScreen> {
                                     () => LargerPreviewScreen(
                                           imageurl: partnerOneProfilePicture,
                                           myImage: false,
-                                          resetPage: () {},
                                           postId: 000,
                                         ),
                                     opaque: false),
@@ -276,7 +275,6 @@ class _CommentScreenState extends State<CommentScreen> {
                                           imageurl: partnerTwoProfilePicture,
                                           myImage: false,
                                           postId: 000,
-                                          resetPage: () {},
                                         ),
                                     opaque: false),
                                 child: Container(

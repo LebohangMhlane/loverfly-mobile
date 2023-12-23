@@ -1,11 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_key_in_widget_constructors, avoid_print, avoid_unnecessary_containers, sized_box_for_whitespace
-import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/screens/listviewscreens/listadmirers/listadmirersscreen.dart';
 import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
 import 'package:provider/provider.dart';
@@ -54,32 +51,28 @@ class MyProfile extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Row(
                                 children: [
+
                                   // sexual orientation:
                                   Expanded(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          // heart icon:
-                                          Container(
-                                            padding: const EdgeInsets.only(
-                                                top: 5.0, bottom: 5.0),
-                                            child: Image.asset(
-                                              'assets/placeholders/logo.jpeg',
-                                              width: 30.0,
-                                            ),
-                                          ),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
 
-                                          // orientation text:
-                                          Container(
-                                              padding: const EdgeInsets.only(
-                                                  top: 5.0, bottom: 5.0),
-                                              child: const Text("Straight",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w300))),
-                                        ],
+                                      // heart icon:
+                                      Container(
+                                        padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                        child: Image.asset('assets/placeholders/logo.jpeg', width: 30.0,),
                                       ),
+
+                                      // orientation text:
+                                      Container(
+                                      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                      child: const Text("Straight", style: TextStyle(fontWeight: FontWeight.w300))
+                                      ),
+
+                                      ],
+                                    ),
                                     ),
                                   ),
 
@@ -455,8 +448,6 @@ class MyProfile extends StatelessWidget {
                                                             LargerPreviewScreen(
                                                             imageurl: userProfileProvider.partnerProfilePicture,
                                                             myImage: false,
-                                                            resetPage:
-                                                                () {},
                                                             postId: 000));
                                                       },
                                                       child: Container(
@@ -1072,60 +1063,52 @@ class MyProfile extends StatelessWidget {
                             const SizedBox(height: 0.0),
 
                             // ROW 6
-                            userProfileProvider.couple["has_posts"] == false ||
-                                    userProfileProvider.couple.isEmpty
-                                ? Container()
-                                :
-                                // POST GALLERY
-                                Container(
-                                    child: Column(
-                                      children: [
-                                        // IMAGE LIST
-                                        Container(
-                                            height: 450.0,
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.all(2.0),
-                                              height: 30.0,
-                                              child: GridView.builder(
-                                                itemCount: 0,
-                                                gridDelegate:
-                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 2),
-                                                itemBuilder: (context, index) {
-                                                  return TextButton(
-                                                    style: TextButton.styleFrom(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(0)),
-                                                    onPressed: () {
-                                                      Get.to(() => LargerPreviewScreen(
-                                                                imageurl: "",
-                                                                myImage: true,
-                                                                postId: 0,
-                                                                resetPage: () {},
-                                                              ),
-                                                          opaque: false);
-                                                    },
-                                                    child: Container(
-                                                        margin: const EdgeInsets
-                                                            .all(2.0),
-                                                        decoration: const BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: CachedNetworkImageProvider(
-                                                                  ""),
-                                                              fit:
-                                                                  BoxFit.cover),
-                                                        )),
-                                                  );
-                                                },
-                                              ),
-                                            )),
+                            userProfileProvider.couple["has_posts"] == false || 
+                            userProfileProvider.couple.isEmpty ? 
+                            Container() :
+                            // POST GALLERY
+                            Container(
+                            child: Column(
+                            children: [
+                            // IMAGE LIST
+                            Container(
+                            height: 450.0,
+                            child: Container(
+                            padding: const EdgeInsets.all(2.0),
+                            height: 30.0,
+                            child: GridView.builder(
+                              itemCount: userProfileProvider.couplePosts.length,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                              itemBuilder: (context, index) {
+                              return TextButton(style: TextButton.styleFrom(padding: const EdgeInsets.all(0)),
+                              onPressed: () {
+                                String image = userProfileProvider.couplePosts[index]["post_image"];
+                                Navigator.of(context).pushNamed("/largerPreviewScreen", 
+                                arguments: {
+                                  "imageurl": image,
+                                  "myImage": false,
+                                  "postid": 000,
+                                }
+                                );
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(2.0),
+                                decoration: BoxDecoration(
+                                image: DecorationImage(
+                                image: NetworkImage(
+                                userProfileProvider.couplePosts[index]["post_image"]
+                                ),
+                                fit: BoxFit.cover),
+                                )),
+                                  );
+                                  },
+                                ),
+                            )),
 
-                                        const SizedBox(height: 10.0),
-                                      ],
-                                    ),
-                                  ),
+                              const SizedBox(height: 10.0),
+                            ],
+                          ),
+                        ),
                           ],
                         ),
                       ),

@@ -5,6 +5,7 @@ import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
+import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainpage.dart';
 import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
 import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
                 isAdmired: RxBool(false),
                 rebuildPageFunction: () {},
               ),
+          "/largerPreviewScreen": (context) => LargerPreviewScreen(
+            imageurl: "", myImage: false, postId: 000
+          )
         },
         initialRoute: '/splashScreen',
       ),

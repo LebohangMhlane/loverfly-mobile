@@ -132,7 +132,6 @@ class _CouplePostState extends State<CouplePost> {
                                   () => LargerPreviewScreen(
                                         imageurl: partnerOneProfilePicture,
                                         myImage: false,
-                                        resetPage: () {},
                                         postId: 000,
                                       ),
                                   opaque: false),
@@ -166,7 +165,6 @@ class _CouplePostState extends State<CouplePost> {
                                         imageurl: partnerTwoProfilePicture,
                                         myImage: false,
                                         postId: 000,
-                                        resetPage: () {},
                                       ),
                                   opaque: false),
                               child: Container(
@@ -276,7 +274,6 @@ class _CouplePostState extends State<CouplePost> {
                             imageurl: post["post_image"] ?? "",
                             myImage: false,
                             postId: 000,
-                            resetPage: () {},
                           ),
                       opaque: false),
                   child: Container(

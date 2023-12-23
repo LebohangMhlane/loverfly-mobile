@@ -13,6 +13,7 @@ class UserProfileProvider extends ChangeNotifier {
   String partnerProfilePicture = "https://www.omgtb.com/wp-content/uploads/2021/04/620_NC4xNjE-1-scaled.jpg";
   bool showRelationshipStageOptions = false;
   List couplePosts = [];
+  bool hasPosts = false;
 
   UserProfileProvider() {
     initializeProvider();
@@ -20,7 +21,6 @@ class UserProfileProvider extends ChangeNotifier {
 
   void initializeProvider() async {
     updateUserProfile(true);
-    updateCouplePosts(couple["id"]);
   }
 
   void updateUserProfile(bool notify) async {
@@ -35,7 +35,7 @@ class UserProfileProvider extends ChangeNotifier {
         cache.write("user_couple", jsonEncode(couple));
         profilePicture = userProfile["profile_picture"]["image"]; // TODO: set the default image in the back end so we don't have to do checks for null here:
         partnerProfilePicture = userProfile["my_partner"]["profile_picture"]["image"];
-        await updateCouplePosts(couple["id"]);
+        hasPosts = await updateCouplePosts(couple["id"]);
         loadingPage = false;
         notify ? notifyListeners() : null;
       }
@@ -47,8 +47,11 @@ class UserProfileProvider extends ChangeNotifier {
 
   Future<bool> updateCouplePosts(coupleId) async {
     Map response = await getCouplePosts(coupleId);
-    print(response);
-    return true;
+    if(response["api_response"] != "failed"){
+      couplePosts = response["couple_posts"];
+      return true;
+    }
+    return false;
   }
 
 }

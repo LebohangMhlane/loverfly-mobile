@@ -187,7 +187,6 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                                           imageurl:
                                                               partnerOneProfilePicture,
                                                           myImage: false,
-                                                          resetPage: () {},
                                                           postId: 000,
                                                         ),
                                                     opaque: false),
@@ -225,7 +224,6 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                                               partnerTwoProfilePicture,
                                                           myImage: false,
                                                           postId: 000,
-                                                          resetPage: () {},
                                                         ),
                                                     opaque: false),
                                                 child: Container(
@@ -535,7 +533,6 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                                       ["post_image"],
                                                   myImage: false,
                                                   postId: 000,
-                                                  resetPage: () {},
                                                 ),
                                             opaque: false);
                                       },
