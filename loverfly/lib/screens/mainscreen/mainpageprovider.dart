@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loverfly/screens/mainscreen/api/mainscreenapi.dart';
+import 'package:loverfly/utils/utils.dart';
 
 class MainPageProvider extends ChangeNotifier {
   Map mainPageData = {
@@ -36,10 +37,9 @@ class MainPageProvider extends ChangeNotifier {
       Map post = posts[i];
       postProviders.add(PostProvider(
         post: post["post"],
-        coupleAdmired: post["isAdmired"],
+        isAdmired: post["isAdmired"],
         isLiked: post["isLiked"],
         couple: post["couple"],
-        commentCount: post["comments_count"],
         isMyPost: post["is_my_post"],
       ));
     }
@@ -52,20 +52,40 @@ class MainPageProvider extends ChangeNotifier {
 }
 
 class PostProvider extends ChangeNotifier {
+  String profilePictureOne = "";
+  String profilePictureTwo = "";
+  String userNameOne = "";
+  String userNameTwo = "";
+  String admirerCount = "";
+  String postImage = "";
+  Map date = {};
+  String likeCount = "";
+  bool isAdmired = false;
   bool isLiked = false;
-  bool coupleAdmired = false;
-  int commentCount = 0;
+  String commentCount = "";
   bool isMyPost = false;
-  Map post = {};
   Map couple = {};
+  Map post = {};
 
   PostProvider({
-    required this.post,
     required this.isLiked,
-    required this.coupleAdmired,
-    required this.commentCount,
     required this.isMyPost,
     required this.couple,
-  });
+    required this.post,
+    required this.isAdmired,
+  }) {
+    try {
+      profilePictureOne = couple["partner_one"]["profile_picture"]["image"];
+      profilePictureTwo = couple["partner_two"]["profile_picture"]["image"];
+      userNameOne = couple["partner_one"]["username"];
+      userNameTwo = couple["partner_two"]["username"];
+      admirerCount = couple["admirers"].toString();
+      likeCount = post["likes"].toString();
+      postImage = post["post_image"];
+      commentCount = post["comments_count"].toString();
+      date = DateFunctions().convertdate(post["time_posted"]);
+    } catch (e) {
+      null;
+    }
+  }
 }
-

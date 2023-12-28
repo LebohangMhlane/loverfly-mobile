@@ -361,11 +361,15 @@ class _MainPageState extends State<MainPage> {
                 }
 
               // couple post:
-              return CouplePost(
-              postIndex: index,
-              updateCommentCountMain: (){},
-              postdata: mainPageProviderWatch.mainPageData["posts"][index],
-              rebuildPageFunction: preparePageData,
+              return ChangeNotifierProvider<PostProvider>.value(
+                value: mainPageProvider.postProviders[index],
+                // TODO: fix couple comment counts:
+                child: CouplePost(
+                postIndex: index,
+                updateCommentCountMain: (){},
+                postdata: mainPageProviderWatch.mainPageData["posts"][index],
+                rebuildPageFunction: preparePageData,
+                ),
               );
 
               })

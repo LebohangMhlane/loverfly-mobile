@@ -183,12 +183,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                               left: 50.0,
                                               child: GestureDetector(
                                                 onTap: () => Get.to(
-                                                    () => LargerPreviewScreen(
-                                                          imageurl:
-                                                              partnerOneProfilePicture,
-                                                          myImage: false,
-                                                          postId: 000,
-                                                        ),
+                                                    () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
                                                     opaque: false),
                                                 child: Container(
                                                   alignment: Alignment.center,
@@ -219,12 +214,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                               top: 25.0,
                                               child: GestureDetector(
                                                 onTap: () => Get.to(
-                                                    () => LargerPreviewScreen(
-                                                          imageurl:
-                                                              partnerTwoProfilePicture,
-                                                          myImage: false,
-                                                          postId: 000,
-                                                        ),
+                                                    () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
                                                     opaque: false),
                                                 child: Container(
                                                   alignment: Alignment.center,
@@ -528,12 +518,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                           padding: const EdgeInsets.all(0)),
                                       onPressed: () {
                                         Get.to(
-                                            () => LargerPreviewScreen(
-                                                  imageurl: posts[index]
-                                                      ["post_image"],
-                                                  myImage: false,
-                                                  postId: 000,
-                                                ),
+                                            () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
                                             opaque: false);
                                       },
                                       child: Container(

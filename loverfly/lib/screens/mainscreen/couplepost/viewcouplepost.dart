@@ -4,10 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/screens/commentsscreen/commentsmainscreen.dart';
+import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
+import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
 import 'package:loverfly/utils/utils.dart';
 import 'package:loverfly/userinteractions/admire/admireapi.dart';
 import 'package:loverfly/userinteractions/like/likeapi.dart';
+import 'package:provider/provider.dart';
 
 class CouplePost extends StatefulWidget {
   final Map postdata;
@@ -101,438 +105,428 @@ class _CouplePostState extends State<CouplePost> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Consumer<PostProvider>(
+      builder: (context, postProvider, child) => Container(
         child: Column(children: [
-      // profile picture and admirers section:
-      GestureDetector(
-        onTap: () {
-          Navigator.of(context).pushNamed("/viewCoupleScreen", arguments: {
-            "couple": widget.postdata["couple"],
-            "isAdmired": RxBool(widget.postdata["isAdmired"]),
-            "rebuildPageFunction": widget.rebuildPageFunction,
-          });
-        },
-        child: SizedBox(
-          height: 100.0,
-          child: Row(
-            children: [
-              // profile pictures:
-              SizedBox(
-                  width: 121.0,
-                  height: 110.0,
-                  child: Center(
-                    child: Container(
-                      child: Stack(
-                        children: [
-                          // couple partner 1 profile picture:
-                          Positioned(
-                            left: 60.0,
-                            child: GestureDetector(
-                              onTap: () => Get.to(
-                                  () => LargerPreviewScreen(
-                                        imageurl: partnerOneProfilePicture,
-                                        myImage: false,
-                                        postId: 000,
-                                      ),
-                                  opaque: false),
-                              child: Container(
-                                alignment: Alignment.center,
+        // profile picture and admirers section:
+        GestureDetector(
+          onTap: () {
+            Get.to(() => CoupleProfileScreen(
+              couple: couple, 
+              isAdmired: isAdmired, 
+              rebuildPageFunction: (){},
+            ));
+          },
+          child: SizedBox(
+            height: 100.0,
+            child: Row(
+              children: [
+                // profile pictures:
+                SizedBox(
+                    width: 121.0,
+                    height: 110.0,
+                    child: Center(
+                      child: Container(
+                        child: Stack(
+                          children: [
+                            // couple partner 1 profile picture:
+                            Positioned(
+                              left: 60.0,
+                              child: GestureDetector(
+                                onTap: () => Get.to(
+                                    () => LargerPreviewScreen(
+                                      image: postProvider.profilePictureOne,
+                                      postId: 000,
+                                      isMyPost: false,
+                                    ),
+                                    opaque: false),
                                 child: Container(
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0)),
-                                      color: Colors.purple),
-                                  padding: const EdgeInsets.all(1.0),
-                                  width: 60.0,
-                                  height: 60.0,
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(partnerOneProfilePicture),
-                                    radius: 25.0,
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(100.0)),
+                                        color: Colors.purple),
+                                    padding: const EdgeInsets.all(1.0),
+                                    width: 60.0,
+                                    height: 60.0,
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(postProvider.profilePictureOne),
+                                      radius: 25.0,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-
-                          // couple partner 2 profile picture:
-                          Positioned(
-                            top: 25.0,
-                            right: 40.0,
-                            child: GestureDetector(
-                              onTap: () => Get.to(
-                                  () => LargerPreviewScreen(
-                                        imageurl: partnerTwoProfilePicture,
-                                        myImage: false,
-                                        postId: 000,
-                                      ),
-                                  opaque: false),
-                              child: Container(
-                                alignment: Alignment.center,
+      
+                            // couple partner 2 profile picture:
+                            Positioned(
+                              top: 25.0,
+                              right: 40.0,
+                              child: GestureDetector(
+                                onTap: () => Get.to(
+                                    () => LargerPreviewScreen(
+                                          image: postProvider.profilePictureTwo,
+                                          postId: 000,
+                                          isMyPost: false,
+                                        ),
+                                    opaque: false),
                                 child: Container(
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0)),
-                                      color: Colors.purple),
-                                  padding: const EdgeInsets.all(1.0),
-                                  width: 60.0,
-                                  height: 60.0,
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(partnerTwoProfilePicture),
-                                    radius: 25.0,
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(100.0)),
+                                        color: Colors.purple),
+                                    padding: const EdgeInsets.all(1.0),
+                                    width: 60.0,
+                                    height: 60.0,
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(postProvider.profilePictureTwo),
+                                      radius: 25.0,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )),
-
-              // usernames:
-              Expanded(
-                flex: 6,
-                child: SizedBox(
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
-                        child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: couple["partner_one"]["username"],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.black)),
-                            const TextSpan(
-                                text: " + ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.black)),
-                            TextSpan(
-                                text: couple["partner_two"]["username"],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.black)),
-                          ]),
-                        ),
-                      )),
-                ),
-              ),
-
-              // top right corner admirers section:
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20.0,
+                    )),
+      
+                // usernames:
+                Expanded(
+                  flex: 6,
+                  child: SizedBox(
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 40.0),
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: postProvider.userNameOne,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black)),
+                              const TextSpan(
+                                  text: " + ",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black)),
+                              TextSpan(
+                                  text: postProvider.userNameTwo,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black)),
+                            ]),
+                          ),
+                        )),
                   ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                          child: SvgPicture.asset(
-                        'assets/svg/heart.svg',
-                        width: 14.0,
-                        colorFilter: const ColorFilter.mode(
-                            Colors.lightBlue, BlendMode.srcIn),
-                      )),
-                      Obx(
-                        () => Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: Text(
-                              couple["admirers"].toString(),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w300),
+                ),
+      
+                // top right corner admirers section:
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20.0,
+                    ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: SvgPicture.asset(
+                          'assets/svg/heart.svg',
+                          width: 14.0,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.lightBlue, BlendMode.srcIn),
+                        )),
+                        Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                postProvider.admirerCount.toString(),
+                                style:
+                                    const TextStyle(fontWeight: FontWeight.w300),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-
-              const Expanded(child: SizedBox()),
-            ],
+      
+                const Expanded(child: SizedBox()),
+              ],
+            ),
           ),
         ),
-      ),
-
-      // posted image:
-      Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              // image:
-              GestureDetector(
-                  onTap: () => Get.to(
-                      () => LargerPreviewScreen(
-                            imageurl: post["post_image"] ?? "",
-                            myImage: false,
-                            postId: 000,
-                          ),
-                      opaque: false),
-                  child: Container(
-                    height: 350.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: Transform.scale(
-                        scale: 1.0,
-                        child: FadeInImage.assetNetwork(
-                          fadeInDuration: const Duration(milliseconds: 250),
-                          fit: BoxFit.cover,
-                          placeholder: "assets/placeholders/loadingImage.gif",
-                          image: post["post_image"] ?? "",
-                        )),
-                  )),
-
-              // caption
-              Opacity(
-                opacity: 0.6,
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Colors.black,
-                  width: MediaQuery.of(context).size.width,
-                  height: 60.0,
-                  margin: const EdgeInsets.only(bottom: 40.0),
-                  child: Text(post['caption'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                      )),
-                ),
-              ),
-
-              // time, date and verification
-              Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.only(
-                      bottom: 12.0, right: 15.0, left: 15.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          child: Text(
-                            postdate['dayofweek'].toString() +
-                                ' - ' +
-                                postdate['date'],
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 12.0),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Text(
-                          couple['is_verified'] ? 'Verified' : '',
-                          style: const TextStyle(
-                            color: Colors.purple,
-                            shadows: <Shadow>[
-                              Shadow(
-                                blurRadius: 3.0,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-            ],
-          )
-        ],
-      ),
-
-      // user interactions:
-      Container(
-        height: 80.0,
-        child: Row(children: [
-          // admire couple button:
-          !widget.postdata["is_my_post"]
-              ? Container(
-                  width: 130.0,
-                  child: TextButton(
-                    onPressed: () async {
-                      await admire(couple["id"], widget.postdata["isAdmired"])
-                          .then((response) {
-                        widget.postdata["isAdmired"] = response["admired"];
-                        isAdmired.value = response["admired"];
-                        if (response["admired"] == false) {
-                          if (admirers.value != 0) {
-                            admirers.value--;
-                            widget.postdata["couple"]["admirers"]--;
-                          }
-                        } else {
-                          admirers.value++;
-                          widget.postdata["couple"]["admirers"]++;
-                        }
-                      });
-                    },
+      
+        // posted image:
+        Column(
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                // image:
+                GestureDetector(
+                    onTap: () => Get.to(
+                        () => LargerPreviewScreen(
+                            image: post["post_image"],
+                            postId: post["id"],
+                            isMyPost: widget.postdata["is_my_post"]),
+                        opaque: false),
                     child: Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: const Text(
-                              "Admire",
-                              style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black),
+                      height: 350.0,
+                      width: MediaQuery.of(context).size.width,
+                      child: Transform.scale(
+                          scale: 1.0,
+                          child: FadeInImage.assetNetwork(
+                            fadeInDuration: const Duration(milliseconds: 250),
+                            fit: BoxFit.cover,
+                            placeholder: "assets/placeholders/loadingImage.gif",
+                            image: post["post_image"] ?? "",
+                          )),
+                    )),
+      
+                // caption
+                Opacity(
+                  opacity: 0.6,
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: Colors.black,
+                    width: MediaQuery.of(context).size.width,
+                    height: 60.0,
+                    margin: const EdgeInsets.only(bottom: 40.0),
+                    child: Text(post['caption'],
+                        style: const TextStyle(
+                          color: Colors.white,
+                        )),
+                  ),
+                ),
+      
+                // time, date and verification
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: const EdgeInsets.only(
+                        bottom: 12.0, right: 15.0, left: 15.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: Text(
+                              postdate['dayofweek'].toString() +
+                                  ' - ' +
+                                  postdate['date'],
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12.0),
                             ),
                           ),
-                          Obx(
-                            () => Container(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: isAdmired.value
-                                  ?
-                                  // admired heart icon
-                                  Transform(
-                                      child: Image.asset(
-                                        'assets/placeholders/logo.jpeg',
+                        ),
+                        Container(
+                          child: Text(
+                            couple['is_verified'] ? 'Verified' : '',
+                            style: const TextStyle(
+                              color: Colors.purple,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  blurRadius: 3.0,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ],
+            )
+          ],
+        ),
+      
+        // user interactions:
+        Container(
+          height: 80.0,
+          child: Row(children: [
+            // admire couple button:
+            !widget.postdata["is_my_post"]
+                ? Container(
+                    width: 130.0,
+                    child: TextButton(
+                      onPressed: () async {
+                        await admire(couple["id"], widget.postdata["isAdmired"])
+                            .then((response) {
+                          widget.postdata["isAdmired"] = response["admired"];
+                          isAdmired.value = response["admired"];
+                          if (response["admired"] == false) {
+                            if (admirers.value != 0) {
+                              admirers.value--;
+                              widget.postdata["couple"]["admirers"]--;
+                            }
+                          } else {
+                            admirers.value++;
+                            widget.postdata["couple"]["admirers"]++;
+                          }
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: const Text(
+                                "Admire",
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.black),
+                              ),
+                            ),
+                            Container(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: isAdmired.value
+                                    ?
+                                    // admired heart icon
+                                    Transform(
+                                        child: Image.asset(
+                                          'assets/placeholders/logo.jpeg',
+                                          width: 20.0,
+                                        ),
+                                        alignment: Alignment.center,
+                                        transform: Matrix4.rotationZ(6.0),
+                                      )
+                                    :
+                                    // unAdmired heart heart icon
+                                    SvgPicture.asset(
+                                        'assets/svg/heart.svg',
+                                        alignment: Alignment.center,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.grey, BlendMode.srcIn),
                                         width: 20.0,
                                       ),
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.rotationZ(6.0),
-                                    )
-                                  :
-                                  // unAdmired heart heart icon
-                                  SvgPicture.asset(
-                                      'assets/svg/heart.svg',
-                                      alignment: Alignment.center,
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.grey, BlendMode.srcIn),
-                                      width: 20.0,
-                                    ),
-                            ),
-                          )
-                        ],
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              : Container(),
-
-          const VerticalDivider(
-            indent: 26.0,
-            endIndent: 26.0,
-            thickness: 1.0,
-            width: 1.0,
-          ),
-
-          // like button
-          !widget.postdata["is_my_post"]
-              ? Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      likePost(post["id"], isliked.value).then((value) {
-                        widget.postdata["isliked"] = value;
-                        isliked.value = value;
-                        if (value == false) {
-                          likecount.value != 0 ? likecount.value-- : null;
-                          widget.postdata["post"]["likes"]--;
-                        } else {
-                          likecount.value++;
-                          widget.postdata["post"]["likes"]++;
-                        }
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // like text
-                          Container(
-                            child: const Text(
-                              "Like",
-                              style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black),
-                            ),
-                          ),
-
-                          // like icon
-                          Obx(
-                            () => Container(
-                                padding: const EdgeInsets.only(
-                                    left: 6.0, bottom: 3.0),
-                                child: Icon(
-                                  Icons.thumb_up,
-                                  color: isliked.value
-                                      ? Colors.purple[800]
-                                      : Colors.grey[300],
-                                  size: 17.0,
-                                )),
-                          ),
-
-                          // like count
-                          Container(
-                            padding: const EdgeInsets.only(left: 7.0),
-                            child: Obx(
-                              () => Text(
-                                likecount.value.toString(),
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 11.0),
+                  )
+                : Container(),
+      
+            const VerticalDivider(
+              indent: 26.0,
+              endIndent: 26.0,
+              thickness: 1.0,
+              width: 1.0,
+            ),
+      
+            // like button
+            !widget.postdata["is_my_post"]
+                ? Expanded(
+                    child: TextButton(
+                      onPressed: () {
+                        likePost(post["id"], isliked.value).then((value) {
+                          widget.postdata["isliked"] = value;
+                          isliked.value = value;
+                          if (value == false) {
+                            likecount.value != 0 ? likecount.value-- : null;
+                            widget.postdata["post"]["likes"]--;
+                          } else {
+                            likecount.value++;
+                            widget.postdata["post"]["likes"]++;
+                          }
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // like text
+                            Container(
+                              child: const Text(
+                                "Like",
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.black),
                               ),
                             ),
-                          )
-                        ],
+      
+                            // like icon
+                            Container(
+                            padding: const EdgeInsets.only(
+                            left: 6.0, bottom: 3.0),
+                            child: Icon(
+                              Icons.thumb_up,
+                              color: postProvider.isLiked
+                              ? Colors.purple[800]
+                              : Colors.grey[300],
+                              size: 17.0,
+                            )),
+      
+                            // like count
+                            Container(
+                              padding: const EdgeInsets.only(left: 7.0),
+                              child: Text(
+                                postProvider.likeCount,
+                                style: const TextStyle(color: Colors.black, fontSize: 11.0),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
+                  )
+                : Container(),
+      
+            const VerticalDivider(
+              indent: 26.0,
+              endIndent: 26.0,
+              thickness: 1.0,
+              width: 1.0,
+            ),
+      
+            // comment button:
+            Expanded(
+              child: TextButton(
+                onPressed: () async {
+                  await Future.delayed(const Duration(milliseconds: 500))
+                      .then((value) {
+                    print(value);
+                    Get.to(() => CommentScreen(
+                      updateCommentCount: updateCommentCount,
+                      postId: post["id"],
+                      couple: couple,
+                    ));
+                  });
+                },
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: Icon(
+                          Icons.comment,
+                          color: Colors.purple[800],
+                          size: 20.0,
+                        ),
+                      ),
+                      Text(
+                        postProvider.commentCount,
+                        style:
+                            const TextStyle(fontSize: 11.0, color: Colors.black),
+                      ),
+                    ],
                   ),
-                )
-              : Container(),
-
-          const VerticalDivider(
-            indent: 26.0,
-            endIndent: 26.0,
-            thickness: 1.0,
-            width: 1.0,
-          ),
-
-          // comment button:
-          Expanded(
-            child: TextButton(
-              onPressed: () async {
-                await Future.delayed(const Duration(milliseconds: 500))
-                    .then((value) {
-                  print(value);
-                  // Get.to(() => CommentScreen(
-                  //       updateCommentCount: updateCommentCount,
-                  //       postId: post["id"],
-                  //       couple: couple,
-                  //     ));
-                  Navigator.of(context).pushNamed("/commentScreen");
-                });
-              },
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5.0),
-                      child: Icon(
-                        Icons.comment,
-                        color: Colors.purple[800],
-                        size: 20.0,
-                      ),
-                    ),
-                    Text(
-                      commentCount.value.toString(),
-                      style:
-                          const TextStyle(fontSize: 11.0, color: Colors.black),
-                    ),
-                  ],
                 ),
               ),
             ),
-          ),
-        ]),
-      ),
-    ]));
+          ]),
+        ),
+      ])),
+    );
   }
 }

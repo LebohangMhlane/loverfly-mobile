@@ -226,11 +226,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               left: 60.0,
                               child: GestureDetector(
                                 onTap: () => Get.to(
-                                    () => LargerPreviewScreen(
-                                          imageurl: partnerOneProfilePicture,
-                                          myImage: false,
-                                          postId: 000,
-                                        ),
+                                    () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
                                     opaque: false),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -271,11 +267,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               right: 40.0,
                               child: GestureDetector(
                                 onTap: () => Get.to(
-                                    () => LargerPreviewScreen(
-                                          imageurl: partnerTwoProfilePicture,
-                                          myImage: false,
-                                          postId: 000,
-                                        ),
+                                    () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
                                     opaque: false),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -288,21 +280,11 @@ class _CommentScreenState extends State<CommentScreen> {
                                     width: 60.0,
                                     height: 60.0,
                                     child: CircleAvatar(
-                                      backgroundImage: widget
-                                                      .couple["partner_two"]
-                                                  ["profile_picture"] !=
-                                              null
-                                          ? widget.couple["partner_two"]
-                                                          ["profile_picture"]
-                                                      ["image"] !=
-                                                  ""
-                                              ? NetworkImage(widget
-                                                      .couple["partner_two"]
-                                                  ["profile_picture"]["image"])
-                                              : const NetworkImage(
-                                                  "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
-                                          : const NetworkImage(
-                                              "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
+                                      backgroundImage: widget.couple["partner_two"]["profile_picture"] != null ? 
+                                      widget.couple["partner_two"]["profile_picture"]["image"] != "" ? 
+                                      NetworkImage(widget.couple["partner_two"]["profile_picture"]["image"]) : 
+                                      const NetworkImage("http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
+                                      : const NetworkImage("http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png"),
                                       radius: 25.0,
                                     ),
                                   ),

@@ -47,27 +47,29 @@ class MyApp extends StatelessWidget {
           create: (context) => CoupleExplorerPageProvider(),
         )
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'LoverFly',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        routes: {
-          "/mainPage": (context) => const MainPage(),
-          "/splashScreen": (context) => const SplashScreen(),
-          "/signInScreen": (context) => SignInScreen(),
-          "/signUpScreen": (context) => SignUpScreen(),
-          "/coupleExplorerScreen": (context) => CoupleExplorerScreen(),
-          "/viewCoupleScreen": (context) => CoupleProfileScreen(
-                couple: const {},
-                isAdmired: RxBool(false),
-                rebuildPageFunction: () {},
-              ),
-          "/largerPreviewScreen": (context) => LargerPreviewScreen(
-            imageurl: "", myImage: false, postId: 000
-          )
-        },
+        getPages: [
+          GetPage(name: "/mainPage", page: () => const MainPage()),
+          GetPage(name: "/splashScreen", page: () => const SplashScreen()),
+          GetPage(name: "/signInScreen", page: () => SignInScreen()),
+          GetPage(name: "/signUpScreen", page: () => SignUpScreen()),
+          GetPage(name: "/coupleExplorerScreen", page: () => CoupleExplorerScreen()),
+          GetPage(name: "/viewCoupleScreen", page: () => CoupleProfileScreen(
+            couple: const {},
+            isAdmired: RxBool(false),
+            rebuildPageFunction: () {},
+          ),),
+          GetPage(name: "/largerPreviewScreen", page: () => const LargerPreviewScreen(
+            image: "", 
+            postId: 000, 
+            isMyPost: false,
+          )),
+        ],
         initialRoute: '/splashScreen',
       ),
     );
