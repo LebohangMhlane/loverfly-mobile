@@ -89,3 +89,10 @@ class PostProvider extends ChangeNotifier {
     }
   }
 }
+
+class DrawerStateProvider extends ChangeNotifier {
+
+  final bool _drawerOpen = true;
+  bool get isDrawerOpen => _drawerOpen;
+
+}

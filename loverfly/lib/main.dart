@@ -5,10 +5,12 @@ import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
+import 'package:loverfly/screens/couplescreen/viewcoupleprovider.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainpage.dart';
 import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
 import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
+import 'package:loverfly/screens/myprofilescreen/myprofilescreen.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserProfileProvider()),
         ChangeNotifierProvider(
           create: (context) => CoupleExplorerPageProvider(),
-        )
+        ),
       ],
       child: GetMaterialApp(
         title: 'LoverFly',
@@ -59,9 +61,10 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/signInScreen", page: () => SignInScreen()),
           GetPage(name: "/signUpScreen", page: () => SignUpScreen()),
           GetPage(name: "/coupleExplorerScreen", page: () => CoupleExplorerScreen()),
+          GetPage(name: "/myProfileScreen", page: () => MyProfile(openDrawer: (){},)),
           GetPage(name: "/viewCoupleScreen", page: () => CoupleProfileScreen(
-            couple: const {},
-            isAdmired: RxBool(false),
+            coupleId: 000,
+            isAdmired: false,
             rebuildPageFunction: () {},
           ),),
           GetPage(name: "/largerPreviewScreen", page: () => const LargerPreviewScreen(

@@ -112,8 +112,8 @@ class _CouplePostState extends State<CouplePost> {
         GestureDetector(
           onTap: () {
             Get.to(() => CoupleProfileScreen(
-              couple: couple, 
-              isAdmired: isAdmired, 
+              coupleId: couple["id"], 
+              isAdmired: false, 
               rebuildPageFunction: (){},
             ));
           },

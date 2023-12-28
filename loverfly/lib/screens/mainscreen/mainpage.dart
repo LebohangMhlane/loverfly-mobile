@@ -6,11 +6,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/mainscreen/couplepost/viewcouplepost.dart';
+import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerpage.dart';
+import 'package:loverfly/screens/mainscreen/couplepost/couplepost.dart';
 import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:provider/provider.dart';
-import '../coupleexplorerscreen/coupleexplorerpage.dart';
 import '../myprofilescreen/myprofilescreen.dart';
 import 'api/mainscreenapi.dart';
 
@@ -90,6 +90,10 @@ class _MainPageState extends State<MainPage> {
     //         : pageData["pagination_link"] = null;
     //   });
     // }
+  }
+
+  void openDrawer(){
+    _scaffoldKey.currentState!.openDrawer();
   }
 
   void logOut(context) async {
@@ -182,45 +186,51 @@ class _MainPageState extends State<MainPage> {
           width: 250.0,
   
           // drawer menu
-          child: Drawer(
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 100.0,
+          child: ChangeNotifierProvider<DrawerStateProvider>(
+            create: (context) => DrawerStateProvider(),
+            child: Consumer<DrawerStateProvider>(
+              builder: (context, drawerStateProvider, child) => Drawer(
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 100.0,
+                    ),
+                
+                    // couple explorer button
+                    SizedBox(
+                      height: 60.0,
+                      child: CustomButton(
+                        buttonlabel: 'Couple Explorer',
+                        textfontsize: 12.0,
+                        buttoncolor: Colors.purple,
+                        onpressedfunction: () {
+                          _scaffoldKey.currentState!.closeDrawer();
+                          Get.to(()=>CoupleExplorerScreen());
+                        },
+                      ),
+                    ),
+                
+                    // button 2
+                    Container(
+                      height: 60.0,
+                      color: Colors.blue,
+                    ),
+                
+                    //  button 3
+                    Container(
+                      height: 60.0,
+                      color: Colors.yellow,
+                      child: CustomButton(
+                        buttonlabel: "Log Out",
+                        textfontsize: 12.0,
+                        onpressedfunction: () {
+                          logOut(context);
+                        },
+                      ),
+                    )
+                  ],
                 ),
-  
-                // couple explorer button
-                SizedBox(
-                  height: 60.0,
-                  child: CustomButton(
-                    buttonlabel: 'Couple Explorer',
-                    textfontsize: 12.0,
-                    buttoncolor: Colors.purple,
-                    onpressedfunction: () {
-                      Navigator.of(context).pushNamed("/coupleExplorer");
-                    },
-                  ),
-                ),
-  
-                // button 2
-                Container(
-                  height: 60.0,
-                  color: Colors.blue,
-                ),
-  
-                //  button 3
-                Container(
-                  height: 60.0,
-                  color: Colors.yellow,
-                  child: CustomButton(
-                    buttonlabel: "Log Out",
-                    textfontsize: 12.0,
-                    onpressedfunction: () {
-                      logOut(context);
-                    },
-                  ),
-                )
-              ],
+              ),
             ),
           ),
         
@@ -338,8 +348,7 @@ class _MainPageState extends State<MainPage> {
                   borderradius: 20.0,
                   buttoncolor: Colors.purple,
                   onpressedfunction: () {
-                  Get.to(() =>
-                  CoupleExplorerScreen());
+                  Get.to(() => CoupleExplorerScreen());
                   },
                 ),
                 ),
@@ -376,7 +385,7 @@ class _MainPageState extends State<MainPage> {
               ),
 
             // user profile page:
-            MyProfile(),
+            MyProfile(openDrawer: (){ openDrawer(); }),
           ],
           ))),
         ])),

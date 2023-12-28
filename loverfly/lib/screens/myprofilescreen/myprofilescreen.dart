@@ -8,18 +8,31 @@ import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
 import 'package:provider/provider.dart';
 import '../../utils/pageutils.dart';
 
-class MyProfile extends StatelessWidget {
-  MyProfile({
-    Key? key,
+class MyProfile extends StatefulWidget {
+
+  final Function openDrawer;
+
+  const MyProfile({
+    required this.openDrawer,
   });
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  State<MyProfile> createState() => _MyProfileState();
+}
+
+class _MyProfileState extends State<MyProfile> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<UserProfileProvider>(
-        builder: (context, userProfileProvider, child) => userProfileProvider.loadingPage ?
+      builder: (context, userProfileProvider, child) => userProfileProvider.loadingPage ?
+
         // loading icon:
         Center(
             child: Container(
@@ -280,12 +293,12 @@ class MyProfile extends StatelessWidget {
                               ),
                             ),
 
-                            // EDITIONAL OPTIONS BUTTON:
+                            // Addtional options button:
                             Expanded(
                               flex: 1,
                               child: TextButton(
                                 onPressed: () {
-                                  _scaffoldKey.currentState?.openDrawer();
+                                  widget.openDrawer();
                                 },
                                 child: const Column(
                                     mainAxisAlignment:

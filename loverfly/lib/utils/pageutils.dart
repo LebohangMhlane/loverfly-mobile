@@ -5,8 +5,8 @@ import '../screens/couplescreen/viewcouple.dart';
 class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {
     Get.to(() => CoupleProfileScreen(
-          couple: coupledata["couple"],
-          isAdmired: RxBool(coupledata["isAdmired"]),
+          coupleId: coupledata["id"],
+          isAdmired: coupledata["isAdmired"],
           rebuildPageFunction: rebuildCoupleExplorer,
         ));
   }

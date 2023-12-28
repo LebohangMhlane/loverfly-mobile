@@ -16,6 +16,7 @@ Future<Map> getPostsForFeed(nextLink) async {
   }
   // make the request:
   try {
+    print(cache.read("token"));
     var response = await http.get(url, headers: {
       'Authorization': 'TOKEN ' + cache.read('token')!
     });
