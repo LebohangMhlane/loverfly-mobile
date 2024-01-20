@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/screens/couplescreen/viewcoupleprovider.dart';
-import 'package:loverfly/userinteractions/admire/admireapi.dart';
-import 'package:loverfly/utils/pageutils.dart';
+import 'package:loverfly/screens/couplescreen/coupleprofileprovider.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
 import '../../components/custombutton.dart';
 import '../largerpreviewscreen/largerpreviewscreen.dart';
 
 class CoupleProfileScreen extends StatefulWidget {
-  final int coupleId;
-  final bool isAdmired;
-  final Function rebuildPageFunction;
 
-  const CoupleProfileScreen(
-      {Key? key,
-      required this.coupleId,
-      required this.isAdmired,
-      required this.rebuildPageFunction})
-      : super(key: key);
+  final Map couple;
+  final int coupleId;
+
+  const CoupleProfileScreen({
+    Key? key,
+    required this.couple,
+    required this.coupleId,
+    })
+    : super(key: key);
 
   @override
   State<CoupleProfileScreen> createState() => _CoupleProfileScreenState();
@@ -33,17 +31,17 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
   }
 
   void admireCouple(context) async {
-    try {
-      Map response = await admire(widget.coupleId, widget.isAdmired);
-      if (response.containsKey("error_info")) {
-        SnackBars().displaySnackBar(
-            "Something went wrong. We will fix it soon!", () => null, context);
-      } else {
-      }
-    } catch (e) {
-      SnackBars().displaySnackBar(
-          "Something went wrong. We will fix it soon!", () => null, context);
-    }
+    // try {
+    //   Map response = await admire(widget.coupleId, widget.isAdmired);
+    //   if (response.containsKey("error_info")) {
+    //     SnackBars().displaySnackBar(
+    //         "Something went wrong. We will fix it soon!", () => null, context);
+    //   } else {
+    //   }
+    // } catch (e) {
+    //   SnackBars().displaySnackBar(
+    //       "Something went wrong. We will fix it soon!", () => null, context);
+    // }
   }
 
   @override
@@ -51,14 +49,13 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
     return WillPopScope(
       onWillPop: () async {
         Get.back();
-        widget.rebuildPageFunction(true, context);
         return true;
       },
     child: Scaffold(
     appBar: customAppBar(context, ""),
-    body: ChangeNotifierProvider<CoupleProvider>(
-      create: (context) => CoupleProvider(),
-      child: Consumer<CoupleProvider>(
+    body: ChangeNotifierProvider<CoupleProfileProvider>(
+      create: (context)=> CoupleProfileProvider(couple: widget.couple),
+      child: Consumer<CoupleProfileProvider>(
         builder: (context, coupleProvider, child) => coupleProvider.pageLoading ? 
         const Center(
           child: SizedBox(
@@ -240,7 +237,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                       icon: Container(
                                           padding: const EdgeInsets.only(
                                               left: 4.0),
-                                          child: widget.isAdmired
+                                          child: false
                                               ?
                                               // Admire heart icon
                                               Transform(

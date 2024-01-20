@@ -4,11 +4,10 @@ import '../screens/couplescreen/viewcouple.dart';
 
 class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {
-    Get.to(() => CoupleProfileScreen(
-          coupleId: coupledata["id"],
-          isAdmired: coupledata["isAdmired"],
-          rebuildPageFunction: rebuildCoupleExplorer,
-        ));
+    Get.to(() => const CoupleProfileScreen(
+      couple: {},
+      coupleId: 000,
+    ));
   }
 }
 

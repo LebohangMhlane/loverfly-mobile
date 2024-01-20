@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loverfly/api/authentication/authenticationapi.dart';
+import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerpage.dart';
@@ -12,7 +10,6 @@ import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:provider/provider.dart';
 import '../myprofilescreen/myprofilescreen.dart';
-import 'api/mainscreenapi.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({key,}) : super(key: key);
@@ -22,75 +19,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   GetStorage cache = GetStorage();
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late MainPageProvider mainPageProviderRead;
-  late MainPageProvider mainPageProviderWatch;
-
-  void preparePageData(comingFromCouplePage, context) async {
-    try {
-      var auth = AuthenticationAPI();
-      Map response = await auth.getUserProfileAndCoupleData(cache.read("token"));
-      if (response.keys.contains("error") || response.isEmpty) {
-        throw Exception(response["error"]);
-      } else {
-        var userProfile = response["user_profile"];
-        var couple = response["couple"];
-        cache.write("user_profile", jsonEncode(userProfile));
-        cache.write("user_couple", jsonEncode(couple));
-      }
-      preparePostsForFeed();
-    } catch (e) {
-      SnackBars().displaySnackBar(
-          "Something went wrong while loading this page.", () => null, context);
-    }
-  }
-
-  void preparePostsForFeed() async {
-    try {
-      var response = await getPostsForFeed(null);
-      mainPageProviderRead.updateAValue("paginationLink", "");
-      if (response["posts"] != null) {
-        mainPageProviderRead.updateAValue("posts", response["posts"]);
-        var link = response["pagination_link"];
-        link != null
-            ? mainPageProviderRead.updateAValue("paginationLink", link)
-            : mainPageProviderRead.updateAValue("paginationLink", "");
-      } else {
-        mainPageProviderRead.updateAValue("posts", []);
-      }
-      mainPageProviderWatch.mainPageData["posts"].isEmpty
-          ? mainPageProviderRead.updateAValue("postsFound", false)
-          : mainPageProviderRead.updateAValue("postsFound", true);
-      mainPageProviderRead.updateAValue("loadingPage", false);
-    } catch (e) {
-      SnackBars().displaySnackBar(
-          "Something went wrong loading this page", () => null, context);
-    }
-  }
-
-  void addMorePosts(context) async {
-    // var paginationLink = pageData["pagination_link"];
-    // if (paginationLink != "") {
-    //   await getPostsForFeed(paginationLink).then((Map response) {
-    //     if (!response.containsKey("error")) {
-    //       posts.update((val) {
-    //         if (response["posts"].length == 0) {
-    //           pageData["pagination_link"] = "";
-    //         } else {
-    //           val!.addAll(response["posts"]);
-    //         }
-    //       });
-    //     } else {
-    //       SnackBars().displaySnackBar(
-    //           "There was an error adding more posts", () => null, context);
-    //     }
-    //     response["pagination_link"] != null
-    //         ? pageData["pagination_link"] = response["pagination_link"]
-    //         : pageData["pagination_link"] = null;
-    //   });
-    // }
-  }
 
   void openDrawer(){
     _scaffoldKey.currentState!.openDrawer();
@@ -99,7 +28,7 @@ class _MainPageState extends State<MainPage> {
   void logOut(context) async {
     try {
       cache.erase();
-      Navigator.of(context).pushReplacementNamed("/signInScreen");
+      Get.off(()=>SignInScreen());
     } catch (e) {
       SnackBars().displaySnackBar("There was an error logging out.", () => null, context);
     }
@@ -107,14 +36,11 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    preparePageData(false, context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    mainPageProviderRead = context.read<MainPageProvider>();
-    mainPageProviderWatch = context.watch<MainPageProvider>();
     return Consumer<MainPageProvider>(
       builder: (context, mainPageProvider, child) => PopScope(
         onPopInvoked: (canPop) async {
@@ -182,61 +108,55 @@ class _MainPageState extends State<MainPage> {
         },
         child: Scaffold(
         key: _scaffoldKey,
-        drawer: SizedBox(
-          width: 250.0,
-  
-          // drawer menu
-          child: ChangeNotifierProvider<DrawerStateProvider>(
-            create: (context) => DrawerStateProvider(),
-            child: Consumer<DrawerStateProvider>(
-              builder: (context, drawerStateProvider, child) => Drawer(
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 100.0,
-                    ),
-                
-                    // couple explorer button
-                    SizedBox(
-                      height: 60.0,
-                      child: CustomButton(
-                        buttonlabel: 'Couple Explorer',
-                        textfontsize: 12.0,
-                        buttoncolor: Colors.purple,
-                        onpressedfunction: () {
-                          _scaffoldKey.currentState!.closeDrawer();
-                          Get.to(()=>CoupleExplorerScreen());
-                        },
-                      ),
-                    ),
-                
-                    // button 2
-                    Container(
-                      height: 60.0,
-                      color: Colors.blue,
-                    ),
-                
-                    //  button 3
-                    Container(
-                      height: 60.0,
-                      color: Colors.yellow,
-                      child: CustomButton(
-                        buttonlabel: "Log Out",
-                        textfontsize: 12.0,
-                        onpressedfunction: () {
-                          logOut(context);
-                        },
-                      ),
-                    )
-                  ],
-                ),
+        drawer: Container(
+        color: Colors.white,
+        width: 250.0,
+        // drawer menu
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 100.0,
+            ),
+        
+            // couple explorer button
+            SizedBox(
+              height: 60.0,
+              child: CustomButton(
+                buttonlabel: 'Couple Explorer',
+                textfontsize: 12.0,
+                buttoncolor: Colors.purple,
+                onpressedfunction: () async {
+                  await Future.delayed(const Duration(milliseconds:250));
+                  _scaffoldKey.currentState!.closeDrawer();
+                  Get.to(()=>CoupleExplorerScreen());
+                },
               ),
             ),
-          ),
+        
+            // button 2
+            Container(
+              height: 60.0,
+              color: Colors.blue,
+            ),
+        
+            //  button 3
+            Container(
+              height: 60.0,
+              color: Colors.yellow,
+              child: CustomButton(
+                buttonlabel: "Log Out",
+                textfontsize: 12.0,
+                onpressedfunction: () {
+                  logOut(context);
+                },
+              ),
+            )
+          ],
+        ),
         
         ),
         appBar: customAppBar(context, ''),
-        body: mainPageProvider.initializationError ? 
+        body: mainPageProvider.initializationError ?
         Column(
         children: [
         const SizedBox(height: 80.0,),
@@ -294,7 +214,7 @@ class _MainPageState extends State<MainPage> {
 
             // couple posts page:
             Container(
-            child: mainPageProvider.mainPageData["loadingPage"] ?
+            child: mainPageProvider.loadingPage ?
 
               // loading indicator:
               const Center(
@@ -307,7 +227,9 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.purpleAccent,
               ),
               ),
-              ) : mainPageProviderWatch.mainPageData["postsFound"] == false ?
+              ) : 
+              
+              mainPageProvider.postProviders.isEmpty ?
               Column(
               children: [
                 const SizedBox(height: 100.0),
@@ -347,8 +269,9 @@ class _MainPageState extends State<MainPage> {
                   'Couple Explorer',
                   borderradius: 20.0,
                   buttoncolor: Colors.purple,
-                  onpressedfunction: () {
-                  Get.to(() => CoupleExplorerScreen());
+                  onpressedfunction: () async {
+                    await Future.delayed(const Duration(milliseconds:250));
+                    Get.to(() => CoupleExplorerScreen());
                   },
                 ),
                 ),
@@ -358,26 +281,20 @@ class _MainPageState extends State<MainPage> {
 
               // couple post list view:
               ListView.builder(
-              itemCount: mainPageProviderWatch.mainPageData["posts"].length,
+              itemCount: mainPageProvider.postProviders.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
 
                 // trigger pagination when at the end of the list:
-                if (index + 1 == mainPageProviderWatch.mainPageData["posts"].length) {
-                  if (mainPageProviderWatch.mainPageData["paginationLink"] != "") {
-                    addMorePosts(context);
+                if (index + 1 == mainPageProvider.postProviders.length) {
+                  if (mainPageProvider.paginationLink != "") {
                   }
                 }
 
               // couple post:
               return ChangeNotifierProvider<PostProvider>.value(
                 value: mainPageProvider.postProviders[index],
-                // TODO: fix couple comment counts:
-                child: CouplePost(
-                postIndex: index,
-                updateCommentCountMain: (){},
-                postdata: mainPageProviderWatch.mainPageData["posts"][index],
-                rebuildPageFunction: preparePageData,
+                child: const CouplePost(
                 ),
               );
 

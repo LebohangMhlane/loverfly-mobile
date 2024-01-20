@@ -22,14 +22,12 @@ class CoupleCard extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
-      
             const SizedBox(height: 10.0),
-      
+
             // section 1 - usernames:
             Container(
               child: Row(
                 children: [
-      
                   // username 1
                   Expanded(
                     flex: 6,
@@ -43,9 +41,9 @@ class CoupleCard extends StatelessWidget {
                       ),
                     ),
                   ),
-      
+
                   const Center(child: Text(" + ")),
-      
+
                   // username 2
                   Expanded(
                     flex: 6,
@@ -59,21 +57,19 @@ class CoupleCard extends StatelessWidget {
                 ],
               ),
             ),
-      
+
             // section 2 - profile pictures:
             GestureDetector(
               onTap: () {
-                Get.to(() => CoupleProfileScreen(
-                  coupleId: coupleCardProvider.coupleId,
-                  isAdmired: false,
-                  rebuildPageFunction: (){},
-                ));
+                Get.to(() => const CoupleProfileScreen(
+                      couple: {},
+                      coupleId: 000,
+                    ));
               },
               child: SizedBox(
                 height: 150.0,
                 child: Row(
                   children: [
-      
                     // profile picture 1
                     Expanded(
                         flex: 3,
@@ -89,15 +85,19 @@ class CoupleCard extends StatelessWidget {
                               width: 100.0,
                               height: 100.0,
                               child: CircleAvatar(
-                                backgroundImage: coupleCardProvider.partnerOneProfilePic == "" ? 
-                                const NetworkImage("http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png") : 
-                                NetworkImage(coupleCardProvider.partnerOneProfilePic),
+                                backgroundImage: coupleCardProvider
+                                            .partnerOneProfilePic ==
+                                        ""
+                                    ? const NetworkImage(
+                                        "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
+                                    : NetworkImage(coupleCardProvider
+                                        .partnerOneProfilePic),
                                 radius: 25.0,
                               ),
                             ),
                           ),
                         )),
-      
+
                     // follower stats
                     Expanded(
                         child: Container(
@@ -108,16 +108,18 @@ class CoupleCard extends StatelessWidget {
                         color: Colors.white,
                         child: Column(
                           children: [
-      
                             // followers title
                             Container(
-                              child: const Text('Admirers', style: TextStyle(fontSize: 11.0),),
+                              child: const Text(
+                                'Admirers',
+                                style: TextStyle(fontSize: 11.0),
+                              ),
                             ),
-      
+
                             const SizedBox(
                               height: 4.0,
                             ),
-      
+
                             // heart icon
                             Container(
                               child: SvgPicture.asset(
@@ -127,26 +129,25 @@ class CoupleCard extends StatelessWidget {
                                 width: 20.0,
                               ),
                             ),
-      
+
                             const SizedBox(
                               height: 0.0,
                             ),
-      
+
                             // admirer count:
                             Center(
                                 child: Container(
-                                  child: Text(
-                                    coupleCardProvider.admirersCount.toString(),
-                                    style: const TextStyle(fontWeight: FontWeight.w600,)
-                                  ),
-                                )
-                            )
-      
+                              child: Text(
+                                  coupleCardProvider.admirersCount.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                            ))
                           ],
                         ),
                       ),
                     ))),
-      
+
                     // profile picture 2
                     Expanded(
                         flex: 3,
@@ -162,49 +163,59 @@ class CoupleCard extends StatelessWidget {
                               width: 100.0,
                               height: 100.0,
                               child: CircleAvatar(
-                                backgroundImage: coupleCardProvider.partnerTwoProfilePic == "" ? 
-                                const NetworkImage("http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png") : 
-                                NetworkImage(coupleCardProvider.partnerTwoProfilePic),
+                                backgroundImage: coupleCardProvider
+                                            .partnerTwoProfilePic ==
+                                        ""
+                                    ? const NetworkImage(
+                                        "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png")
+                                    : NetworkImage(coupleCardProvider
+                                        .partnerTwoProfilePic),
                                 radius: 25.0,
                               ),
                             ),
                           ),
-                        )
-                    ),
-      
+                        )),
                   ],
                 ),
               ),
             ),
-      
+
             // section 3 - functional buttons:
             SizedBox(
               height: 60.0,
               child: Row(
                 children: [
-                  Expanded(child: SizedBox(
+                  Expanded(
+                      child: SizedBox(
                     child: Center(
                       child: CustomButton(
-                        width: MediaQuery.of(context).size.width,
-                        buttoncolor: Colors.purple,
-                        buttonlabel: 'Admire',
-                        icon: Icon(Icons.star, color: coupleCardProvider.isAdmired ? 
-                        const Color.fromARGB(164, 255, 235, 59) : 
-                        const Color.fromARGB(163, 231, 231, 228)),
-                        onpressedfunction: () async {
-                          if (coupleCardProvider.admiring) {
-                            SnackBars().displaySnackBar("Please wait for the process to finish", (){}, context);
-                          } else {
-                            bool coupleAdmired = await coupleCardProvider.admireOrUnAdmireCouple();
-                            !coupleAdmired ? SnackBars().displaySnackBar("An error has occured", (){}, context) : null;
-                          }
-                        }),
+                          width: MediaQuery.of(context).size.width,
+                          buttoncolor: Colors.purple,
+                          buttonlabel: 'Admire',
+                          icon: Icon(Icons.star,
+                              color: coupleCardProvider.isAdmired
+                                  ? const Color.fromARGB(164, 255, 235, 59)
+                                  : const Color.fromARGB(163, 231, 231, 228)),
+                          onpressedfunction: () async {
+                            if (coupleCardProvider.admiring) {
+                              SnackBars().displaySnackBar(
+                                  "Please wait for the process to finish",
+                                  () {},
+                                  context);
+                            } else {
+                              bool coupleAdmired = await coupleCardProvider
+                                  .admireOrUnAdmireCouple();
+                              !coupleAdmired
+                                  ? SnackBars().displaySnackBar(
+                                      "An error has occured", () {}, context)
+                                  : null;
+                            }
+                          }),
                     ),
                   )),
                 ],
               ),
             ),
-      
           ],
         ),
       ),

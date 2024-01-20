@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_this, avoid_unnecessary_containers, sized_box_for_whitespace, use_key_in_widget_constructors, avoid_print
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -8,22 +7,13 @@ import 'package:loverfly/screens/commentsscreen/commentsmainscreen.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
-import 'package:loverfly/utils/utils.dart';
 import 'package:loverfly/userinteractions/admire/admireapi.dart';
 import 'package:loverfly/userinteractions/like/likeapi.dart';
 import 'package:provider/provider.dart';
 
 class CouplePost extends StatefulWidget {
-  final Map postdata;
-  final Function rebuildPageFunction;
-  final Function updateCommentCountMain;
-  final int postIndex;
-  const CouplePost({
-    required this.postdata,
-    required this.rebuildPageFunction,
-    required this.updateCommentCountMain,
-    required this.postIndex,
-  });
+
+  const CouplePost({ Key? key, });
 
   @override
   State<CouplePost> createState() => _CouplePostState();
@@ -32,74 +22,9 @@ class CouplePost extends StatefulWidget {
 // TODO: remove getx setup in stateful widgets:
 
 class _CouplePostState extends State<CouplePost> {
-  // prepare the data
-  final RxMap post = RxMap({});
-
-  final RxMap couple = RxMap({});
-
-  final Rx<bool> isliked = RxBool(false);
-
-  final RxBool isAdmired = RxBool(false);
-
-  final RxMap postdate = RxMap({});
-
-  final RxInt admirers = RxInt(0);
-
-  final RxInt likecount = RxInt(0);
-
-  final RxInt commentCount = RxInt(0);
-
-  final RxDouble imageHeight = RxDouble(0.0);
-
-  final RxBool pageLoaded = RxBool(false);
-
-  String partnerOneProfilePicture = "";
-
-  String partnerTwoProfilePicture = "";
-
-  // gets the image from aws s3 storage bucket:
-  Future<http.Response> fetchImage(String imageUrl) async {
-    Uri url = Uri.parse(imageUrl);
-    final response = await http.get(url);
-    return response;
-  }
-
-  void preparePageData() {
-    if (!pageLoaded.value) {
-      post.value = widget.postdata["post"];
-      couple.value = widget.postdata["couple"];
-      isliked.value = widget.postdata["isLiked"];
-      isAdmired.value = widget.postdata["isAdmired"];
-      postdate.value = DateFunctions().convertdate(post["time_posted"]);
-      admirers.value = couple["admirers"];
-      likecount.value = post["likes"];
-      commentCount.value = widget.postdata["comments_count"];
-      imageHeight.value = 0.0;
-      pageLoaded.value = true;
-      partnerOneProfilePicture = couple["partner_one"]["profile_picture"] !=
-              null
-          ? couple["partner_one"]["profile_picture"]["image"]
-          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
-      partnerTwoProfilePicture = couple["partner_two"]["profile_picture"] !=
-              null
-          ? couple["partner_two"]["profile_picture"]["image"]
-          : "http://www.buckinghamandcompany.com.au/wp-content/uploads/2016/03/profile-placeholder.png";
-    }
-  }
-
-  // TODO: remember to remove getx:
-  void updateCommentCount(bool increment) {
-    widget.updateCommentCountMain(increment, widget.postIndex);
-    setState(() {
-      increment
-          ? commentCount.value = commentCount.value + 1
-          : commentCount.value = commentCount.value - 1;
-    });
-  }
 
   @override
   void initState() {
-    preparePageData();
     super.initState();
   }
 
@@ -112,9 +37,8 @@ class _CouplePostState extends State<CouplePost> {
         GestureDetector(
           onTap: () {
             Get.to(() => CoupleProfileScreen(
-              coupleId: couple["id"], 
-              isAdmired: false, 
-              rebuildPageFunction: (){},
+              couple: postProvider.couple,
+              coupleId: 000,
             ));
           },
           child: SizedBox(
@@ -135,10 +59,10 @@ class _CouplePostState extends State<CouplePost> {
                               child: GestureDetector(
                                 onTap: () => Get.to(
                                     () => LargerPreviewScreen(
-                                      image: postProvider.profilePictureOne,
-                                      postId: 000,
-                                      isMyPost: false,
-                                    ),
+                                          image: postProvider.profilePictureOne,
+                                          postId: 000,
+                                          isMyPost: false,
+                                        ),
                                     opaque: false),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -151,15 +75,15 @@ class _CouplePostState extends State<CouplePost> {
                                     width: 60.0,
                                     height: 60.0,
                                     child: CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(postProvider.profilePictureOne),
+                                      backgroundImage: NetworkImage(
+                                          postProvider.profilePictureOne),
                                       radius: 25.0,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-      
+
                             // couple partner 2 profile picture:
                             Positioned(
                               top: 25.0,
@@ -183,7 +107,8 @@ class _CouplePostState extends State<CouplePost> {
                                     width: 60.0,
                                     height: 60.0,
                                     child: CircleAvatar(
-                                      backgroundImage: NetworkImage(postProvider.profilePictureTwo),
+                                      backgroundImage: NetworkImage(
+                                          postProvider.profilePictureTwo),
                                       radius: 25.0,
                                     ),
                                   ),
@@ -194,7 +119,7 @@ class _CouplePostState extends State<CouplePost> {
                         ),
                       ),
                     )),
-      
+
                 // usernames:
                 Expanded(
                   flex: 6,
@@ -225,7 +150,7 @@ class _CouplePostState extends State<CouplePost> {
                         )),
                   ),
                 ),
-      
+
                 // top right corner admirers section:
                 Expanded(
                   child: Padding(
@@ -242,27 +167,27 @@ class _CouplePostState extends State<CouplePost> {
                               Colors.lightBlue, BlendMode.srcIn),
                         )),
                         Expanded(
-                            flex: 3,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Text(
-                                postProvider.admirerCount.toString(),
-                                style:
-                                    const TextStyle(fontWeight: FontWeight.w300),
-                              ),
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Text(
+                              postProvider.admirerCount.toString(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
                             ),
                           ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-      
+
                 const Expanded(child: SizedBox()),
               ],
             ),
           ),
         ),
-      
+
         // posted image:
         Column(
           children: [
@@ -273,23 +198,23 @@ class _CouplePostState extends State<CouplePost> {
                 GestureDetector(
                     onTap: () => Get.to(
                         () => LargerPreviewScreen(
-                            image: post["post_image"],
-                            postId: post["id"],
-                            isMyPost: widget.postdata["is_my_post"]),
+                            image: postProvider.postImage,
+                            postId: postProvider.post["post"]["id"],
+                            isMyPost: postProvider.isMyPost),
                         opaque: false),
                     child: Container(
                       height: 350.0,
                       width: MediaQuery.of(context).size.width,
                       child: Transform.scale(
-                          scale: 1.0,
-                          child: FadeInImage.assetNetwork(
-                            fadeInDuration: const Duration(milliseconds: 250),
-                            fit: BoxFit.cover,
-                            placeholder: "assets/placeholders/loadingImage.gif",
-                            image: post["post_image"] ?? "",
-                          )),
+                        scale: 1.0,
+                        child: FadeInImage.assetNetwork(
+                          fadeInDuration: const Duration(milliseconds: 250),
+                          fit: BoxFit.cover,
+                          placeholder: "assets/placeholders/loadingImage.gif",
+                          image: postProvider.post["post"]["post_image"],
+                        )),
                     )),
-      
+
                 // caption
                 Opacity(
                   opacity: 0.6,
@@ -299,13 +224,13 @@ class _CouplePostState extends State<CouplePost> {
                     width: MediaQuery.of(context).size.width,
                     height: 60.0,
                     margin: const EdgeInsets.only(bottom: 40.0),
-                    child: Text(post['caption'],
+                    child: Text(postProvider.post["post"]['caption'],
                         style: const TextStyle(
                           color: Colors.white,
                         )),
                   ),
                 ),
-      
+
                 // time, date and verification
                 Container(
                     alignment: Alignment.bottomCenter,
@@ -316,9 +241,7 @@ class _CouplePostState extends State<CouplePost> {
                         Expanded(
                           child: Container(
                             child: Text(
-                              postdate['dayofweek'].toString() +
-                                  ' - ' +
-                                  postdate['date'],
+                              postProvider.date["normalized"],
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 12.0),
                             ),
@@ -326,7 +249,9 @@ class _CouplePostState extends State<CouplePost> {
                         ),
                         Container(
                           child: Text(
-                            couple['is_verified'] ? 'Verified' : '',
+                            postProvider.couple['is_verified']
+                                ? 'Verified'
+                                : '',
                             style: const TextStyle(
                               color: Colors.purple,
                               shadows: <Shadow>[
@@ -344,31 +269,22 @@ class _CouplePostState extends State<CouplePost> {
             )
           ],
         ),
-      
+
         // user interactions:
         Container(
           height: 80.0,
           child: Row(children: [
             // admire couple button:
-            !widget.postdata["is_my_post"]
+            postProvider.isMyPost
                 ? Container(
                     width: 130.0,
                     child: TextButton(
                       onPressed: () async {
-                        await admire(couple["id"], widget.postdata["isAdmired"])
-                            .then((response) {
-                          widget.postdata["isAdmired"] = response["admired"];
-                          isAdmired.value = response["admired"];
-                          if (response["admired"] == false) {
-                            if (admirers.value != 0) {
-                              admirers.value--;
-                              widget.postdata["couple"]["admirers"]--;
-                            }
-                          } else {
-                            admirers.value++;
-                            widget.postdata["couple"]["admirers"]++;
-                          }
-                        });
+                        Map response = await admire(
+                            postProvider.couple["id"], postProvider.isAdmired);
+                        if (response.containsKey("admired")) {
+                          postProvider.updateIsAdmired(response["admired"]);
+                        }
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -385,58 +301,50 @@ class _CouplePostState extends State<CouplePost> {
                               ),
                             ),
                             Container(
-                                padding: const EdgeInsets.only(left: 4.0),
-                                child: isAdmired.value
-                                    ?
-                                    // admired heart icon
-                                    Transform(
-                                        child: Image.asset(
-                                          'assets/placeholders/logo.jpeg',
-                                          width: 20.0,
-                                        ),
-                                        alignment: Alignment.center,
-                                        transform: Matrix4.rotationZ(6.0),
-                                      )
-                                    :
-                                    // unAdmired heart heart icon
-                                    SvgPicture.asset(
-                                        'assets/svg/heart.svg',
-                                        alignment: Alignment.center,
-                                        colorFilter: const ColorFilter.mode(
-                                            Colors.grey, BlendMode.srcIn),
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: postProvider.isAdmired
+                                  ?
+                                  // admired heart icon
+                                  Transform(
+                                      child: Image.asset(
+                                        'assets/placeholders/logo.jpeg',
                                         width: 20.0,
                                       ),
-                              ),
+                                      alignment: Alignment.center,
+                                      transform: Matrix4.rotationZ(6.0),
+                                    )
+                                  :
+                                  // unAdmired heart heart icon
+                                  SvgPicture.asset(
+                                      'assets/svg/heart.svg',
+                                      alignment: Alignment.center,
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.grey, BlendMode.srcIn),
+                                      width: 20.0,
+                                    ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   )
                 : Container(),
-      
+
             const VerticalDivider(
               indent: 26.0,
               endIndent: 26.0,
               thickness: 1.0,
               width: 1.0,
             ),
-      
+
             // like button
-            !widget.postdata["is_my_post"]
+            postProvider.isMyPost
                 ? Expanded(
                     child: TextButton(
-                      onPressed: () {
-                        likePost(post["id"], isliked.value).then((value) {
-                          widget.postdata["isliked"] = value;
-                          isliked.value = value;
-                          if (value == false) {
-                            likecount.value != 0 ? likecount.value-- : null;
-                            widget.postdata["post"]["likes"]--;
-                          } else {
-                            likecount.value++;
-                            widget.postdata["post"]["likes"]++;
-                          }
-                        });
+                      onPressed: () async {
+                        bool isLiked = await likePost(
+                            postProvider.post["id"], postProvider.isLiked);
+                        postProvider.updateLikes(isLiked);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -453,25 +361,26 @@ class _CouplePostState extends State<CouplePost> {
                                     color: Colors.black),
                               ),
                             ),
-      
+
                             // like icon
                             Container(
-                            padding: const EdgeInsets.only(
-                            left: 6.0, bottom: 3.0),
-                            child: Icon(
-                              Icons.thumb_up,
-                              color: postProvider.isLiked
-                              ? Colors.purple[800]
-                              : Colors.grey[300],
-                              size: 17.0,
-                            )),
-      
+                                padding: const EdgeInsets.only(
+                                    left: 6.0, bottom: 3.0),
+                                child: Icon(
+                                  Icons.thumb_up,
+                                  color: postProvider.isLiked
+                                      ? Colors.purple[800]
+                                      : Colors.grey[300],
+                                  size: 17.0,
+                                )),
+
                             // like count
                             Container(
                               padding: const EdgeInsets.only(left: 7.0),
                               child: Text(
                                 postProvider.likeCount,
-                                style: const TextStyle(color: Colors.black, fontSize: 11.0),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 11.0),
                               ),
                             )
                           ],
@@ -480,25 +389,25 @@ class _CouplePostState extends State<CouplePost> {
                     ),
                   )
                 : Container(),
-      
+
             const VerticalDivider(
               indent: 26.0,
               endIndent: 26.0,
               thickness: 1.0,
               width: 1.0,
             ),
-      
+
             // comment button:
             Expanded(
               child: TextButton(
                 onPressed: () async {
-                  await Future.delayed(const Duration(milliseconds: 500))
+                  await Future.delayed(const Duration(milliseconds: 250))
                       .then((value) {
                     print(value);
                     Get.to(() => CommentScreen(
-                      updateCommentCount: updateCommentCount,
-                      postId: post["id"],
-                      couple: couple,
+                      updateCommentCount: () {},
+                      postId: 000,
+                      couple: const {},
                     ));
                   });
                 },
@@ -516,8 +425,8 @@ class _CouplePostState extends State<CouplePost> {
                       ),
                       Text(
                         postProvider.commentCount,
-                        style:
-                            const TextStyle(fontSize: 11.0, color: Colors.black),
+                        style: const TextStyle(
+                            fontSize: 11.0, color: Colors.black),
                       ),
                     ],
                   ),

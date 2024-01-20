@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/screens/mainscreen/api/mainscreenapi.dart';
 import 'package:loverfly/utils/utils.dart';
 
 class MainPageProvider extends ChangeNotifier {
-  Map mainPageData = {
-    "posts": [],
-    "postsFound": false,
-    "pageIndex": 0,
-    "paginationLink": "",
-    "couple": {},
-    "showExitModal": false,
-    "loadingPage": true,
-  };
-
   bool initializationError = false;
   List posts = [];
   List postProviders = [];
+  String paginationLink = "";
+  bool loadingPage = true;
 
   MainPageProvider() {
     initializeProvider();
@@ -25,29 +18,36 @@ class MainPageProvider extends ChangeNotifier {
     try {
       Map response = await getPostsForFeed("");
       posts = response["posts"];
-      createProvidersForPosts(posts);
+      if (createProvidersForPosts(posts)) {
+        loadingPage = false;
+        notifyListeners();
+      } else {
+        initializationError = true;
+        loadingPage = false;
+        notifyListeners();
+      }
     } catch (e) {
       initializationError = true;
       notifyListeners();
     }
   }
 
-  void createProvidersForPosts(posts) {
-    for (int i = 0; i < posts.length; i++) {
-      Map post = posts[i];
-      postProviders.add(PostProvider(
-        post: post["post"],
-        isAdmired: post["isAdmired"],
-        isLiked: post["isLiked"],
-        couple: post["couple"],
-        isMyPost: post["is_my_post"],
-      ));
+  bool createProvidersForPosts(posts) {
+    try {
+      for (int i = 0; i < posts.length; i++) {
+        Map post = posts[i];
+        postProviders.add(PostProvider(
+          post: post,
+          isAdmired: post["isAdmired"],
+          isLiked: post["isLiked"],
+          couple: post["couple"],
+          isMyPost: post["is_my_post"],
+        ));
+      }
+      return true;
+    } catch (e) {
+      return false;
     }
-  }
-
-  void updateAValue(String key, dynamic value) {
-    mainPageData[key] = value;
-    notifyListeners();
   }
 }
 
@@ -75,24 +75,49 @@ class PostProvider extends ChangeNotifier {
     required this.isAdmired,
   }) {
     try {
-      profilePictureOne = couple["partner_one"]["profile_picture"]["image"];
-      profilePictureTwo = couple["partner_two"]["profile_picture"]["image"];
+      profilePictureOne = couple["partner_one"]["profile_picture"] != null ? 
+      couple["partner_one"]["profile_picture"]["image"] : EnvConfig().defaultProfilePicture;
+      profilePictureTwo = couple["partner_two"]["profile_picture"] != null ? 
+      couple["partner_two"]["profile_picture"]["image"] : EnvConfig().defaultProfilePicture;
       userNameOne = couple["partner_one"]["username"];
       userNameTwo = couple["partner_two"]["username"];
       admirerCount = couple["admirers"].toString();
-      likeCount = post["likes"].toString();
-      postImage = post["post_image"];
+      likeCount = post["post"]["likes"].toString();
+      postImage = post["post"]["post_image"];
       commentCount = post["comments_count"].toString();
-      date = DateFunctions().convertdate(post["time_posted"]);
+      date = DateFunctions().convertdate(post["post"]["time_posted"]);
     } catch (e) {
+      print(e);
       null;
     }
   }
-}
 
-class DrawerStateProvider extends ChangeNotifier {
+  void updateIsAdmired(isAdmired) {
+    this.isAdmired = isAdmired;
+    int newAdmirerCount = int.parse(admirerCount);
+    if (isAdmired) {
+      newAdmirerCount++;
+      admirerCount = newAdmirerCount.toString();
+      notifyListeners();
+    } else {
+      newAdmirerCount--;
+      admirerCount = newAdmirerCount.toString();
+      notifyListeners();
+    }
+  }
 
-  final bool _drawerOpen = true;
-  bool get isDrawerOpen => _drawerOpen;
+  void updateLikes(isLiked) {
+    this.isLiked = isLiked;
+    int newLikeCount = int.parse(likeCount);
+    if (isAdmired) {
+      newLikeCount++;
+      likeCount = newLikeCount.toString();
+      notifyListeners();
+    } else {
+      newLikeCount--;
+      likeCount = newLikeCount.toString();
+      notifyListeners();
+    }
+  }
 
 }

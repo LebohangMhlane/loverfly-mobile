@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/screens/couplescreen/coupleprofileprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
-import 'package:loverfly/screens/couplescreen/viewcoupleprovider.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
 import 'package:loverfly/screens/mainscreen/mainpage.dart';
 import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
@@ -33,7 +33,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -45,9 +44,8 @@ class MyApp extends StatelessWidget {
           create: (context) => MainPageProvider(),
         ),
         ChangeNotifierProvider(create: (context) => UserProfileProvider()),
-        ChangeNotifierProvider(
-          create: (context) => CoupleExplorerPageProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => CoupleExplorerPageProvider()),
+        ChangeNotifierProvider(create: (context) => CoupleProfileProvider(couple: {})),
       ],
       child: GetMaterialApp(
         title: 'LoverFly',
@@ -62,10 +60,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/signUpScreen", page: () => SignUpScreen()),
           GetPage(name: "/coupleExplorerScreen", page: () => CoupleExplorerScreen()),
           GetPage(name: "/myProfileScreen", page: () => MyProfile(openDrawer: (){},)),
-          GetPage(name: "/viewCoupleScreen", page: () => CoupleProfileScreen(
+          GetPage(name: "/viewCoupleScreen", page: () => const CoupleProfileScreen(
+            couple: {},
             coupleId: 000,
-            isAdmired: false,
-            rebuildPageFunction: () {},
           ),),
           GetPage(name: "/largerPreviewScreen", page: () => const LargerPreviewScreen(
             image: "", 
