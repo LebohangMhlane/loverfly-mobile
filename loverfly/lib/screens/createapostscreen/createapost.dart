@@ -47,15 +47,6 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     super.initState();
   }
 
-  void setMainPartner() {
-    var cache = GetStorage();
-    userProfile.value = jsonDecode(cache.read('user_profile')!);
-    couple.value = jsonDecode(cache.read('user_couple')!);
-    couple.value["partner_one"]["username"] == userProfile.value["username"]
-        ? partnerOne = userProfile.value
-        : partnerOne = couple.value["partner_one"];
-  }
-
   void createMemory() async {
     try {
       // prevent button spamming:
@@ -74,6 +65,15 @@ class _CreateAPostScreenState extends State<CreateAPostScreen> {
     } catch (e) {
       SnackBars().displaySnackBar("Something went wrong.", () => null, context);
     }
+  }
+
+  void setMainPartner() {
+    var cache = GetStorage();
+    userProfile.value = jsonDecode(cache.read('user_profile')!);
+    couple.value = jsonDecode(cache.read('user_couple')!);
+    couple.value["partner_one"]["username"] == userProfile.value["username"]
+        ? partnerOne = userProfile.value
+        : partnerOne = couple.value["partner_one"];
   }
 
   Future<bool> uploadPostToServerDatabase(context, caption, imageFile) async {
