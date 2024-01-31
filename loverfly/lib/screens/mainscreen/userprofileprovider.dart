@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
+import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/screens/couplescreen/api/couplescreenapi.dart';
 
 class UserProfileProvider extends ChangeNotifier {
@@ -14,16 +15,18 @@ class UserProfileProvider extends ChangeNotifier {
   bool showRelationshipStageOptions = false;
   List couplePosts = [];
   bool hasPosts = false;
+  bool hasMessages = false;
+  bool hasNotifications = true;
 
   UserProfileProvider() {
     initializeProvider();
   }
 
   void initializeProvider() async {
-    updateUserProfile(true);
+    prepareUserProfile(true);
   }
 
-  void updateUserProfile(bool notify) async {
+  void prepareUserProfile(bool notify) async {
     try {
       GetStorage cache = GetStorage();
       var auth = AuthenticationAPI();
@@ -33,9 +36,12 @@ class UserProfileProvider extends ChangeNotifier {
         couple = response["couple"];
         cache.write("user_profile", jsonEncode(userProfile));
         cache.write("user_couple", jsonEncode(couple));
-        profilePicture = userProfile["profile_picture"]["image"]; // TODO: set the default image in the back end so we don't have to do checks for null here:
-        partnerProfilePicture = userProfile["my_partner"]["profile_picture"]["image"];
-        hasPosts = await updateCouplePosts(couple["id"]);
+        profilePicture = userProfile["profile_picture"]["image"] == "" ? 
+          EnvConfig().defaultProfilePicture : userProfile["profile_picture"]["image"]; 
+        partnerProfilePicture = userProfile["my_partner"] != null ? userProfile["my_partner"]["profile_picture"]["image"] : EnvConfig().defaultProfilePicture;
+        if(couple.isNotEmpty){
+          hasPosts = await updateCouplePosts(couple["id"]);
+        }
         loadingPage = false;
         notify ? notifyListeners() : null;
       }
