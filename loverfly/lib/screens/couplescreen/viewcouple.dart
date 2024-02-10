@@ -98,9 +98,9 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                 Container(
                                     padding: const EdgeInsets.only(
                                         top: 5.0, bottom: 5.0),
-                                    child: Text(
+                                    child: const Text(
                                         "",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.w300))),
                               ],
                             ),
@@ -146,7 +146,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                                         1.0),
                                                 width: 70.0,
                                                 height: 70.0,
-                                                child: CircleAvatar(
+                                                child: const CircleAvatar(
                                                   backgroundImage: NetworkImage(
                                                       ""),
                                                   radius: 25.0,
@@ -177,7 +177,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                                         1.0),
                                                 width: 65.0,
                                                 height: 65.0,
-                                                child: CircleAvatar(
+                                                child: const CircleAvatar(
                                                   backgroundImage: NetworkImage(
                                                       ""),
                                                   radius: 25.0,
@@ -204,12 +204,12 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                         top: 10.0,
                         bottom: 15.0,
                       ),
-                      child: Text(
+                      child: const Text(
                         "" +
                             " & " +
                             "",
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
+                        style: TextStyle(
                             letterSpacing: 1.0,
                             fontWeight: FontWeight.w300),
                       ),
@@ -341,11 +341,11 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                   flex: 1,
                                   child: Container(
                                     alignment: Alignment.center,
-                                    child: Text(
+                                    child: const Text(
                                         // relationshipstartdate["normalized"]
                                         //     .toString(),
                                         "",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12.0,
                                         )),
@@ -355,11 +355,11 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                   flex: 1,
                                   child: Container(
                                     alignment: Alignment.center,
-                                    child: Text(
+                                    child: const Text(
                                         // nextanniversarydate["normalized"]
                                         //     .toString(),
                                         "",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12.0)),
                                   ),
@@ -408,7 +408,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                               ),
                               Container(
                                 padding: const EdgeInsets.all(6.0),
-                                child: Text(
+                                child: const Text(
                                     ""),
                               )
                             ]),
@@ -439,7 +439,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                               ),
                               Container(
                                 padding: const EdgeInsets.all(6.0),
-                                child:Text(
+                                child:const Text(
                                     ""),
                               ),
                             ]),
@@ -470,7 +470,7 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
                                   },
                                   child: Container(
                                       margin: const EdgeInsets.all(2.0),
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         image: DecorationImage(
                                             image: NetworkImage(
                                                 ""),

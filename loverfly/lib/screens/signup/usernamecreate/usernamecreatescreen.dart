@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/mainscreen/mainpage.dart';
+import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signup/signupapi.dart';
 import 'package:loverfly/utils/pageutils.dart';
 

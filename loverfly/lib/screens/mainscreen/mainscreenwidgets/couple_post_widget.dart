@@ -6,22 +6,20 @@ import 'package:get/get.dart';
 import 'package:loverfly/screens/commentsscreen/commentsmainscreen.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
-import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
+import 'package:loverfly/screens/mainscreen/mainscreenproviders/mainpageprovider.dart';
 import 'package:loverfly/userinteractions/admire/admireapi.dart';
 import 'package:loverfly/userinteractions/like/likeapi.dart';
 import 'package:provider/provider.dart';
 
-class CouplePost extends StatefulWidget {
+class CouplePostWidget extends StatefulWidget {
 
-  const CouplePost({ Key? key, });
+  const CouplePostWidget({ Key? key, });
 
   @override
-  State<CouplePost> createState() => _CouplePostState();
+  State<CouplePostWidget> createState() => _CouplePostWidgetState();
 }
 
-// TODO: remove getx setup in stateful widgets:
-
-class _CouplePostState extends State<CouplePost> {
+class _CouplePostWidgetState extends State<CouplePostWidget> {
 
   @override
   void initState() {

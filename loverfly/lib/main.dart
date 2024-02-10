@@ -7,9 +7,9 @@ import 'package:loverfly/screens/coupleexplorerscreen/coupleexplorerprovider/cou
 import 'package:loverfly/screens/couplescreen/coupleprofileprovider.dart';
 import 'package:loverfly/screens/couplescreen/viewcouple.dart';
 import 'package:loverfly/screens/largerpreviewscreen/largerpreviewscreen.dart';
-import 'package:loverfly/screens/mainscreen/mainpage.dart';
-import 'package:loverfly/screens/mainscreen/mainpageprovider.dart';
-import 'package:loverfly/screens/mainscreen/userprofileprovider.dart';
+import 'package:loverfly/screens/mainscreen/mainscreen.dart';
+import 'package:loverfly/screens/mainscreen/mainscreenproviders/mainpageprovider.dart';
+import 'package:loverfly/screens/mainscreen/mainscreenproviders/userprofileprovider.dart';
 import 'package:loverfly/screens/myprofilescreen/myprofilescreen.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/screens/splashscreen/viewsplashscreen.dart';

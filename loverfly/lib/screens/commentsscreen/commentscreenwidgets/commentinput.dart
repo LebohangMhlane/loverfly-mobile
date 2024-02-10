@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../components/custombutton.dart';
-import '../../utils/pageutils.dart';
+import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/utils/pageutils.dart';
 
 class CommentInput extends StatefulWidget {
   final int postId;

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:loverfly/screens/commentsscreen/api/commentsapi.dart';
-import 'package:loverfly/screens/commentsscreen/comment.dart';
-import 'package:loverfly/screens/commentsscreen/commentinput.dart';
+import 'package:loverfly/screens/commentsscreen/commentscreenwidgets/comment.dart';
+import 'package:loverfly/screens/commentsscreen/commentscreenwidgets/commentinput.dart';
 
 // TODO: fix the immutable issue later:
 // ignore: must_be_immutable

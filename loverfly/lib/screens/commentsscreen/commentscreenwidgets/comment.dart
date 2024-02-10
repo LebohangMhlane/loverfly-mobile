@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/screens/commentsscreen/commentreply.dart';
+import 'package:loverfly/screens/commentsscreen/api/commentsapi.dart';
+import 'package:loverfly/screens/commentsscreen/commentscreenwidgets/commentreply.dart';
+import 'package:loverfly/utils/pageutils.dart';
 
-import '../../utils/pageutils.dart';
-import 'api/commentsapi.dart';
 
 class Comment extends StatefulWidget {
   final Map commentData;

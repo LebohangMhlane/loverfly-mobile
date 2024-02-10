@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/mainscreen/mainpage.dart';
+import 'package:loverfly/screens/mainscreen/mainscreen.dart';
 import 'package:loverfly/screens/signup/signupscreen/signupscreen.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:provider/provider.dart';

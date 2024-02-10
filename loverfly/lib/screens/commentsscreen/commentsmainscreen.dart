@@ -6,12 +6,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/screens/commentsscreen/commentinput.dart';
+import 'package:loverfly/screens/commentsscreen/commentscreenwidgets/comment.dart';
+import 'package:loverfly/screens/commentsscreen/commentscreenwidgets/commentinput.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
 import '../largerpreviewscreen/largerpreviewscreen.dart';
 import 'api/commentsapi.dart';
-import 'comment.dart';
 
 class CommentScreen extends StatefulWidget {
   final int postId;
