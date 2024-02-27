@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../screens/couplescreen/viewcouple.dart';
+import '../features/couplescreen/viewcouple.dart';
 
 class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {
