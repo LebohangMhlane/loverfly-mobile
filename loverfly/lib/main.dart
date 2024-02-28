@@ -5,8 +5,8 @@ import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
 import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/models/couple.dart';
-import 'package:loverfly/features/view_couple/coupleprofileprovider.dart';
-import 'package:loverfly/features/view_couple/viewcouple.dart';
+import 'package:loverfly/features/view_couple/view_couple_provider.dart';
+import 'package:loverfly/features/view_couple/view_couple.dart';
 import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
 import 'package:loverfly/features/main_screen/mainscreen.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/myProfileScreen", page: () => MyProfile(openDrawer: (){},)),
           GetPage(name: "/viewCoupleScreen", page: () => ViewCouple(
             couple: Couple.createFromJson({}),
+            isAdmired: false,
           ),),
           GetPage(name: "/largerPreviewScreen", page: () => const LargerPreviewScreen(
             image: "", 

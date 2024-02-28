@@ -7,7 +7,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/models/couple.dart';
-import 'package:loverfly/features/view_couple/viewcouple.dart';
+import 'package:loverfly/features/view_couple/view_couple.dart';
 import 'package:provider/provider.dart';
 import '../../utils/pageutils.dart';
 
@@ -64,6 +64,7 @@ class CoupleCard extends StatelessWidget {
               onTap: () {
                 Get.to(() => ViewCouple(
                       couple: Couple.createFromJson({}),
+                      isAdmired: coupleCardProvider.isAdmired,
                     ));
               },
               child: SizedBox(

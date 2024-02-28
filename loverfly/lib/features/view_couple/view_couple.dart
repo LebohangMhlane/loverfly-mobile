@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/features/models/couple.dart';
-import 'package:loverfly/features/view_couple/coupleprofileprovider.dart';
+import 'package:loverfly/features/models/post.dart';
+import 'package:loverfly/features/view_couple/view_couple_provider.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
 import '../../components/custombutton.dart';
@@ -11,10 +12,12 @@ import '../larger_image_view_screen/largerpreviewscreen.dart';
 class ViewCouple extends StatefulWidget {
 
   final Couple couple;
+  final bool isAdmired;
 
   const ViewCouple({
     Key? key,
     required this.couple,
+    required this.isAdmired,
     })
     : super(key: key);
 
@@ -45,6 +48,8 @@ class _ViewCoupleState extends State<ViewCouple> {
 
   @override
   Widget build(BuildContext context) {
+    Couple couple = widget.couple;
+    bool isAdmired = widget.isAdmired;
     return WillPopScope(
       onWillPop: () async {
         Get.back();
@@ -74,11 +79,13 @@ class _ViewCoupleState extends State<ViewCouple> {
               children: [
                 Column(
                   children: [
+
                     // row 1
                     Container(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Row(
                         children: [
+
                           // relationship stage
                           Container(
                             width: 140.0,
@@ -96,11 +103,16 @@ class _ViewCoupleState extends State<ViewCouple> {
                                 ),
                                 Container(
                                     padding: const EdgeInsets.only(
-                                        top: 5.0, bottom: 5.0),
-                                    child: const Text(
-                                        "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w300))),
+                                      top: 5.0, 
+                                      bottom: 5.0
+                                    ),
+                                    child: Text(
+                                      couple.relationshipStatus,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w300
+                                      )
+                                    )
+                                ),
                               ],
                             ),
                           ),
@@ -124,12 +136,13 @@ class _ViewCoupleState extends State<ViewCouple> {
                                         bottom: 10.0),
                                     child: Stack(
                                       children: [
+
                                         // couple partner 1 profile picture:
                                         Positioned(
                                           left: 50.0,
                                           child: GestureDetector(
                                             onTap: () => Get.to(
-                                                () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
+                                                () =>  LargerPreviewScreen(image: couple.partnerOne!.profilePicture , postId: 000, isMyPost: false,),
                                                 opaque: false),
                                             child: Container(
                                               alignment: Alignment.center,
@@ -145,9 +158,9 @@ class _ViewCoupleState extends State<ViewCouple> {
                                                         1.0),
                                                 width: 70.0,
                                                 height: 70.0,
-                                                child: const CircleAvatar(
+                                                child: CircleAvatar(
                                                   backgroundImage: NetworkImage(
-                                                      ""),
+                                                      couple.partnerOne!.profilePicture),
                                                   radius: 25.0,
                                                 ),
                                               ),
@@ -160,7 +173,7 @@ class _ViewCoupleState extends State<ViewCouple> {
                                           top: 25.0,
                                           child: GestureDetector(
                                             onTap: () => Get.to(
-                                                () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
+                                                () => LargerPreviewScreen(image: couple.partnerTwo!.profilePicture, postId: 000, isMyPost: false,),
                                                 opaque: false),
                                             child: Container(
                                               alignment: Alignment.center,
@@ -176,9 +189,9 @@ class _ViewCoupleState extends State<ViewCouple> {
                                                         1.0),
                                                 width: 65.0,
                                                 height: 65.0,
-                                                child: const CircleAvatar(
+                                                child: CircleAvatar(
                                                   backgroundImage: NetworkImage(
-                                                      ""),
+                                                      couple.partnerTwo!.profilePicture),
                                                   radius: 25.0,
                                                 ),
                                               ),
@@ -203,12 +216,12 @@ class _ViewCoupleState extends State<ViewCouple> {
                         top: 10.0,
                         bottom: 15.0,
                       ),
-                      child: const Text(
-                        "" +
+                      child: Text(
+                        couple.partnerOne!.username +
                             " & " +
-                            "",
+                            couple.partnerTwo!.username,
                         textAlign: TextAlign.right,
-                        style: TextStyle(
+                        style: const TextStyle(
                             letterSpacing: 1.0,
                             fontWeight: FontWeight.w300),
                       ),
@@ -236,7 +249,7 @@ class _ViewCoupleState extends State<ViewCouple> {
                                       icon: Container(
                                           padding: const EdgeInsets.only(
                                               left: 4.0),
-                                          child: false
+                                          child: isAdmired
                                               ?
                                               // Admire heart icon
                                               Transform(
@@ -340,11 +353,9 @@ class _ViewCoupleState extends State<ViewCouple> {
                                   flex: 1,
                                   child: Container(
                                     alignment: Alignment.center,
-                                    child: const Text(
-                                        // relationshipstartdate["normalized"]
-                                        //     .toString(),
-                                        "",
-                                        style: TextStyle(
+                                    child: Text(
+                                        couple.startedDating,
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12.0,
                                         )),
@@ -354,11 +365,9 @@ class _ViewCoupleState extends State<ViewCouple> {
                                   flex: 1,
                                   child: Container(
                                     alignment: Alignment.center,
-                                    child: const Text(
-                                        // nextanniversarydate["normalized"]
-                                        //     .toString(),
-                                        "",
-                                        style: TextStyle(
+                                    child: Text(
+                                        couple.nextAnniversary,
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12.0)),
                                   ),
@@ -449,37 +458,42 @@ class _ViewCoupleState extends State<ViewCouple> {
         
                     // IMAGE LIST
                     SizedBox(
-                        height: 450.0,
-                        child: Container(
-                            padding: const EdgeInsets.all(2.0),
-                            height: 30.0,
-                            child: GridView.builder(
-                              itemCount:0,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
-                              itemBuilder: (context, index) {
-                                return TextButton(
-                                  style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.all(0)),
-                                  onPressed: () {
-                                    Get.to(
-                                        () => const LargerPreviewScreen(image: "", postId: 000, isMyPost: false,),
-                                        opaque: false);
-                                  },
-                                  child: Container(
-                                      margin: const EdgeInsets.all(2.0),
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                ""),
-                                            fit: BoxFit.cover),
-                                      )),
-                                );
+                    height: 450.0,
+                    child: Container(
+                        padding: const EdgeInsets.all(2.0),
+                        height: 30.0,
+                        child: GridView.builder(
+                          itemCount: coupleProvider.couplePosts.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
+                          itemBuilder: (context, index) {
+                            Post post =  coupleProvider.couplePosts[index];
+                            return TextButton(
+                              style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.all(0)),
+                              onPressed: () {
+                                Get.to(
+                                    () => LargerPreviewScreen(
+                                      image: post.postImage, 
+                                      postId: post.id, 
+                                      isMyPost: false,
+                                    ),
+                                    opaque: false);
                               },
-                            ),
-                          ),
+                              child: Container(
+                                  margin: const EdgeInsets.all(2.0),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            post.postImage),
+                                        fit: BoxFit.cover),
+                                  )),
+                            );
+                          },
                         ),
+                      ),
+                    ),
                     // ROW 6
                   ],
                 ),

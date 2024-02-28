@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/features/comments/commentsmainscreen.dart';
-import 'package:loverfly/features/view_couple/viewcouple.dart';
+import 'package:loverfly/features/view_couple/view_couple.dart';
 import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/user_interactions/admire/admireapi.dart';
@@ -31,17 +31,20 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
     return Consumer<PostProvider>(
       builder: (context, postProvider, child) => Container(
         child: Column(children: [
+
         // profile picture and admirers section:
         GestureDetector(
           onTap: () {
             Get.to(() => ViewCouple(
               couple: postProvider.couple!,
+              isAdmired: postProvider.isAdmired,
             ));
           },
           child: SizedBox(
             height: 100.0,
             child: Row(
               children: [
+
                 // profile pictures:
                 SizedBox(
                     width: 121.0,

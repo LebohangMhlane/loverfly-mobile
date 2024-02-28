@@ -1,5 +1,6 @@
 
 import 'package:loverfly/features/models/userprofile.dart';
+import 'package:loverfly/utils/utils.dart';
 
 class Couple {
 
@@ -25,11 +26,11 @@ class Couple {
     id = json["id"].toString();
     partnerOne = UserProfile.createFromJson(json["partner_one"]);
     partnerTwo = UserProfile.createFromJson(json["partner_two"]);
-    startedDating = json["started_dating"];
+    startedDating = DateFunctions().convertdate(json["started_dating"])["normalized"] as String;
     anniversaries = json["anniversaries"];
     admirers = json["admirers"];
-    lastAnniversary = json["last_anniversary"];
-    nextAnniversary = json["next_anniversary"];
+    lastAnniversary = DateFunctions().convertdate(json["last_anniversary"])["normalized"] as String;
+    nextAnniversary = DateFunctions().convertdate(json["next_anniversary"])["normalized"] as String;
     relationshipStatus = json["relationship_status"];
     isStraightCouple = json["is_straight_couple"];
     limbo = json["limbo"];
