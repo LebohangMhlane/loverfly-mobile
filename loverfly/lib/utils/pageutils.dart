@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/features/models/couple.dart';
-import '../features/view_couple_screen/viewcouple.dart';
+import '../features/view_couple/viewcouple.dart';
 
 class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {

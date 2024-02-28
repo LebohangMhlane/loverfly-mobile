@@ -7,11 +7,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/environmentconfig/envconfig.dart';
-import 'package:loverfly/features/comments/commentscreenwidgets/comment.dart';
-import 'package:loverfly/features/comments/commentscreenwidgets/commentinput.dart';
+import 'package:loverfly/features/comments/comment_screen_widgets/comment.dart';
+import 'package:loverfly/features/comments/comment_screen_widgets/commentinput.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
-import '../largerpreviewscreen/largerpreviewscreen.dart';
+import '../larger_image_view_screen/largerpreviewscreen.dart';
 import 'api/commentsapi.dart';
 
 class CommentScreen extends StatefulWidget {
