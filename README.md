@@ -1,4 +1,8 @@
 # loverfly-mobile
 Official LoverFly Repo
 
-![Screenshot_1709110359](https://github.com/LebohangMhlane/loverfly-mobile/assets/75252307/e621ef19-9217-42e4-9064-de9d198f81d0)
+Previews:
+
+
+![Screenshot_1709110752](https://github.com/LebohangMhlane/loverfly-mobile/assets/75252307/7f63e7ff-533b-4f45-871e-b8c2fb80eb0d)
+![Screenshot_1709110865](https://github.com/LebohangMhlane/loverfly-mobile/assets/75252307/385bfcc7-e569-4028-914b-ab717cbe5931)
