@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
 import 'package:loverfly/environmentconfig/envconfig.dart';
-import 'package:loverfly/features/couplescreen/api/couplescreenapi.dart';
+import 'package:loverfly/features/view_couple_screen/api/couplescreenapi.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   Map userProfile = {};

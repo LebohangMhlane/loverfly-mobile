@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/features/couplescreen/coupleprofileprovider.dart';
+import 'package:loverfly/features/view_couple_screen/coupleprofileprovider.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
 import '../../components/custombutton.dart';
 import '../largerpreviewscreen/largerpreviewscreen.dart';
 
-class CoupleProfileScreen extends StatefulWidget {
+class ViewCouple extends StatefulWidget {
 
   final Map couple;
-  final int coupleId;
 
-  const CoupleProfileScreen({
+  const ViewCouple({
     Key? key,
     required this.couple,
-    required this.coupleId,
     })
     : super(key: key);
 
   @override
-  State<CoupleProfileScreen> createState() => _CoupleProfileScreenState();
+  State<ViewCouple> createState() => _ViewCoupleState();
 }
 
-class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
+class _ViewCoupleState extends State<ViewCouple> {
 
   @override
   void initState() {
@@ -53,9 +51,9 @@ class _CoupleProfileScreenState extends State<CoupleProfileScreen> {
       },
     child: Scaffold(
     appBar: customAppBar(context, ""),
-    body: ChangeNotifierProvider<CoupleProfileProvider>(
-      create: (context)=> CoupleProfileProvider(couple: widget.couple),
-      child: Consumer<CoupleProfileProvider>(
+    body: ChangeNotifierProvider<ViewCoupleProvider>(
+      create: (context)=> ViewCoupleProvider(couple: widget.couple),
+      child: Consumer<ViewCoupleProvider>(
         builder: (context, coupleProvider, child) => coupleProvider.pageLoading ? 
         const Center(
           child: SizedBox(

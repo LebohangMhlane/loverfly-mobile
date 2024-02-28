@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../features/couplescreen/viewcouple.dart';
+import '../features/view_couple_screen/viewcouple.dart';
 
 class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {
-    Get.to(() => const CoupleProfileScreen(
+    Get.to(() => const ViewCouple(
       couple: {},
-      coupleId: 000,
     ));
   }
 }
