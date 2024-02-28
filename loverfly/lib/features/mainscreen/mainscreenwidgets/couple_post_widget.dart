@@ -35,7 +35,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
         GestureDetector(
           onTap: () {
             Get.to(() => ViewCouple(
-              couple: postProvider.couple,
+              couple: postProvider.couple!,
             ));
           },
           child: SizedBox(
@@ -196,7 +196,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                   onTap: () => Get.to(
                       () => LargerPreviewScreen(
                           image: postProvider.postImage,
-                          postId: postProvider.post["id"],
+                          postId: postProvider.post!.id,
                           isMyPost: postProvider.isMyPost),
                       opaque: false),
                   child: Container(
@@ -208,7 +208,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                         fadeInDuration: const Duration(milliseconds: 250),
                         fit: BoxFit.cover,
                         placeholder: "assets/placeholders/loadingImage.gif",
-                        image: postProvider.post["post_image"],
+                        image: postProvider.post!.postImage,
                       )),
                   )
                 ),
@@ -222,7 +222,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                     width: MediaQuery.of(context).size.width,
                     height: 60.0,
                     margin: const EdgeInsets.only(bottom: 40.0),
-                    child: Text(postProvider.post["caption"],
+                    child: Text(postProvider.post!.caption,
                         style: const TextStyle(
                           color: Colors.white,
                         )),
@@ -247,7 +247,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                         ),
                         Container(
                           child: Text(
-                            postProvider.couple['is_verified']
+                            postProvider.couple!.isVerified
                                 ? 'Verified'
                                 : '',
                             style: const TextStyle(
@@ -280,7 +280,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                     child: TextButton(
                       onPressed: () async {
                         Map response = await admire(
-                            postProvider.couple["id"], postProvider.isAdmired);
+                            postProvider.couple!.id, postProvider.isAdmired);
                         if (response.containsKey("admired")) {
                           postProvider.updateIsAdmired(response["admired"]);
                         }
@@ -349,7 +349,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                 child: TextButton(
                   onPressed: () async {
                     bool isLiked = await likePost(
-                        postProvider.post["id"], postProvider.isLiked
+                        postProvider.post!.id, postProvider.isLiked
                       );
                     postProvider.updateLikes(isLiked);
                   },

@@ -27,6 +27,8 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
   }
 
+  // TODO: change these to class based widgets:
+
   Widget renderLoadingIcon() {
     return Center(
         child: Container(

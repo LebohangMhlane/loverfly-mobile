@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> admire(coupleid, admired) async {
-  var url = Uri.parse(EnvConfig().baseUrl +
+  var url = Uri.parse(EnvConfig.baseUrl +
       '/admire/' +
       coupleid.toString() +
       '/' +

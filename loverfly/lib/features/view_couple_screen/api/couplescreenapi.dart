@@ -8,7 +8,7 @@ Future<Map> getCouplePosts(coupleid) async {
   Map responseMap = {};
   var cache = GetStorage();
   try {
-    var url = Uri.parse(EnvConfig().baseUrl + '/get-couple-posts/' + coupleid.toString() + '/');
+    var url = Uri.parse(EnvConfig.baseUrl + '/get-couple-posts/' + coupleid.toString() + '/');
     var response = await http.get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
     if (response.statusCode == 200) {
       responseMap = jsonDecode(response.body);
@@ -37,7 +37,7 @@ Future<bool> checkIfAdmired(coupleid) async {
   var cache = GetStorage();
   try {
     var url = Uri.parse(
-        EnvConfig().baseUrl + '/check-if-admired/' + coupleid.toString() + '/');
+        EnvConfig.baseUrl + '/check-if-admired/' + coupleid.toString() + '/');
     var response = await http
         .get(url, headers: {'Authorization': 'TOKEN ' + cache.read('token')!});
     if (response.statusCode == 200) {

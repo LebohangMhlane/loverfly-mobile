@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future likePost(postid, postliked) async {
-  var url = Uri.parse(EnvConfig().baseUrl +
+  var url = Uri.parse(EnvConfig.baseUrl +
       '/like-post/' +
       postid.toString() +
       '/' +

@@ -1,10 +1,10 @@
 
 import 'package:flutter/widgets.dart';
-import 'package:loverfly/features/mainscreen/models/couple_model.dart';
+import 'package:loverfly/features/models/couple.dart';
 
 class ViewCoupleProvider extends ChangeNotifier {
   bool pageLoading = true;
-  Map couple = {};
+  Couple couple = Couple.createFromJson({});
 
   String partnerOnePicture = "";
   String partnerTwoPicture = "";
@@ -16,15 +16,12 @@ class ViewCoupleProvider extends ChangeNotifier {
   List coupleMemories = [];
 
   ViewCoupleProvider({required this.couple}) {
-    if (couple.isNotEmpty) {
-      CoupleModel coupleInstance = CoupleModel.createFromJson(couple);
-      partnerOnePicture = couple["partner_one"]["profile_picture"]["image"];
-      partnerTwoPicture = couple["partner_two"]["profile_picture"]["image"];
+    partnerOnePicture = couple.partnerOne!.profilePicture;
+    partnerTwoPicture = couple.partnerTwo!.profilePicture;
 
-      partnerOneUsername = couple["partner_one"]["username"];
-      partnerTwoUsername = couple["partner_two"]["username"];
-      pageLoading = false;
-      notifyListeners();
-    }
+    partnerOneUsername = couple.partnerOne!.username;
+    partnerTwoUsername = couple.partnerTwo!.username;
+    pageLoading = false;
+    notifyListeners();
   }
 }

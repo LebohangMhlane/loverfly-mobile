@@ -13,7 +13,7 @@ Future<Map> signUp() async {
       String? username = cache.read("username");
       String? email = cache.read("email");
       String? password = cache.read("password");
-      Uri url = Uri.parse(EnvConfig().baseUrl + '/sign-up/');
+      Uri url = Uri.parse(EnvConfig.baseUrl + '/sign-up/');
       var response = await http.post(
         url,
         body: {"username": username, "email": email, "password": password},

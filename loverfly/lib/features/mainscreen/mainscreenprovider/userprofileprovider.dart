@@ -37,8 +37,8 @@ class UserProfileProvider extends ChangeNotifier {
         cache.write("user_profile", jsonEncode(userProfile));
         cache.write("user_couple", jsonEncode(couple));
         profilePicture = userProfile["profile_picture"]["image"] == "" ? 
-          EnvConfig().defaultProfilePicture : userProfile["profile_picture"]["image"]; 
-        partnerProfilePicture = userProfile["my_partner"] != null ? userProfile["my_partner"]["profile_picture"]["image"] : EnvConfig().defaultProfilePicture;
+          EnvConfig.defaultProfilePicture : userProfile["profile_picture"]["image"]; 
+        partnerProfilePicture = userProfile["my_partner"] != null ? userProfile["my_partner"]["profile_picture"]["image"] : EnvConfig.defaultProfilePicture;
         if(couple.isNotEmpty){
           hasPosts = await updateCouplePosts(couple["id"]);
         }

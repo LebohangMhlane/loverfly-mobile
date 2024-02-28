@@ -244,7 +244,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                       NetworkImage(widget.couple["partner_one"]
                                                   ["profile_picture"]["image"])
                                               : NetworkImage(
-                                                  EnvConfig().defaultProfilePicture),
+                                                  EnvConfig.defaultProfilePicture),
                                       radius: 25.0,
                                     ),
                                   ),

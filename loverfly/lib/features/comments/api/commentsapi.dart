@@ -8,7 +8,7 @@ Future<Map> getComments(postId, nextPageLink) async {
   try {
     var cache = GetStorage();
     Uri url = Uri.parse(
-        EnvConfig().baseUrl + '/get-comments/' + postId.toString() + '/');
+        EnvConfig.baseUrl + '/get-comments/' + postId.toString() + '/');
     var apiResponse = await http.get(
       url,
       headers: {
@@ -43,7 +43,7 @@ Future<Map> postComment(postId, commentData) async {
   try {
     var cache = GetStorage();
     var url = Uri.parse(
-        EnvConfig().baseUrl + '/post-comment/' + postId.toString() + '/');
+        EnvConfig.baseUrl + '/post-comment/' + postId.toString() + '/');
     var apiResponse = await http.post(url, headers: {
       'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     }, body: {
@@ -59,7 +59,7 @@ Future<Map> postComment(postId, commentData) async {
 Future<Map> replyToCommentServer(commentId, commentData) async {
   try {
     var cache = GetStorage();
-    var url = Uri.parse(EnvConfig().baseUrl +
+    var url = Uri.parse(EnvConfig.baseUrl +
         '/reply-to-comment/' +
         commentId.toString() +
         "/");
@@ -84,7 +84,7 @@ Future<Map> replyToCommentServer(commentId, commentData) async {
 Future<Map> getCommentRepliesFromServer(commentId) async {
   try {
     var cache = GetStorage();
-    var url = Uri.parse(EnvConfig().baseUrl +
+    var url = Uri.parse(EnvConfig.baseUrl +
         '/get-comment-replies/' +
         commentId.toString() +
         "/");
@@ -106,7 +106,7 @@ Future<Map> getCommentRepliesFromServer(commentId) async {
 Future<Map> likeComment(commentId, commentLiked) async {
   try {
     var cache = GetStorage();
-    var url = Uri.parse(EnvConfig().baseUrl + '/like-comment/');
+    var url = Uri.parse(EnvConfig.baseUrl + '/like-comment/');
     var apiResponse = await http.post(url, headers: {
       'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     }, body: {
@@ -124,7 +124,7 @@ Future<Map> deleteCommentService(commentId) async {
   try {
     var cache = GetStorage();
     var url = Uri.parse(
-        EnvConfig().baseUrl + '/delete-comment/' + commentId.toString() + '/');
+        EnvConfig.baseUrl + '/delete-comment/' + commentId.toString() + '/');
     var apiResponse = await http.post(url, headers: {
       'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     });

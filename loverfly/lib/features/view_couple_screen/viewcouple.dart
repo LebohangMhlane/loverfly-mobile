@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/view_couple_screen/coupleprofileprovider.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
@@ -9,7 +10,7 @@ import '../largerpreviewscreen/largerpreviewscreen.dart';
 
 class ViewCouple extends StatefulWidget {
 
-  final Map couple;
+  final Couple couple;
 
   const ViewCouple({
     Key? key,

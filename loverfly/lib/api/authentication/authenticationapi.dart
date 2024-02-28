@@ -13,7 +13,7 @@ class AuthenticationAPI {
   Future<Map> getAndCacheAPIToken({username, password}) async {
     Map token = {};
     try {
-      var url = Uri.parse(EnvConfig().baseUrl + '/api-token-auth/');
+      var url = Uri.parse(EnvConfig.baseUrl + '/api-token-auth/');
       var response = await http
           .post(
             url,
@@ -50,7 +50,7 @@ class AuthenticationAPI {
   // gets and returns a user profile and couple data from the database:
   Future<Map> getUserProfileAndCoupleData(token) async {
     Map userProfileAndCoupleData = {};
-    var url = Uri.parse(EnvConfig().baseUrl + '/get-user-profile-and-couple-data/');
+    var url = Uri.parse(EnvConfig.baseUrl + '/get-user-profile-and-couple-data/');
     try {
       var response = await http.post(
         url,

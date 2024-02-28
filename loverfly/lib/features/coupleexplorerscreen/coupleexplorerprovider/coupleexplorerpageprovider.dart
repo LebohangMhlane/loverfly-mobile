@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loverfly/features/coupleexplorerscreen/api/coupleexplorerapi.dart';
+import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/userinteractions/admire/admireapi.dart';
 
 class CoupleExplorerPageProvider extends ChangeNotifier {
@@ -30,19 +31,15 @@ class CoupleExplorerPageProvider extends ChangeNotifier {
 
   void createProvidersForCouples(coupleList){
     for (int i = 0; i < coupleList.length; i++) {
-      Map couple = coupleList[i]["couple"];
+      Couple couple = Couple.createFromJson(coupleList[i]["couple"]);
       coupleCardProviders.add(CoupleCardProvider(
-        coupleId: couple["id"],
-        isAdmired: coupleList[i]["isAdmired"],
-        partnerOneUsername: couple["partner_one"]["username"],
-        partnerTwoUsername: couple["partner_two"]["username"],
-        partnerOneProfilePic: couple["partner_one"]["profile_picture"] != null ? 
-        couple["partner_one"]["profile_picture"]["image"] != "" ? 
-        couple["partner_one"]["profile_picture"]["image"] : "" : "",
-        partnerTwoProfilePic: coupleList[i]["couple"]["partner_two"]["profile_picture"] != null ? 
-        couple["partner_two"]["profile_picture"]["image"] != "" ? 
-        couple["partner_two"]["profile_picture"]["image"] : "" : "",
-        admirersCount: couple["admirers"]
+        coupleId: int.parse(couple.id),
+        isAdmired: false,
+        partnerOneUsername: "",
+        partnerTwoUsername: "",
+        partnerOneProfilePic: "",
+        partnerTwoProfilePic: "",
+        admirersCount: 0
         )
       );
     }

@@ -9,7 +9,7 @@ Future<bool> uploadProfilePicture(imageFile) async {
   var cache = GetStorage();
   try {
     // prepare the request:
-    var url = Uri.parse(EnvConfig().baseUrl + '/update-profile-picture');
+    var url = Uri.parse(EnvConfig.baseUrl + '/update-profile-picture');
     var request = http.MultipartRequest(
       'POST',
       url,

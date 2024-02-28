@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/features/mainscreen/api/mainscreenapi.dart';
+import 'package:loverfly/features/models/couple.dart';
+import 'package:loverfly/features/models/post.dart';
 import 'package:loverfly/utils/utils.dart';
 
 class MainPageProvider extends ChangeNotifier {
@@ -35,13 +37,14 @@ class MainPageProvider extends ChangeNotifier {
   bool createProvidersForPosts(posts) {
     try {
       for (int i = 0; i < posts.length; i++) {
-        Map post = posts[i];
+        PostApiResponse postApiResponse = PostApiResponse.createFromJson(posts[i]);
+        Post? post = postApiResponse.post;
         postProviders.add(PostProvider(
-          post: post,
-          isAdmired: post["isAdmired"],
-          isLiked: post["isLiked"],
-          couple: post["couple"],
-          isMyPost: post["is_my_post"],
+          post: post!,
+          isAdmired: postApiResponse.isAdmired,
+          isLiked: postApiResponse.isLiked,
+          couple: post.couple!,
+          isMyPost: postApiResponse.isMyPost,
         ));
       }
       return true;
@@ -65,8 +68,8 @@ class PostProvider extends ChangeNotifier {
   bool isLiked = false;
   String commentCount = "";
   bool isMyPost = false;
-  Map couple = {};
-  Map post = {};
+  Couple? couple;
+  Post? post;
 
   PostProvider({
     required this.isLiked,
@@ -76,18 +79,16 @@ class PostProvider extends ChangeNotifier {
     required this.isAdmired,
   }) {
     try {
-      profilePictureOne = couple["partner_one"]["profile_picture"]["image"] != "" ? 
-      couple["partner_one"]["profile_picture"]["image"] : EnvConfig().defaultProfilePicture;
-      profilePictureTwo = couple["partner_two"]["profile_picture"]["image"] != "" ? 
-      couple["partner_two"]["profile_picture"]["image"] : EnvConfig().defaultProfilePicture;
-      userNameOne = couple["partner_one"]["username"];
-      userNameTwo = couple["partner_two"]["username"];
-      admirerCount = couple["admirers"].toString();
-      likeCount = post["post"]["likes"].toString();
-      postImage = post["post"]["post_image"];
-      commentCount = post["comments_count"].toString();
-      date = DateFunctions().convertdate(post["post"]["time_posted"]);
-      post = post["post"];
+      profilePictureOne = post!.couple!.partnerOne!.profilePicture;
+      profilePictureTwo = post!.couple!.partnerTwo!.profilePicture;
+      userNameOne = post!.couple!.partnerOne!.username;
+      userNameTwo = post!.couple!.partnerTwo!.username;
+      admirerCount = post!.couple!.admirers.toString();
+      likeCount = post!.likes.toString();
+      postImage = post!.postImage;
+      commentCount = 0.toString(); // TODO: fix later:
+      date = DateFunctions().convertdate(post!.timePosted);
+      post = post;
     } catch (e) {
       print(e);
       null;

@@ -6,7 +6,7 @@ import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> getAllCouples() async {
   Map coupledata = {};
-  var url = Uri.parse(EnvConfig().baseUrl + '/get-all-couples/');
+  var url = Uri.parse(EnvConfig.baseUrl + '/get-all-couples/');
   var cache = GetStorage();
   try {
     var response = await http.get(url, headers: {
@@ -36,7 +36,7 @@ Future<Map> getAllCouples() async {
 
 Future<Map> getTrendingCouples() async {
   Map trendingCouples = {};
-  var url = Uri.parse(EnvConfig().baseUrl + '/get-trending-couples/');
+  var url = Uri.parse(EnvConfig.baseUrl + '/get-trending-couples/');
   var cache = GetStorage();
   try {
     var response = await http.get(url,

@@ -8,7 +8,7 @@ import '../../../environmentconfig/envconfig.dart';
 // requests and returns a list of followers from the server:
 Future<Map> getAdmirersFromServer(nextPageLink) async {
   var cache = GetStorage();
-  var url = Uri.parse(EnvConfig().baseUrl + '/get-all-admirers/');
+  var url = Uri.parse(EnvConfig.baseUrl + '/get-all-admirers/');
   if (nextPageLink != "") {
     url = Uri.parse(nextPageLink);
   }

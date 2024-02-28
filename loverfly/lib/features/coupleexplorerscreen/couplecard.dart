@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:loverfly/components/custombutton.dart';
 import 'package:loverfly/features/coupleexplorerscreen/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/view_couple_screen/viewcouple.dart';
 import 'package:provider/provider.dart';
 import '../../utils/pageutils.dart';
@@ -61,8 +62,8 @@ class CoupleCard extends StatelessWidget {
             // section 2 - profile pictures:
             GestureDetector(
               onTap: () {
-                Get.to(() => const ViewCouple(
-                      couple: {},
+                Get.to(() => ViewCouple(
+                      couple: Couple.createFromJson({}),
                     ));
               },
               child: SizedBox(

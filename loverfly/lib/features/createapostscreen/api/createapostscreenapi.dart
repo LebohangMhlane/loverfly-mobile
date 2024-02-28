@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> createAPost(caption, imageFile) async {
-  var url = Uri.parse(EnvConfig().baseUrl + '/create-a-post/');
+  var url = Uri.parse(EnvConfig.baseUrl + '/create-a-post/');
   var cache = GetStorage();
   try {
     var request = http.MultipartRequest(

@@ -12,7 +12,7 @@ Future<Map> getPostsForFeed(nextLink) async {
   if (nextLink != null && nextLink != "") {
     url = Uri.parse(nextLink);
   } else {
-    url = Uri.parse(EnvConfig().baseUrl + '/get-posts-for-feed/');
+    url = Uri.parse(EnvConfig.baseUrl + '/get-posts-for-feed/');
   }
   // make the request:
   try {

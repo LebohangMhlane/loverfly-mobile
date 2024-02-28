@@ -7,7 +7,7 @@ Future<Map> generateLinkCode() async {
   var code = {};
   try {
     var cache = GetStorage();
-    var url = Uri.parse(EnvConfig().baseUrl + '/generate-code/');
+    var url = Uri.parse(EnvConfig.baseUrl + '/generate-code/');
     var response = await http.get(
       url,
       headers: {'Authorization': 'TOKEN ' + cache.read('token')!.toString()},
@@ -23,7 +23,7 @@ Future<Map> inputLinkCode(code) async {
   Map finalresponse = {};
   try {
     var cache = GetStorage();
-    var url = Uri.parse(EnvConfig().baseUrl + '/input-code/' + code + '/');
+    var url = Uri.parse(EnvConfig.baseUrl + '/input-code/' + code + '/');
     var response = await http.get(
       url,
       headers: {'Authorization': 'TOKEN ' + cache.read('token')!.toString()},

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:loverfly/environmentconfig/envconfig.dart';
 
 Future<Map> getAdmiredCouples(username) async {
-  var url = Uri.parse(EnvConfig().baseUrl + '/get-admired-couples/');
+  var url = Uri.parse(EnvConfig.baseUrl + '/get-admired-couples/');
   var cache = GetStorage();
 
   try {
@@ -29,7 +29,7 @@ Future<Map> getAdmiredCouples(username) async {
 Future<Map> deletePost(postId) async {
   var responseData = {};
   var url = Uri.parse(
-      EnvConfig().baseUrl + '/delete-post/' + postId.toString() + '/');
+      EnvConfig.baseUrl + '/delete-post/' + postId.toString() + '/');
   var cache = GetStorage();
 
   try {
