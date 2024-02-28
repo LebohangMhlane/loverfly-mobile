@@ -1,4 +1,6 @@
+
 import 'package:flutter/widgets.dart';
+import 'package:loverfly/features/mainscreen/models/couple_model.dart';
 
 class ViewCoupleProvider extends ChangeNotifier {
   bool pageLoading = true;
@@ -13,10 +15,9 @@ class ViewCoupleProvider extends ChangeNotifier {
 
   List coupleMemories = [];
 
-  // TODO: create models for all responses:
-
   ViewCoupleProvider({required this.couple}) {
     if (couple.isNotEmpty) {
+      CoupleModel coupleInstance = CoupleModel.createFromJson(couple);
       partnerOnePicture = couple["partner_one"]["profile_picture"]["image"];
       partnerTwoPicture = couple["partner_two"]["profile_picture"]["image"];
 
