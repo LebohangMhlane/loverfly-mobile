@@ -49,6 +49,7 @@ class MainPageProvider extends ChangeNotifier {
       return false;
     }
   }
+
 }
 
 class PostProvider extends ChangeNotifier {
@@ -86,6 +87,7 @@ class PostProvider extends ChangeNotifier {
       postImage = post["post"]["post_image"];
       commentCount = post["comments_count"].toString();
       date = DateFunctions().convertdate(post["post"]["time_posted"]);
+      post = post["post"];
     } catch (e) {
       print(e);
       null;
@@ -109,7 +111,7 @@ class PostProvider extends ChangeNotifier {
   void updateLikes(isLiked) {
     this.isLiked = isLiked;
     int newLikeCount = int.parse(likeCount);
-    if (isAdmired) {
+    if (isLiked) {
       newLikeCount++;
       likeCount = newLikeCount.toString();
       notifyListeners();

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:loverfly/features/comments/commentsmainscreen.dart';
 import 'package:loverfly/features/couplescreen/viewcouple.dart';
 import 'package:loverfly/features/largerpreviewscreen/largerpreviewscreen.dart';
-import 'package:loverfly/features/mainscreen/mainscreenproviders/mainpageprovider.dart';
+import 'package:loverfly/features/mainscreen/mainscreenprovider/mainpageprovider.dart';
 import 'package:loverfly/userinteractions/admire/admireapi.dart';
 import 'package:loverfly/userinteractions/like/likeapi.dart';
 import 'package:provider/provider.dart';
@@ -194,24 +194,25 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
               children: [
                 // image:
                 GestureDetector(
-                    onTap: () => Get.to(
-                        () => LargerPreviewScreen(
-                            image: postProvider.postImage,
-                            postId: postProvider.post["post"]["id"],
-                            isMyPost: postProvider.isMyPost),
-                        opaque: false),
-                    child: Container(
-                      height: 350.0,
-                      width: MediaQuery.of(context).size.width,
-                      child: Transform.scale(
-                        scale: 1.0,
-                        child: FadeInImage.assetNetwork(
-                          fadeInDuration: const Duration(milliseconds: 250),
-                          fit: BoxFit.cover,
-                          placeholder: "assets/placeholders/loadingImage.gif",
-                          image: postProvider.post["post"]["post_image"],
-                        )),
-                    )),
+                  onTap: () => Get.to(
+                      () => LargerPreviewScreen(
+                          image: postProvider.postImage,
+                          postId: postProvider.post["id"],
+                          isMyPost: postProvider.isMyPost),
+                      opaque: false),
+                  child: Container(
+                    height: 350.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: Transform.scale(
+                      scale: 1.0,
+                      child: FadeInImage.assetNetwork(
+                        fadeInDuration: const Duration(milliseconds: 250),
+                        fit: BoxFit.cover,
+                        placeholder: "assets/placeholders/loadingImage.gif",
+                        image: postProvider.post["post_image"],
+                      )),
+                  )
+                ),
 
                 // caption
                 Opacity(
@@ -222,7 +223,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                     width: MediaQuery.of(context).size.width,
                     height: 60.0,
                     margin: const EdgeInsets.only(bottom: 40.0),
-                    child: Text(postProvider.post["post"]['caption'],
+                    child: Text(postProvider.post["caption"],
                         style: const TextStyle(
                           color: Colors.white,
                         )),
@@ -272,8 +273,9 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
         Container(
           height: 80.0,
           child: Row(children: [
+
             // admire couple button:
-            postProvider.isMyPost
+            postProvider.isMyPost == false
                 ? Container(
                     width: 130.0,
                     child: TextButton(
@@ -284,6 +286,13 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                           postProvider.updateIsAdmired(response["admired"]);
                         }
                       },
+                      style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0)
+                          )
+                        )
+                      ),
                       child: Container(
                         alignment: Alignment.center,
                         child: Row(
@@ -335,58 +344,66 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
               width: 1.0,
             ),
 
-            // like button
-            postProvider.isMyPost
-                ? Expanded(
-                    child: TextButton(
-                      onPressed: () async {
-                        bool isLiked = await likePost(
-                            postProvider.post["id"], postProvider.isLiked);
-                        postProvider.updateLikes(isLiked);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // like text
-                            Container(
-                              child: const Text(
-                                "Like",
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.black),
-                              ),
-                            ),
-
-                            // like icon
-                            Container(
-                                padding: const EdgeInsets.only(
-                                    left: 6.0, bottom: 3.0),
-                                child: Icon(
-                                  Icons.thumb_up,
-                                  color: postProvider.isLiked
-                                      ? Colors.purple[800]
-                                      : Colors.grey[300],
-                                  size: 17.0,
-                                )),
-
-                            // like count
-                            Container(
-                              padding: const EdgeInsets.only(left: 7.0),
-                              child: Text(
-                                postProvider.likeCount,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 11.0),
-                              ),
-                            )
-                          ],
+            // like button:
+            postProvider.isMyPost == false
+            ? Expanded(
+                child: TextButton(
+                  onPressed: () async {
+                    bool isLiked = await likePost(
+                        postProvider.post["id"], postProvider.isLiked
+                      );
+                    postProvider.updateLikes(isLiked);
+                  },
+                  style: ButtonStyle(
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0.0)
+                      )
+                    )
+                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // like text
+                        Container(
+                          child: const Text(
+                            "Like",
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black),
+                          ),
                         ),
-                      ),
+
+                        // like icon
+                        Container(
+                            padding: const EdgeInsets.only(
+                                left: 6.0, bottom: 3.0),
+                            child: Icon(
+                              Icons.thumb_up,
+                              color: postProvider.isLiked
+                                  ? Colors.purple[800]
+                                  : Colors.grey[300],
+                              size: 17.0,
+                            )),
+
+                        // like count
+                        Container(
+                          padding: const EdgeInsets.only(left: 7.0),
+                          child: Text(
+                            postProvider.likeCount,
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 11.0),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                : Container(),
+                  ),
+                ),
+              )
+            : Container(),
 
             const VerticalDivider(
               indent: 26.0,
@@ -409,6 +426,13 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                     ));
                   });
                 },
+                style: ButtonStyle(
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0.0)
+                      )
+                    )
+                  ),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -5,7 +5,7 @@ import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/loadingIndicator.dart';
 import 'package:loverfly/features/mainscreen/drawer/drawerwidget.dart';
-import 'package:loverfly/features/mainscreen/mainscreenproviders/mainpageprovider.dart';
+import 'package:loverfly/features/mainscreen/mainscreenprovider/mainpageprovider.dart';
 import 'package:loverfly/features/mainscreen/mainscreenwidgets/welcome_widget.dart';
 import 'package:loverfly/features/mainscreen/mainscreenwidgets/couple_post_widget.dart';
 import 'package:loverfly/features/mainscreen/mainscreenwidgets/page_load_error_widget.dart';
