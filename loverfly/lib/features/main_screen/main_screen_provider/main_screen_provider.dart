@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loverfly/environmentconfig/envconfig.dart';
 import 'package:loverfly/features/main_screen/api/mainscreenapi.dart';
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/models/post.dart';
