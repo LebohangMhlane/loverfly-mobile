@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:loverfly/components/admire_button.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/features/main_screen/main_screen_widgets/page_load_error_widget.dart';
-import 'package:loverfly/features/main_screen/mainscreen.dart';
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/models/post.dart';
 import 'package:loverfly/features/view_couple/view_couple_provider.dart';
