@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (context) => UserProfileProvider()),
         ChangeNotifierProvider(create: (context) => CoupleExplorerPageProvider()),
-        ChangeNotifierProvider(create: (context) => ViewCoupleProvider(couple: Couple())),
+        ChangeNotifierProvider(create: (context) => ViewCoupleProvider(coupleId: 0)),
       ],
       child: GetMaterialApp(
         title: 'LoverFly',
@@ -63,7 +63,6 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/myProfileScreen", page: () => MyProfile(openDrawer: (){},)),
           GetPage(name: "/viewCoupleScreen", page: () => ViewCouple(
             couple: Couple.createFromJson({}),
-            isAdmired: false,
           ),),
           GetPage(
             name: "/largerPreviewScreen", page: () => const LargerPreviewScreen(

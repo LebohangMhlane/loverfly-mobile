@@ -27,7 +27,7 @@ class PageLoadErrorWidget extends StatelessWidget {
           CustomButton(
           onpressedfunction: () async {
             await Future.delayed(const Duration(milliseconds: 250));
-            logOutFunction();
+            logOutFunction(context);
           },
           borderradius: 10.0,
           buttoncolor: Colors.purple,

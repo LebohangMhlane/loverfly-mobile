@@ -64,7 +64,6 @@ class CoupleCard extends StatelessWidget {
               onTap: () {
                 Get.to(() => ViewCouple(
                       couple: Couple.createFromJson({}),
-                      isAdmired: coupleCardProvider.isAdmired,
                     ));
               },
               child: SizedBox(

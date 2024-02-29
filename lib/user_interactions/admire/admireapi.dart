@@ -4,6 +4,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environment_configurations/envconfig.dart';
 
+// TODO: create a requests handler but not here:
+class ResponseModel {}
+
 Future<Map> admire(coupleid, admired) async {
   var url = Uri.parse(EnvConfig.baseUrl +
       '/admire/' +

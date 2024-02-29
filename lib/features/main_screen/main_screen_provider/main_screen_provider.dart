@@ -53,6 +53,21 @@ class MainPageProvider extends ChangeNotifier {
     }
   }
 
+  void refreshPosts() async {
+    posts = [];
+    postProviders = [];
+    Map response = await getPostsForFeed("");
+    posts = response["posts"];
+    if (createProvidersForPosts(posts)) {
+      loadingPage = false;
+      notifyListeners();
+    } else {
+      initializationError = true;
+      loadingPage = false;
+      notifyListeners();
+    }
+  }
+
 }
 
 class PostProvider extends ChangeNotifier {

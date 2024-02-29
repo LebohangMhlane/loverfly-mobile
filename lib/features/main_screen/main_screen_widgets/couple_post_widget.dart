@@ -37,7 +37,6 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
           onTap: () {
             Get.to(() => ViewCouple(
               couple: postProvider.couple!,
-              isAdmired: postProvider.isAdmired,
             ));
           },
           child: SizedBox(

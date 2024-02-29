@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/features/models/couple.dart';
 import '../features/view_couple/view_couple.dart';
 
@@ -7,7 +9,6 @@ class PageUtils {
   void navigateToCoupleScreen(coupledata, rebuildCoupleExplorer) {
     Get.to(() => ViewCouple(
       couple: Couple.createFromJson({}),
-      isAdmired: false,
     ));
   }
 }
@@ -31,3 +32,13 @@ class SnackBars {
     });
   }
 }
+
+  void logOut(context) async {
+    try {
+      final GetStorage cache = GetStorage();
+      cache.erase();
+      Get.off(() => SignInScreen());
+    } catch (e) {
+      SnackBars().displaySnackBar("There was an error logging out.", () => null, context);
+    }
+  }

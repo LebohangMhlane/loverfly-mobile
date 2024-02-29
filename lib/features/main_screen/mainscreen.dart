@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/loading_indicator.dart';
 import 'package:loverfly/features/main_screen/drawer/drawerwidget.dart';
@@ -31,16 +29,6 @@ class _MainPageState extends State<MainPage> {
     _scaffoldKey.currentState!.closeDrawer();
   }
   
-  void logOut(context) async {
-    try {
-      final GetStorage cache = GetStorage();
-      cache.erase();
-      Get.off(() => SignInScreen());
-    } catch (e) {
-      SnackBars().displaySnackBar("There was an error logging out.", () => null, context);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -57,7 +45,7 @@ class _MainPageState extends State<MainPage> {
         ),
         appBar: customAppBar(context, ''),
         body: mainPageProvider.initializationError ?
-          PageLoadErrorWidget(
+          const PageLoadErrorWidget(
             logOutFunction: logOut,
           ) :
           Stack(

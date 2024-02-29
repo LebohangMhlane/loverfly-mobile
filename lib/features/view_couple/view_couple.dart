@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:loverfly/components/admire_button.dart';
+import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
+import 'package:loverfly/features/main_screen/main_screen_widgets/page_load_error_widget.dart';
+import 'package:loverfly/features/main_screen/mainscreen.dart';
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/models/post.dart';
 import 'package:loverfly/features/view_couple/view_couple_provider.dart';
+import 'package:loverfly/utils/pageutils.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
-import '../../components/custombutton.dart';
 import '../larger_image_view_screen/largerpreviewscreen.dart';
 
 class ViewCouple extends StatefulWidget {
 
   final Couple couple;
-  final bool isAdmired;
 
   const ViewCouple({
     Key? key,
     required this.couple,
-    required this.isAdmired,
     })
     : super(key: key);
 
@@ -32,24 +34,9 @@ class _ViewCoupleState extends State<ViewCouple> {
     super.initState();
   }
 
-  void admireCouple(context) async {
-    // try {
-    //   Map response = await admire(widget.coupleId, widget.isAdmired);
-    //   if (response.containsKey("error_info")) {
-    //     SnackBars().displaySnackBar(
-    //         "Something went wrong. We will fix it soon!", () => null, context);
-    //   } else {
-    //   }
-    // } catch (e) {
-    //   SnackBars().displaySnackBar(
-    //       "Something went wrong. We will fix it soon!", () => null, context);
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     Couple couple = widget.couple;
-    bool isAdmired = widget.isAdmired;
     return WillPopScope(
       onWillPop: () async {
         Get.back();
@@ -58,7 +45,9 @@ class _ViewCoupleState extends State<ViewCouple> {
     child: Scaffold(
     appBar: customAppBar(context, ""),
     body: ChangeNotifierProvider<ViewCoupleProvider>(
-      create: (context)=> ViewCoupleProvider(couple: widget.couple),
+      create: (context) => ViewCoupleProvider(
+        coupleId: int.parse(widget.couple.id)
+      ),
       child: Consumer<ViewCoupleProvider>(
         builder: (context, coupleProvider, child) => coupleProvider.pageLoading ? 
         const Center(
@@ -71,7 +60,8 @@ class _ViewCoupleState extends State<ViewCouple> {
               strokeWidth: 1.0,
             ),
           ),
-        ) :
+        ) : coupleProvider.errorOccured ? 
+        const PageLoadErrorWidget(logOutFunction: logOut ) :
         SingleChildScrollView(
           child: Container(
             color: Colors.white,
@@ -236,50 +226,15 @@ class _ViewCoupleState extends State<ViewCouple> {
                       margin: const EdgeInsets.only(top: 0.0),
                       child: Row(
                         children: [
-                          // Admire couple button:
-                          Expanded(
-                              child: Center(
-                                  child: CustomButton(
-                                      elevation: 0.0,
-                                      splashcolor: Colors.blue,
-                                      buttoncolor: Colors.white,
-                                      buttonlabel: 'Admire',
-                                      fontWeight: FontWeight.bold,
-                                      textcolor: Colors.black,
-                                      icon: Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 4.0),
-                                          child: isAdmired
-                                              ?
-                                              // Admire heart icon
-                                              Transform(
-                                                  child: Image.asset(
-                                                    'assets/placeholders/logo.jpeg',
-                                                    width: 17.0,
-                                                  ),
-                                                  alignment:
-                                                      Alignment.center,
-                                                  transform:
-                                                      Matrix4.rotationZ(
-                                                          6.0),
-                                                )
-                                              :
-                                              // not Admired heart icon:
-                                              SvgPicture.asset(
-                                                  'assets/svg/heart.svg',
-                                                  alignment:
-                                                      Alignment.center,
-                                                  colorFilter:
-                                                      const ColorFilter
-                                                          .mode(Colors.grey,
-                                                          BlendMode.srcIn),
-                                                  width: 20.0,
-                                                ),
-                                        ),
-                                      
-                                      onpressedfunction: () async {
-                                        admireCouple(context);
-                                      })),),
+
+                          // Admire button:
+                          Consumer<MainPageProvider>(
+                            builder: (context, mainPageProvider, child) => AdmireButton(
+                              coupleId: int.parse(couple.id), 
+                              isAdmired: coupleProvider.isAdmired,
+                              mainPageProvider: mainPageProvider,
+                            ),
+                          ),
         
                           // relationship advice request:
                           Expanded(
