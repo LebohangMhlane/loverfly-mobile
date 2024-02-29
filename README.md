@@ -1,8 +1,16 @@
-# loverfly-mobile
-Official LoverFly Repo
+# loverfly_mobile
 
-Previews:
+A new Flutter project.
 
+## Getting Started
 
-![Screenshot_1709110752](https://github.com/LebohangMhlane/loverfly-mobile/assets/75252307/7f63e7ff-533b-4f45-871e-b8c2fb80eb0d)
-![Screenshot_1709110865](https://github.com/LebohangMhlane/loverfly-mobile/assets/75252307/385bfcc7-e569-4028-914b-ab717cbe5931)
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
