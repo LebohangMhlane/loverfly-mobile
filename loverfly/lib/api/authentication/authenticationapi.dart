@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import '../../environmentconfig/envconfig.dart';
+import '../../environment_configurations/envconfig.dart';
 
 class AuthenticationAPI {
   // =========================================================================

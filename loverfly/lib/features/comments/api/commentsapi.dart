@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../environmentconfig/envconfig.dart';
+import '../../../environment_configurations/envconfig.dart';
 
 Future<Map> getComments(postId, nextPageLink) async {
   try {

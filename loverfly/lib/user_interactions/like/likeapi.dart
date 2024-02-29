@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:loverfly/environmentconfig/envconfig.dart';
+import 'package:loverfly/environment_configurations/envconfig.dart';
 
 Future likePost(postid, postliked) async {
   var url = Uri.parse(EnvConfig.baseUrl +

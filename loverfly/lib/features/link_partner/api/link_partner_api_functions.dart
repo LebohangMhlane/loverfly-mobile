@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
-import '../../../environmentconfig/envconfig.dart';
 import 'package:http/http.dart' as http;
+import 'package:loverfly/environment_configurations/envconfig.dart';
 
 Future<Map> generateLinkCode() async {
   var code = {};

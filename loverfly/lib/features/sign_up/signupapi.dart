@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
-import 'package:loverfly/environmentconfig/envconfig.dart';
+import 'package:loverfly/environment_configurations/envconfig.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map> signUp() async {

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/components/customappbar.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/environmentconfig/envconfig.dart';
+import 'package:loverfly/environment_configurations/envconfig.dart';
 import 'package:loverfly/features/comments/comment_screen_widgets/comment.dart';
 import 'package:loverfly/features/comments/comment_screen_widgets/commentinput.dart';
 import 'package:loverfly/utils/pageutils.dart';

@@ -1,5 +1,5 @@
 
-import 'package:loverfly/environmentconfig/envconfig.dart';
+import 'package:loverfly/environment_configurations/envconfig.dart';
 
 class UserProfile {
 

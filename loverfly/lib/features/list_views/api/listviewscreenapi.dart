@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import '../../../environmentconfig/envconfig.dart';
+import 'package:loverfly/environment_configurations/envconfig.dart';
 
 // requests and returns a list of followers from the server:
 Future<Map> getAdmirersFromServer(nextPageLink) async {
