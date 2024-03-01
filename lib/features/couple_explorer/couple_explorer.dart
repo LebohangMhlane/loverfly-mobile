@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/couple_explorer/couple_card_widget.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
-import 'trendingcouplessection.dart';
+import 'trending_couples/trending_couples_widget.dart';
 
 class CoupleExplorerScreen extends StatelessWidget {
   CoupleExplorerScreen({
@@ -37,7 +37,7 @@ class CoupleExplorerScreen extends StatelessWidget {
           // render lists:
           Column(
             children: [
-            const TrendingCouples(),
+            const TrendingCouplesWidget(),
             provider.initializationError ? 
             const Center(
                 child: Padding(

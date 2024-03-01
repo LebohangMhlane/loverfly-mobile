@@ -50,14 +50,16 @@ class CoupleInstance {
 }
 
 Future<Map> getTrendingCouples() async {
-  Map trendingCouples = {};
   var url = Uri.parse(EnvConfig.baseUrl + '/get-trending-couples/');
   var cache = GetStorage();
   try {
-    var response = await http.get(url,
-        headers: {'Authorization': 'TOKEN ' + cache.read('token')!.toString()});
+    var response = await http.get(
+      url,
+      headers: {'Authorization': 'TOKEN ' + cache.read('token')!.toString()}
+    );
     if (response.statusCode == 200) {
-      trendingCouples = jsonDecode(response.body);
+      Map trendingCouples = jsonDecode(response.body);
+      return trendingCouples;
     } else {
       return {
         "error": "An error has occured on the server",
@@ -75,5 +77,4 @@ Future<Map> getTrendingCouples() async {
       "error_info": e.toString()
     };
   }
-  return trendingCouples;
 }

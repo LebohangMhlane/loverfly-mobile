@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/features/comments/commentsmainscreen.dart';
-import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/view_couple/view_couple.dart';
 import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
@@ -320,7 +320,7 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
                                     Transform(
                                         child: Image.asset(
                                           'assets/placeholders/logo.jpeg',
-                                          width: 20.0,
+                                          width: 22.0,
                                         ),
                                         alignment: Alignment.center,
                                         transform: Matrix4.rotationZ(6.0),

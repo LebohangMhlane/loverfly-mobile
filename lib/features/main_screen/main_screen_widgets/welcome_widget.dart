@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/features/couple_explorer/coupleexplorerpage.dart';
+import 'package:loverfly/features/couple_explorer/couple_explorer.dart';
 
 class WelcomeWidget extends StatelessWidget {
   const WelcomeWidget({Key? key}) : super(key: key);

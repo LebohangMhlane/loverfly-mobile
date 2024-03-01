@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loverfly/features/couple_explorer/api/coupleexplorerapi.dart';
+import 'package:loverfly/features/couple_explorer/api/couple_explorer_api.dart';
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/user_interactions/admire/admireapi.dart';
 

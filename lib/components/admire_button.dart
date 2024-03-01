@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/user_interactions/admire/admireapi.dart';
 
@@ -62,7 +62,7 @@ class _AdmireButtonState extends State<AdmireButton> {
               Transform(
                 child: Image.asset(
                   'assets/placeholders/logo.jpeg',
-                  width: 17.0,
+                  width: 25.0,
                 ),
                 alignment: Alignment.center,
                 transform: Matrix4.rotationZ(6.0),
@@ -92,6 +92,13 @@ class _AdmireButtonState extends State<AdmireButton> {
       ),
     );
   }
+
+  // TODO: There must be a more optimized way to do this:
+  // based on the changes to couple amdire two things must happen:
+  // 1: The main page must remove the profile that has been unAdmired.
+  // 2: The coupleExplorer page must update the state of the couple card 
+  // for this couple to have a button that is unAdmired or admired based on
+  // the users selection.
 
   void refreshMainPagePostList(){
     mainPageProvider.refreshPosts();

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/api/authentication/signinscreen.dart';
 import 'package:loverfly/api/authentication/signinscreenprovider.dart';
-import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/view_couple/view_couple_provider.dart';
 import 'package:loverfly/features/view_couple/view_couple.dart';
@@ -15,7 +15,7 @@ import 'package:loverfly/features/my_profile/my_profile.dart';
 import 'package:loverfly/features/sign_up/signupscreen/signupscreen.dart';
 import 'package:loverfly/features/lazy_splash_screen/viewsplashscreen.dart';
 import 'package:provider/provider.dart';
-import 'features/couple_explorer/coupleexplorerpage.dart';
+import 'features/couple_explorer/couple_explorer.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {

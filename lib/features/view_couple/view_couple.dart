@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/components/admire_button.dart';
-import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
+import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/features/main_screen/main_screen_widgets/page_load_error_widget.dart';
 import 'package:loverfly/features/models/couple.dart';
