@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           create: (context) => MainPageProvider(),
         ),
         ChangeNotifierProvider(create: (context) => UserProfileProvider()),
-        ChangeNotifierProvider(create: (context) => CoupleExplorerPageProvider()),
+        ChangeNotifierProvider(create: (context) => CoupleExplorerProvider()),
         ChangeNotifierProvider(create: (context) => ViewCoupleProvider(coupleId: 0)),
       ],
       child: GetMaterialApp(

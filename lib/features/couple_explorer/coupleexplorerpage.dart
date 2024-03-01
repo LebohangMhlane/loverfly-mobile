@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
-import 'package:loverfly/features/couple_explorer/couplecard.dart';
+import 'package:loverfly/features/couple_explorer/couple_card_widget.dart';
 import 'package:provider/provider.dart';
 import '../../components/customappbar.dart';
 import 'trendingcouplessection.dart';
@@ -16,7 +16,7 @@ class CoupleExplorerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CoupleExplorerPageProvider>(
+    return Consumer<CoupleExplorerProvider>(
       builder: (context, provider, widget){ 
         return PopScope(
         canPop: canPop,
@@ -71,7 +71,7 @@ class CoupleExplorerScreen extends StatelessWidget {
                         value: provider.coupleCardProviders[index],
                         child: Consumer<CoupleCardProvider>(
                           builder: (context, coupleCardItemProvider, widget) {
-                            return const CoupleCard();
+                            return const CoupleCardWidget();
                           },
                         ),
                       );

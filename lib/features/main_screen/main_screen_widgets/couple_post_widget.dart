@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loverfly/features/comments/commentsmainscreen.dart';
+import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/view_couple/view_couple.dart';
 import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
@@ -279,59 +280,63 @@ class _CouplePostWidgetState extends State<CouplePostWidget> {
             postProvider.isMyPost == false
                 ? Container(
                     width: 130.0,
-                    child: TextButton(
-                      onPressed: () async {
-                        Map response = await admire(
-                            postProvider.couple!.id, postProvider.isAdmired);
-                        if (response.containsKey("admired")) {
-                          postProvider.updateIsAdmired(response["admired"]);
-                        }
-                      },
-                      style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0.0)
+                    child: Consumer<CoupleExplorerProvider>(
+                      builder: (context, coupleExplorerPageProvider, child) => 
+                      TextButton(
+                        onPressed: () async {
+                          Map response = await admire(
+                              postProvider.couple!.id, postProvider.isAdmired);
+                          if (response.containsKey("admired")) {
+                            postProvider.updateIsAdmired(response["admired"]);
+                            coupleExplorerPageProvider.refreshCoupleExplorerPage();
+                          }
+                        },
+                        style: ButtonStyle(
+                          shape: MaterialStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0)
+                            )
                           )
-                        )
-                      ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: const Text(
-                                "Admire",
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.black),
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                child: const Text(
+                                  "Admire",
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: postProvider.isAdmired
-                                  ?
-                                  // admired heart icon
-                                  Transform(
-                                      child: Image.asset(
-                                        'assets/placeholders/logo.jpeg',
+                              Container(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: postProvider.isAdmired
+                                    ?
+                                    // admired heart icon
+                                    Transform(
+                                        child: Image.asset(
+                                          'assets/placeholders/logo.jpeg',
+                                          width: 20.0,
+                                        ),
+                                        alignment: Alignment.center,
+                                        transform: Matrix4.rotationZ(6.0),
+                                      )
+                                    :
+                                    // unAdmired heart heart icon
+                                    SvgPicture.asset(
+                                        'assets/svg/heart.svg',
+                                        alignment: Alignment.center,
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.grey, BlendMode.srcIn),
                                         width: 20.0,
                                       ),
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.rotationZ(6.0),
-                                    )
-                                  :
-                                  // unAdmired heart heart icon
-                                  SvgPicture.asset(
-                                      'assets/svg/heart.svg',
-                                      alignment: Alignment.center,
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.grey, BlendMode.srcIn),
-                                      width: 20.0,
-                                    ),
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

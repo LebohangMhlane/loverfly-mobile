@@ -3,22 +3,27 @@ import 'package:loverfly/features/couple_explorer/api/coupleexplorerapi.dart';
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/user_interactions/admire/admireapi.dart';
 
-class CoupleExplorerPageProvider extends ChangeNotifier {
+class CoupleExplorerProvider extends ChangeNotifier {
   List coupleList = [];
   List trendingCoupleList = [];
   List coupleCardProviders = [];
   bool pageLoading = true;
   bool initializationError = false;
 
-  CoupleExplorerPageProvider(){
+  CoupleExplorerProvider(){
+    print("initialization");
     initalizeProvider();
   }
 
   void initalizeProvider() async {
     try{
-      Map response = await getAllCouples();
-      coupleList = response['couples'];
-      createProvidersForCouples(coupleList);
+      var (successful, response) = await getAllCouples();
+      if(successful){
+        createProvidersForCouples(response);
+      } else {
+        Exception exception = response;
+        throw exception;
+      }
       pageLoading = false;
       notifyListeners();
     } catch (e){
@@ -29,56 +34,52 @@ class CoupleExplorerPageProvider extends ChangeNotifier {
     }
   }
 
-  void createProvidersForCouples(coupleList){
-    for (int i = 0; i < coupleList.length; i++) {
-      Couple couple = Couple.createFromJson(coupleList[i]["couple"]);
-      coupleCardProviders.add(CoupleCardProvider(
-        coupleId: int.parse(couple.id),
-        isAdmired: false,
-        partnerOneUsername: "",
-        partnerTwoUsername: "",
-        partnerOneProfilePic: "",
-        partnerTwoProfilePic: "",
-        admirersCount: 0
+  // TODO: consider returning a CoupleCardProvider in the listview.builder instead:
+
+  void createProvidersForCouples(coupleInstanceList){
+    for (int i = 0; i < coupleInstanceList.length; i++) {
+      CoupleInstance coupleInstance = coupleInstanceList[i];
+        coupleCardProviders.add(
+        CoupleCardProvider(
+          couple: coupleInstance.couple,
+          isAdmired: coupleInstance.isAdmired,
         )
       );
     }
   }
 
+  void refreshCoupleExplorerPage() async {
+    coupleList = [];
+    trendingCoupleList = [];
+    coupleCardProviders = [];
+    initalizeProvider();
+  }
+
 }
 
 class CoupleCardProvider extends ChangeNotifier {
-  int coupleId = 0;
-  String partnerOneUsername = "";
-  String partnerTwoUsername = "";
-  String partnerOneProfilePic = "";
-  String partnerTwoProfilePic = "";
-  bool isAdmired = false;
-  int admirersCount = 0;
+  Couple couple;
+  bool isAdmired;
   bool admiring = false;
+  int admirerCount = 0;
 
   CoupleCardProvider({
-    required this.coupleId,
-    required this.partnerOneUsername,
-    required this.partnerTwoUsername,
-    required this.partnerOneProfilePic,
-    required this.partnerTwoProfilePic,
+    required this.couple,
     required this.isAdmired,
-    required this.admirersCount,
-  });
+  }) : admirerCount = couple.admirers;
 
   Future<bool> admireOrUnAdmireCouple() async {
     try {
       admiring = true;
       notifyListeners();
-      Map response = await admire(coupleId, isAdmired);
+      Map response = await admire(couple.id, isAdmired);
       if (response.containsKey("error_info")) {
         admiring = false;
         notifyListeners();
         return false;
       } else {
         isAdmired = response["admired"];
-        isAdmired ? admirersCount++ : admirersCount--;
+        isAdmired ? admirerCount++ : admirerCount--;
         admiring = false;
         notifyListeners();
         return true;

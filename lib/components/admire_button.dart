@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/features/couple_explorer/coupleexplorerprovider/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/user_interactions/admire/admireapi.dart';
 
@@ -11,12 +12,14 @@ class AdmireButton extends StatefulWidget {
   final bool isAdmired;
   final int coupleId;
   final MainPageProvider mainPageProvider;
+  final CoupleExplorerProvider coupleExplorerProvider;
 
   const AdmireButton({
     Key? key,
     required this.isAdmired,
     required this.coupleId,
     required this.mainPageProvider,
+    required this.coupleExplorerProvider,
   }) : super(key: key);
 
   @override
@@ -28,6 +31,7 @@ class _AdmireButtonState extends State<AdmireButton> {
   late bool isAdmired;
   late int coupleId;
   late MainPageProvider mainPageProvider;
+  CoupleExplorerProvider coupleExplorerProvider = CoupleExplorerProvider();
 
   @override
   void initState() {
@@ -35,6 +39,7 @@ class _AdmireButtonState extends State<AdmireButton> {
     isAdmired = widget.isAdmired;
     coupleId = widget.coupleId;
     mainPageProvider = widget.mainPageProvider;
+    coupleExplorerProvider = widget.coupleExplorerProvider;
   }
 
   @override
@@ -80,6 +85,7 @@ class _AdmireButtonState extends State<AdmireButton> {
                 isAdmired = response["admired"];
               });
               refreshMainPagePostList();
+              refreshCoupleExplorerPage();
             }
           }
         )
@@ -89,6 +95,10 @@ class _AdmireButtonState extends State<AdmireButton> {
 
   void refreshMainPagePostList(){
     mainPageProvider.refreshPosts();
+  }
+
+  void refreshCoupleExplorerPage(){
+    coupleExplorerProvider.refreshCoupleExplorerPage();
   }
 
 }

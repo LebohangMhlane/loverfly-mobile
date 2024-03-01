@@ -58,14 +58,7 @@ class MainPageProvider extends ChangeNotifier {
     postProviders = [];
     Map response = await getPostsForFeed("");
     posts = response["posts"];
-    if (createProvidersForPosts(posts)) {
-      loadingPage = false;
-      notifyListeners();
-    } else {
-      initializationError = true;
-      loadingPage = false;
-      notifyListeners();
-    }
+    initializeProvider();
   }
 
 }

@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:loverfly/environment_configurations/envconfig.dart';
+import 'package:loverfly/features/models/couple.dart';
 
-Future<Map> getAllCouples() async {
-  Map coupledata = {};
+Future<(bool, dynamic)> getAllCouples() async {
+  Map coupleData = {};
   var url = Uri.parse(EnvConfig.baseUrl + '/get-all-couples/');
   var cache = GetStorage();
   try {
@@ -13,25 +14,39 @@ Future<Map> getAllCouples() async {
       'Authorization': 'TOKEN ' + cache.read('token')!.toString(),
     });
     if (response.statusCode == 200) {
-      coupledata = jsonDecode(response.body);
+      coupleData = jsonDecode(response.body);
+      List coupleJsons = coupleData["couples"];
+      return (true, convertCoupleInstancesToModel(coupleJsons));
     } else {
-      return {
-        "error": "An error has occured on the server",
-        "error_info": response.body
-      };
+      return (false, Exception("Server error: ${response.statusCode}"));
     }
   } on SocketException {
-    return {
-      "error": "An error has occured on the server",
-      "error_info": "A connection could not be made"
-    };
+    return (false, Exception("No internet connection"));
   } catch (e) {
-    return {
-      "error": "An error has occured on the server",
-      "error_info": e.toString()
-    };
+    return (false, Exception("An error occurred: ${e.toString()}"));
   }
-  return coupledata;
+}
+
+List<CoupleInstance> convertCoupleInstancesToModel(List coupleJson){
+  List<CoupleInstance> coupleInstances = coupleJson.map((coupleJson) => 
+    CoupleInstance(
+      couple: Couple.createFromJson(coupleJson["couple"]), 
+      isAdmired: coupleJson["isAdmired"]
+    )
+  ).toList();
+  return coupleInstances;
+}
+
+class CoupleInstance {
+
+  Couple couple;
+  bool isAdmired;
+
+  CoupleInstance({
+    required this.couple,
+    required this.isAdmired,
+  });
+
 }
 
 Future<Map> getTrendingCouples() async {
