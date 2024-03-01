@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/custom_button.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
 class CommentInput extends StatefulWidget {

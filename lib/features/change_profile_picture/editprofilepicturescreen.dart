@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:loverfly/components/customappbar.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/app_bar.dart';
+import 'package:loverfly/components/custom_button.dart';
 import 'package:loverfly/features/change_profile_picture/api.dart';
 import 'package:loverfly/utils/pageutils.dart';
 

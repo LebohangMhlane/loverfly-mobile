@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/components/custombutton.dart';
-import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreennotifier.dart';
+import 'package:loverfly/components/custom_button.dart';
+import 'package:loverfly/features/larger_image_view/larger_image_view_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../my_profile/api/myprofilescreen.dart';

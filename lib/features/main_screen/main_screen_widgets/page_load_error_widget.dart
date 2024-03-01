@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/custom_button.dart';
 
 class PageLoadErrorWidget extends StatelessWidget {
   const PageLoadErrorWidget({

@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loverfly/features/main_screen/mainscreen.dart';
 
-import '../../components/custombutton.dart';
+import '../../components/custom_button.dart';
 import '../../utils/pageutils.dart';
 import 'api/createapostscreenapi.dart';
 

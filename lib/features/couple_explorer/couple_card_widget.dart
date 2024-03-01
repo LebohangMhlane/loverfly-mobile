@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/custom_button.dart';
 import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/features/view_couple/view_couple.dart';

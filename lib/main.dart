@@ -7,13 +7,13 @@ import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexpl
 import 'package:loverfly/features/models/couple.dart';
 import 'package:loverfly/features/view_couple/view_couple_provider.dart';
 import 'package:loverfly/features/view_couple/view_couple.dart';
-import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
+import 'package:loverfly/features/larger_image_view/larger_image_view_screen.dart';
 import 'package:loverfly/features/main_screen/mainscreen.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/features/my_profile/my_profile_provider.dart';
 import 'package:loverfly/features/my_profile/my_profile.dart';
 import 'package:loverfly/features/sign_up/signupscreen/signupscreen.dart';
-import 'package:loverfly/features/lazy_splash_screen/viewsplashscreen.dart';
+import 'package:loverfly/features/lazy_splash_screen/lazy_splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'features/couple_explorer/couple_explorer.dart';
 import 'package:get_storage/get_storage.dart';

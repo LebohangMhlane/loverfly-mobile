@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loverfly/api/authentication/authenticationapi.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/custom_button.dart';
 import 'package:loverfly/features/main_screen/mainscreen.dart';
 import 'package:loverfly/features/sign_up/signupapi.dart';
 import 'package:loverfly/utils/pageutils.dart';

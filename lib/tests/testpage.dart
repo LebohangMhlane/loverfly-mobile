@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/components/customappbar.dart';
+import 'package:loverfly/components/app_bar.dart';
 
 class MyWidget extends StatelessWidget {
 

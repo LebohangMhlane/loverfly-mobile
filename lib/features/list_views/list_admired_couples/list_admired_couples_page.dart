@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:loverfly/components/customappbar.dart';
+import 'package:loverfly/components/app_bar.dart';
 import 'package:loverfly/features/list_views/api/listviewscreenapi.dart';
 import 'package:loverfly/features/list_views/list_admirers/listadmirersscreen.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
-class ListAdmiredCouplesScreen extends StatelessWidget {
-  ListAdmiredCouplesScreen({Key? key, required this.listType})
+class ListAdmiredCouplesPage extends StatelessWidget {
+  ListAdmiredCouplesPage({Key? key, required this.listType})
       : super(key: key);
 
   final String listType;

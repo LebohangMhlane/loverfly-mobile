@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/custom_button.dart';
 
 class CoupleCreateScreen extends StatelessWidget {
   const CoupleCreateScreen({Key? key}) : super(key: key);

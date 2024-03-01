@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/custom_button.dart';
 import 'package:loverfly/features/couple_explorer/couple_explorer.dart';
 
 class DrawerWidget extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loverfly/components/customappbar.dart';
-import '../../components/custombutton.dart';
+import 'package:loverfly/components/app_bar.dart';
+import '../../components/custom_button.dart';
 import 'api/link_partner_api_functions.dart';
 
 class InputCodeScreen extends StatelessWidget {

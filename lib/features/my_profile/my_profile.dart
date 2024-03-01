@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
+import 'package:loverfly/features/larger_image_view/larger_image_view_screen.dart';
 import 'package:loverfly/features/my_profile/my_profile_provider.dart';
 import 'package:provider/provider.dart';
 import '../../utils/pageutils.dart';

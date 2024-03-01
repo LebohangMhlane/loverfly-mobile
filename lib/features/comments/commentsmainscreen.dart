@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loverfly/components/customappbar.dart';
-import 'package:loverfly/components/custombutton.dart';
+import 'package:loverfly/components/app_bar.dart';
+import 'package:loverfly/components/custom_button.dart';
 import 'package:loverfly/environment_configurations/envconfig.dart';
 import 'package:loverfly/features/comments/comment_screen_widgets/comment.dart';
 import 'package:loverfly/features/comments/comment_screen_widgets/commentinput.dart';
 import 'package:loverfly/utils/pageutils.dart';
 
-import '../larger_image_view_screen/largerpreviewscreen.dart';
+import '../larger_image_view/larger_image_view_screen.dart';
 import 'api/commentsapi.dart';
 
 class CommentScreen extends StatefulWidget {

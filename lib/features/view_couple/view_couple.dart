@@ -10,8 +10,8 @@ import 'package:loverfly/features/models/post.dart';
 import 'package:loverfly/features/view_couple/view_couple_provider.dart';
 import 'package:loverfly/utils/pageutils.dart';
 import 'package:provider/provider.dart';
-import '../../components/customappbar.dart';
-import '../larger_image_view_screen/largerpreviewscreen.dart';
+import '../../components/app_bar.dart';
+import '../larger_image_view/larger_image_view_screen.dart';
 
 class ViewCouple extends StatefulWidget {
 

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:loverfly/features/comments/commentsmainscreen.dart';
 import 'package:loverfly/features/couple_explorer/couple_explorer_api/coupleexplorerpageprovider.dart';
 import 'package:loverfly/features/view_couple/view_couple.dart';
-import 'package:loverfly/features/larger_image_view_screen/largerpreviewscreen.dart';
+import 'package:loverfly/features/larger_image_view/larger_image_view_screen.dart';
 import 'package:loverfly/features/main_screen/main_screen_provider/main_screen_provider.dart';
 import 'package:loverfly/user_interactions/admire/admireapi.dart';
 import 'package:loverfly/user_interactions/like/likeapi.dart';
